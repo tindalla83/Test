@@ -47,3 +47,70 @@ Netlify Forms, your own endpoint) and add a privacy notice covering how enquirie
 
 Defined as custom properties at the top of `assets/css/styles.css` — change `--navy`
 and `--accent` to rebrand the whole site.
+
+---
+
+# Concept Viability Model (`model/`)
+
+`model/index.html` is a browser version of
+`Strat_Land_Concept_Viab_Res_Land_v6.0 (Freehold).xlsm`. Single self-contained
+file — no build step, no dependencies, works from `file://` or any static host.
+
+```sh
+python3 -m http.server 8000   # then open http://localhost:8000/model/
+```
+
+## What it does
+
+The **Viability Summary** and **IRR Input** sheets are the front end. Every cell
+that is yellow in the workbook is an editable yellow cell here, and everything
+else recalculates on each keystroke:
+
+- the unit calculator (mix ratios, unit counts, floor areas) — `Calc.`
+- the development appraisal down to residual land value — `Concept Viab Model Strat`
+- the 229-month cashflow, with the workbook's own spend profiles: build
+  S-curve, infrastructure release tranches, prelims split, DPE annual buckets,
+  linear customer care and sales & marketing, land VAT out and back
+- interest, IRR, NPV, peak debt, break-even and cost of planning failure
+
+A third **Cashflow** tab shows the monthly detail, a cumulative cash chart and a
+CSV export. Scenarios save to browser storage; **Reset** restores the workbook's
+shipped assumptions.
+
+## Reconciliation
+
+On the workbook's own inputs the page reproduces it exactly:
+
+| | Workbook | Page |
+|---|---|---|
+| Total sales revenue | £305,391,750 | £305,391,750 |
+| Total development cost inc. contingency | £244,878,061 | £244,878,061 |
+| Cost of finance | £7,272,332 | £7,272,332 |
+| Residual land value | £16,920,000 | £16,920,000 |
+| Net offer value for land | £16,000,000 | £16,000,000 |
+| Net margin | £32,256,357 / 10.56% | £32,256,357 / 10.56% |
+| IRR | 2.69% | 2.69% |
+| Peak debt | −£69,447,126 (Dec 2028) | −£69,447,126 (Dec 2028) |
+| NPV @ 5% | −£9,764,645 | −£9,764,645 |
+
+Two deliberate differences:
+
+1. **Interest is solved, not pasted.** The workbook breaks its own circular
+   reference by hard-coding the cashflow interest into `Concept Viab Model
+   Strat!AH64` and goal-seeking it by hand — the shipped file is out by
+   £2.59m on that cell. Interest here is read straight off the cashflow, so
+   *Cost of Finance* is always current.
+2. **The IRR window is switchable.** `Cash_flow!L85` runs XIRR over
+   `OFFSET(L68,0,0,1,J85)`, and `J85` counts a fixed 197-column range — so the
+   workbook's IRR ignores the last three years of the scheme. That is the
+   default here, to tie out. The Cashflow tab offers the full-series IRR
+   alongside it (2.69% vs 4.99% on the shipped inputs).
+
+## Not carried over
+
+The workbook's detail tabs (accommodation schedule, house-type library,
+regional build-cost books, COINS cost codes, authorisation, @RISK simulation)
+are not part of the concept-stage calculation and are not reproduced. The
+`Cost of planning failure` block sums pre-allocation spend from the main
+cashflow rather than the workbook's parallel disposal sub-cashflow, so it lands
+within about 0.3% of the sheet.

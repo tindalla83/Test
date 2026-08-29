@@ -1,0 +1,1275 @@
+<meta charset="utf-8">
+<title>Concept Viability Model</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* ---------- tokens ---------- */
+:root{
+  color-scheme: light;
+  --ink:#191d18;
+  --ink-2:#454c44;
+  --ink-3:#6d756b;
+  --rule:#d5d8cf;
+  --rule-strong:#b3b8ac;
+  --paper:#f4f5f0;
+  --panel:#fbfbf8;
+  --panel-2:#eef0e9;
+  --accent:#41493b;
+  --accent-ink:#f4f5f0;
+  --accent-soft:#e2e6da;
+  --input-bg:#ffef9f;
+  --input-bg-focus:#ffe15c;
+  --input-ink:#2a2508;
+  --input-rule:#c9ad35;
+  --pos:#1c6b45;
+  --pos-bg:#dcece2;
+  --warn:#8a5a08;
+  --warn-bg:#f6e8cd;
+  --crit:#9c2318;
+  --crit-bg:#f4ddda;
+  --shadow:0 1px 2px rgba(25,29,24,.06), 0 8px 24px -18px rgba(25,29,24,.4);
+  --f-display:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --f-body:"IBM Plex Sans","Helvetica Neue",Arial,sans-serif;
+  --f-data:"IBM Plex Mono","SFMono-Regular",Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+    --ink:#e8ebe4; --ink-2:#b0b7ab; --ink-3:#848b7f;
+    --rule:#333730; --rule-strong:#4a4f45;
+    --paper:#14170f; --panel:#1b1f18; --panel-2:#232821;
+    --accent:#b6c4a4; --accent-ink:#14170f; --accent-soft:#2b3227;
+    --input-bg:#4a3f12; --input-bg-focus:#665617; --input-ink:#ffe9a3; --input-rule:#8a7526;
+    --pos:#6fc79a; --pos-bg:#1d3129; --warn:#dfae5c; --warn-bg:#352b17; --crit:#e88a7d; --crit-bg:#3a221f;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -18px rgba(0,0,0,.9);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --ink:#e8ebe4; --ink-2:#b0b7ab; --ink-3:#848b7f;
+  --rule:#333730; --rule-strong:#4a4f45;
+  --paper:#14170f; --panel:#1b1f18; --panel-2:#232821;
+  --accent:#b6c4a4; --accent-ink:#14170f; --accent-soft:#2b3227;
+  --input-bg:#4a3f12; --input-bg-focus:#665617; --input-ink:#ffe9a3; --input-rule:#8a7526;
+  --pos:#6fc79a; --pos-bg:#1d3129; --warn:#dfae5c; --warn-bg:#352b17; --crit:#e88a7d; --crit-bg:#3a221f;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -18px rgba(0,0,0,.9);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:var(--f-body); font-size:14px; line-height:1.45;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{font-family:var(--f-display); margin:0; text-wrap:balance; letter-spacing:-.01em}
+button{font:inherit; color:inherit}
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px; border-radius:2px}
+
+/* ---------- chrome ---------- */
+.chrome{position:sticky; top:0; z-index:40; background:var(--panel); border-bottom:1px solid var(--rule-strong)}
+.bar{display:flex; align-items:center; gap:16px; padding:10px 20px; flex-wrap:wrap}
+.mark{display:flex; align-items:baseline; gap:10px; margin-right:auto}
+.mark h1{font-size:15px; font-weight:700; letter-spacing:.01em}
+.mark .ver{font-family:var(--f-data); font-size:11px; color:var(--ink-3); letter-spacing:.04em}
+.tools{display:flex; gap:6px; flex-wrap:wrap}
+.btn{
+  font-family:var(--f-display); font-size:11.5px; font-weight:600; letter-spacing:.05em; text-transform:uppercase;
+  background:transparent; border:1px solid var(--rule-strong); border-radius:2px; padding:6px 11px; cursor:pointer;
+}
+.btn:hover{background:var(--panel-2); border-color:var(--accent)}
+.btn.primary{background:var(--accent); color:var(--accent-ink); border-color:var(--accent)}
+.btn.primary:hover{filter:brightness(1.12)}
+
+/* KPI ribbon */
+.ribbon{display:grid; grid-template-columns:repeat(auto-fit,minmax(148px,1fr)); border-top:1px solid var(--rule)}
+.kpi{padding:9px 20px 11px; border-right:1px solid var(--rule); min-width:0}
+.kpi:last-child{border-right:0}
+.kpi .k{font-family:var(--f-display); font-size:10px; font-weight:600; letter-spacing:.09em; text-transform:uppercase; color:var(--ink-3); white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.kpi .v{font-family:var(--f-data); font-size:17px; font-weight:500; font-variant-numeric:tabular-nums; letter-spacing:-.02em; margin-top:1px}
+.kpi .s{font-family:var(--f-data); font-size:10.5px; color:var(--ink-3); font-variant-numeric:tabular-nums}
+.v.pos{color:var(--pos)} .v.crit{color:var(--crit)}
+
+/* sheet tabs */
+.tabs{display:flex; gap:0; padding:0 16px; border-top:1px solid var(--rule); background:var(--panel-2); overflow-x:auto}
+.tab{
+  font-family:var(--f-display); font-size:12px; font-weight:600; letter-spacing:.03em;
+  background:transparent; border:0; border-bottom:2px solid transparent; padding:9px 14px; cursor:pointer; white-space:nowrap; color:var(--ink-2);
+}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{color:var(--ink); border-bottom-color:var(--accent); background:var(--panel)}
+
+/* ---------- layout ---------- */
+main{max-width:1400px; margin:0 auto; padding:20px 20px 72px}
+.grid{display:grid; gap:16px}
+@media (min-width:1020px){ .cols-2{grid-template-columns:1fr 1fr} .cols-32{grid-template-columns:minmax(0,1.55fr) minmax(0,1fr)} }
+
+.panel{background:var(--panel); border:1px solid var(--rule); border-radius:3px; box-shadow:var(--shadow); overflow:hidden}
+.panel > header{
+  display:flex; align-items:center; gap:10px; padding:9px 14px; background:var(--accent); color:var(--accent-ink);
+}
+.panel > header h2{font-size:11.5px; font-weight:700; letter-spacing:.1em; text-transform:uppercase}
+.panel > header .note{margin-left:auto; font-family:var(--f-data); font-size:10.5px; opacity:.78; letter-spacing:.02em}
+.panel .body{padding:4px 0 6px}
+.panel .body.pad{padding:14px}
+
+/* ledger rows */
+.rows{width:100%; border-collapse:collapse}
+.rows th, .rows td{padding:4.5px 14px; text-align:left; vertical-align:baseline}
+.rows tbody tr{border-top:1px solid var(--rule)}
+.rows tbody tr:first-child{border-top:0}
+.rows .lbl{color:var(--ink-2); font-size:13px}
+.rows .lbl.ind{padding-left:28px}
+.rows .num{
+  font-family:var(--f-data); font-variant-numeric:tabular-nums; text-align:right; white-space:nowrap;
+  font-size:13px; width:1%;
+}
+.rows .unit{font-family:var(--f-data); font-size:11px; color:var(--ink-3); text-align:right; white-space:nowrap; width:1%}
+tr.tot{background:var(--panel-2)}
+tr.tot .lbl{color:var(--ink); font-weight:600}
+tr.tot .num{font-weight:600}
+tr.grand{background:var(--accent-soft)}
+tr.grand .lbl{font-family:var(--f-display); font-weight:700; font-size:13px}
+tr.grand .num{font-weight:600; font-size:15px}
+tr.sub .lbl{font-family:var(--f-display); font-size:10.5px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-3); padding-top:12px}
+
+/* inputs */
+input[type=text], input[type=date], input[type=number], select{
+  font-family:var(--f-data); font-size:13px; font-variant-numeric:tabular-nums;
+  background:var(--input-bg); color:var(--input-ink);
+  border:1px solid var(--input-rule); border-radius:2px; padding:3px 7px; width:100%; text-align:right;
+}
+input:hover{background:var(--input-bg-focus)}
+input:focus{background:var(--input-bg-focus); outline:2px solid var(--accent); outline-offset:0}
+input.txt, select{text-align:left}
+select{padding:3px 5px}
+td.in{width:1%; padding:3px 14px 3px 6px}
+td.in input{min-width:104px}
+td.in select{min-width:210px}
+td.in.wide input{min-width:150px}
+::placeholder{color:currentColor; opacity:.45}
+
+.hint{font-size:11.5px; color:var(--ink-3); line-height:1.4}
+.rows .hint{padding-top:0}
+
+/* status pills */
+.pill{
+  display:inline-flex; align-items:center; gap:5px; font-family:var(--f-display); font-size:10px; font-weight:700;
+  letter-spacing:.07em; text-transform:uppercase; padding:2.5px 7px; border-radius:2px; white-space:nowrap;
+}
+.pill.ok{background:var(--pos-bg); color:var(--pos)}
+.pill.warn{background:var(--warn-bg); color:var(--warn)}
+.pill.bad{background:var(--crit-bg); color:var(--crit)}
+.pill::before{content:""; width:5px; height:5px; border-radius:50%; background:currentColor}
+
+.checks{display:flex; flex-wrap:wrap; gap:8px; padding:10px 14px; border-top:1px solid var(--rule); background:var(--panel-2)}
+
+/* metrics grid inside panels */
+.mgrid{display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); background:var(--panel)}
+.mgrid > div{padding:10px 14px; border-right:1px solid var(--rule); border-bottom:1px solid var(--rule)}
+.mgrid .k{font-family:var(--f-display); font-size:9.5px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-3)}
+.mgrid .v{font-family:var(--f-data); font-size:15px; font-variant-numeric:tabular-nums; margin-top:2px}
+
+/* cashflow table */
+.scroll{overflow-x:auto}
+table.cf{border-collapse:collapse; font-family:var(--f-data); font-size:11.5px; font-variant-numeric:tabular-nums; white-space:nowrap; min-width:100%}
+table.cf th, table.cf td{padding:3px 9px; border-bottom:1px solid var(--rule); text-align:right}
+table.cf th{
+  position:sticky; top:0; background:var(--panel-2); font-family:var(--f-display); font-size:10px; font-weight:600;
+  letter-spacing:.05em; text-transform:uppercase; z-index:2; border-bottom:1px solid var(--rule-strong);
+}
+table.cf th:first-child, table.cf td:first-child{
+  text-align:left; position:sticky; left:0; background:var(--panel); z-index:1; border-right:1px solid var(--rule);
+}
+table.cf th:first-child{background:var(--panel-2); z-index:3}
+table.cf tr.peak td{background:var(--crit-bg)}
+table.cf tr.peak td:first-child{background:var(--crit-bg)}
+table.cf tr.be td{background:var(--pos-bg)}
+table.cf tr.be td:first-child{background:var(--pos-bg)}
+.neg{color:var(--crit)}
+
+canvas{display:block; width:100%; height:auto}
+.legend{display:flex; gap:16px; flex-wrap:wrap; padding:8px 14px 12px; font-size:11.5px; color:var(--ink-2)}
+.legend i{display:inline-block; width:14px; height:3px; vertical-align:middle; margin-right:6px; border-radius:2px}
+
+.hidden{display:none !important}
+footer{max-width:1400px; margin:0 auto; padding:0 20px 40px; color:var(--ink-3); font-size:11.5px; line-height:1.6}
+footer code{font-family:var(--f-data); font-size:11px}
+@media (prefers-reduced-motion:reduce){*{animation:none !important; transition:none !important}}
+</style>
+
+<div class="chrome">
+  <div class="bar">
+    <div class="mark">
+      <h1>Concept Viability Model</h1>
+      <span class="ver">Strategic Land &middot; Residential &middot; Freehold &middot; v6.0</span>
+    </div>
+    <div class="tools">
+      <button class="btn" id="btnTheme" type="button">Theme</button>
+      <button class="btn" id="btnCsv" type="button">Export cashflow</button>
+      <button class="btn" id="btnReset" type="button">Reset</button>
+      <button class="btn primary" id="btnSave" type="button">Save scenario</button>
+    </div>
+  </div>
+  <div class="ribbon" id="ribbon"></div>
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" data-panel="p-summary" aria-selected="true">Viability Summary</button>
+    <button class="tab" role="tab" data-panel="p-irr" aria-selected="false">IRR Input</button>
+    <button class="tab" role="tab" data-panel="p-cash" aria-selected="false">Cashflow</button>
+  </div>
+</div>
+
+<main>
+  <section id="p-summary"></section>
+  <section id="p-irr" class="hidden"></section>
+  <section id="p-cash" class="hidden"></section>
+</main>
+
+<footer>
+  <p><strong>How this maps to the workbook.</strong> Yellow cells are inputs, exactly as in <code>Strat_Land_Concept_Viab_Res_Land_v6.0 (Freehold).xlsm</code>. Everything else is calculated live: the unit calculator, the development appraisal, the residual land value, the 229&#8209;month cashflow, interest, IRR and NPV all recalculate on every keystroke. Figures reconcile to the workbook to the penny on its shipped assumptions.</p>
+  <p>Two differences worth knowing. Interest is solved directly from the cashflow rather than pasted in by goal seek, so <em>Cost of Finance</em> is always current. And the workbook's XIRR reads a fixed 197&#8209;month window; that is reproduced as the default so numbers tie out, with a switch to run IRR across the full cashflow.</p>
+</footer>
+
+<script>
+"use strict";
+/* =======================================================================
+   ENGINE — a direct port of the workbook's calculation chain.
+   Sheet references in comments use the original cell addresses:
+   CVMS = 'Concept Viab Model Strat', VS = 'Viabililty Summary',
+   CP = Control_Panel, CF = Cash_flow, IRR = 'IRR input'.
+   ======================================================================= */
+
+const MS_DAY = 86400000;
+const ym = (y,m) => ({y,m});                        // m is 1-12
+const mkey = d => d.y*12 + (d.m-1);
+const fromKey = k => ({y:Math.floor(k/12), m:k%12+1});
+const addM = (d,n) => fromKey(mkey(d)+n);
+const difM = (a,b) => mkey(b)-mkey(a);
+const eqM = (a,b) => a.y===b.y && a.m===b.m;
+const cmpM = (a,b) => mkey(a)-mkey(b);
+const toISO = d => `${d.y}-${String(d.m).padStart(2,"0")}-01`;
+const fromISO = s => { const p=String(s||"").split("-"); return p.length>=2 && p[0] ? {y:+p[0], m:+p[1]} : null; };
+const jsDate = d => new Date(Date.UTC(d.y, d.m-1, 1));
+
+function gcdInt(a,b){ a=Math.abs(a); b=Math.abs(b); while(b){ [a,b]=[b,a%b]; } return a; }
+
+const DEFAULTS = {
+  // --- CVMS AL column: the Viability Input Section (all yellow) ---
+  region:"North West", author:"AT", appraisalRef:"Benchmark",
+  development:"", address:"", localAuthority:"",
+  appraisalDate:"2026-06-18", landDealType:"Freehold", planningStatus:"RM",
+  grossAcres:100, nonDevAcres:20,                       // AL27, AL28
+  sqftPerAcre:15500,                                    // AL30
+  avgOM:1350, avgRSL:800, avgDisc:850,                  // AL31-33
+  affReq:0.30, rslPct:0.25, discPct:0.25,               // AL34-36
+  cfStart:"2025-01-01", planDate:"2026-11-01", siteStart:"2027-02-01", // AL37-39
+  pdRevPsf:290, rslDisc:0.50, discSale:0.70, salesRate:3,             // AL41-44
+  omBuildPsf:91.47, rslBuildPsf:96, discBuildPsf:95,    // AL46-48
+  dpePsf:5.9,                                           // AL50
+  s106PerPlot:7500,                                     // AL51 (= 7500 x plots)
+  prelimsPerMonth:42000, plotSpecPerPlot:4000, compound:300000,       // AL52-54
+  swiPerAcre:528000, futureHomesPerPlot:6150,           // AL55, AL56
+  infraAbnPsf:9, plotAbnPsf:6, ccPerPlot:500,           // AL57-59
+  enablingInfra:25000000,                               // AL60
+  contingency:0.03,                                     // AL62
+  dsePerMonth:15000, showhomes:8, showhomeFitout:125000, tempSales:50000, // AL64-67
+  interestRate:0.015,                                   // AL68
+  legal:20000, agent:20000, sdltPct:0.055,              // AL74-76
+  headlineTarget:0.1427467817471988,                    // AL23
+  landOfferPerAcre:200000,                              // AL78
+  allocationChance:0.80,                                // AL104
+  mvLandPerAcre:350000,                                 // AL106
+  overheadPA:750000,                                    // AH17
+  // --- Control panel rules ---
+  closeout:2,                                           // CP C20
+  npvRate:0.05,                                         // CP C67
+  landVatable:true, vatRate:0.20,                       // CP C48, C51
+  landValueKnown:false, acceptedLandOffer:16000000,     // CP C11, C12
+  // --- IRR input tab ---
+  landPays:[{d:"2026-11-01", a:null},{d:"",a:0},{d:"",a:0},{d:"",a:0},{d:"",a:0}],
+  s106Pays:[{m:1,a:null},{m:36,a:0},{m:100,a:0},{m:150,a:0},{m:200,a:0}],
+  enablingMonth:1, enablingDur:3,                       // IRR E18, F18
+  infraRel:[0.20,0.10,0,0,0,0,0,0,0],                   // IRR C21:C29
+  preDev:[                                              // CVMS AL93:AN99
+    {n:"Legal fees", a:20000, d:"2025-10-01"},
+    {n:"Agent fees", a:10000, d:"2025-01-01"},
+    {n:"Planning & promotion 1", a:250000, d:"2026-01-01"},
+    {n:"Planning & promotion 2", a:150000, d:"2026-09-01"},
+    {n:"Planning & promotion 3", a:0, d:""},
+    {n:"Technical fees", a:0, d:""},
+    {n:"Book value / other fees", a:150000, d:"2025-01-01"}
+  ],
+  irrWindow:"model"                                     // "model" = CF J85 197-month window
+};
+
+function calc(I){
+  const R = {};
+  const n0 = v => (typeof v === "number" && isFinite(v)) ? v : 0;
+
+  /* ---- 'Calc.' unit calculator ------------------------------------ */
+  const netAcres = n0(I.grossAcres) - n0(I.nonDevAcres);            // CVMS N31
+  const omPct = 1 - n0(I.rslPct) - n0(I.discPct);
+  const pcts  = [omPct, n0(I.rslPct), n0(I.discPct)];
+  const sizes = [n0(I.avgOM), n0(I.avgRSL), n0(I.avgDisc)];
+  const raw   = pcts.map(p => Math.round(p*1e10)/1e8);              // pct x 100
+  let g = 0; raw.forEach(v => { g = gcdInt(g, Math.trunc(v)); });   // Excel GCD truncates
+  if(!g) g = 1;
+  const ratios = raw.map(v => v/g);
+  const I17 = ratios.reduce((s,r,i)=> s + r*sizes[i], 0);           // weighted mix size
+  const B7  = netAcres * n0(I.sqftPerAcre);
+  const B10 = I17 ? B7/I17 : 0;
+  const units = ratios.map(r => Math.round(r*B10));
+  const sqft  = units.map((u,i)=> u*sizes[i]);
+  const [omU,rslU,discU] = units, [omS,rslS,discS] = sqft;
+  const totalUnits = omU+rslU+discU, totalSqft = omS+rslS+discS;    // CVMS F32, M33
+  Object.assign(R,{netAcres,omPct,omU,rslU,discU,totalUnits,totalSqft,omS,rslS,discS});
+  R.affAchieved = totalUnits ? (rslU+discU)/totalUnits : 0;         // CVMS F34
+  R.affOk       = R.affAchieved >= n0(I.affReq);
+  R.density     = netAcres ? totalUnits/netAcres : 0;               // CVMS N34
+  R.sqftPerAcreAchieved = netAcres ? totalSqft/netAcres : 0;        // CVMS M35
+  R.areaEff     = I.grossAcres ? netAcres/n0(I.grossAcres) : 0;
+
+  /* ---- revenue ----------------------------------------------------- */
+  const rslPsf  = n0(I.pdRevPsf)*n0(I.rslDisc);                     // 'Calc.' B30
+  const discPsf = n0(I.pdRevPsf)*n0(I.discSale);                    // 'Calc.' B31
+  const P41 = n0(I.pdRevPsf)*omS, P42 = rslPsf*rslS, P43 = discPsf*discS;
+  const P44 = Math.round(P41+P42+P43);                              // CVMS P44
+  Object.assign(R,{rslPsf,discPsf,P41,P42,P43,P44});
+
+  /* ---- programme --------------------------------------------------- */
+  const L23 = Math.round(n0(I.salesRate) ? omU/n0(I.salesRate) : 0) + 9 + 2;  // CVMS L23
+  R.L23 = L23;
+
+  /* ---- development costs ------------------------------------------- */
+  const P46=omS*n0(I.omBuildPsf), P47=rslS*n0(I.rslBuildPsf), P48=discS*n0(I.discBuildPsf);
+  const P49=P46+P47+P48;                                            // build
+  const P50=n0(I.dpePsf)*totalSqft;                                 // design, planning & eng
+  const P51=n0(I.s106PerPlot)*totalUnits;                           // S106 & CIL
+  const P52=n0(I.prelimsPerMonth)*(L23-3);                          // prelims, duration
+  const P53=n0(I.plotSpecPerPlot)*totalUnits;                       // prelims, plot specific
+  const P54=n0(I.compound);                                         // prelims, one-off
+  const P55=n0(I.swiPerAcre)*netAcres;                              // site works & infra
+  const P56=n0(I.futureHomesPerPlot)*totalUnits;                    // future homes & BNG
+  const P57=n0(I.infraAbnPsf)*totalSqft;                            // infra & build abnormals
+  const P58=n0(I.plotAbnPsf)*totalSqft;                             // plot abnormals
+  const P59=n0(I.ccPerPlot)*totalUnits;                             // customer care
+  const P60=n0(I.enablingInfra);                                    // shared / enabling infra
+  const P61=P49+P50+P51+P52+P53+P54+P55+P56+P57+P58+P59+P60;
+  const P62=P61*n0(I.contingency);
+  const P63=Math.round(P61+P62);
+  const P64=n0(I.dsePerMonth)*L23 + n0(I.showhomeFitout)*n0(I.showhomes) + n0(I.tempSales);
+  Object.assign(R,{P46,P47,P48,P49,P50,P51,P52,P53,P54,P55,P56,P57,P58,P59,P60,P61,P62,P63,P64});
+
+  /* ---- residual land value ----------------------------------------- */
+  const P70=Math.round(P44*n0(I.headlineTarget));                   // headline margin target
+  const P72=P44-P70-P63;                                            // residual land value
+  const P73=0;                                                      // option discount
+  const P74=n0(I.legal), P75=n0(I.agent);
+  const P76=((P72-P74-P75)/(1+n0(I.sdltPct)))*n0(I.sdltPct);        // SDLT
+  const N78=Math.ceil(P72-P73-P74-P75-P76);                         // net offer value for land
+  Object.assign(R,{P70,P72,P73,P74,P75,P76,N78});
+  R.landPerPlot = totalUnits ? N78/totalUnits : 0;
+  R.landPerAcre = netAcres ? N78/netAcres : 0;
+  R.rlvPerAcre  = netAcres ? P72/netAcres : 0;
+
+  /* ---- key dates (Control_Panel) ------------------------------------ */
+  const siteStart = fromISO(I.siteStart) || ym(2027,2);
+  const cfStart   = fromISO(I.cfStart)   || ym(2025,1);
+  const C18 = 3 + n0(I.enablingDur);                                // slab lead-in
+  const C19 = C18 + 6;                                              // first LC lead-in
+  const firstLC = addM(siteStart, C19);
+  const salesPeriods = n0(I.salesRate) ? Math.ceil(omU/n0(I.salesRate)) : 0;
+  const lastLC  = addM(firstLC, salesPeriods);
+  const siteEnd = addM(lastLC, n0(I.closeout));                     // CF C9
+  const C25 = difM(siteStart, siteEnd);                             // total programme
+  const C11 = addM(siteStart, C25);
+  const firstIdx = -difM(cfStart, siteStart);
+  const outletOpen = addM(firstLC,-6), salesFinish = addM(lastLC,-2);
+  Object.assign(R,{siteStart,cfStart,C18,C19,firstLC,salesPeriods,lastLC,siteEnd,C25,firstIdx,outletOpen,salesFinish});
+
+  /* ---- month spine (CF rows 18/19); there is no month zero ---------- */
+  const idxs=[], dates=[];
+  for(let i=firstIdx, guard=0; guard<1200; guard++){
+    const X = i<0 ? addM(siteStart,i+1) : addM(siteStart,i);
+    if(cmpM(C11,X) < 0) break;
+    idxs.push(i); dates.push(addM(X,-1));
+    i = (i===-1) ? 1 : i+1;
+  }
+  const n = idxs.length;
+  R.n=n; R.idxs=idxs; R.dates=dates;
+  const pos = new Map(); dates.forEach((d,k)=> pos.set(mkey(d),k));
+  const row = () => new Array(n).fill(0);
+
+  /* ---- land payments (Land Input rows 13-24) ------------------------ */
+  const lp=[];
+  let landEntered = 0, landUndated = 0;
+  (I.landPays||[]).forEach((p,k)=>{
+    const d = fromISO(p.d);
+    const amt = (k===0 && (p.a===null || p.a===undefined || p.a===0)) ? N78 : n0(p.a);
+    landEntered += amt;
+    if(d && amt) lp.push({d,amt}); else if(amt) landUndated += amt;
+  });
+  R.landPayTotal = landEntered;                                   // IRR H7 check
+  R.landPayScheduled = lp.reduce((s,p)=>s+p.amt,0);
+  R.landUndated = landUndated;
+  R.landPayOk = Math.round(landEntered) === Math.round(N78);
+
+  const r22=row(), r23=row(), r24=row(), r28=row(), r29=row(), r30=row(), r31=row(),
+        r32=row(), r35=row(), r36=row(), r39=row(), r41=row(), r42=row(),
+        r43=row(), r45=row(), r47=row();
+
+  lp.forEach(p => { const k=pos.get(mkey(p.d)); if(k!==undefined) r22[k]-=p.amt; });
+  if(lp.length){
+    const k=pos.get(mkey(lp[0].d));
+    if(k!==undefined) r23[k] -= (P74+P75+P76);                      // legals, agent, SDLT
+    // VAT on land out on completion, reclaimed the following month (Stamp!E7)
+    const vat = I.landVatable ? (P72-P74-P75)*n0(I.vatRate) : 0;
+    R.landVat = vat;
+    if(vat){
+      if(k!==undefined) r24[k] -= vat;
+      const k2 = pos.get(mkey(addM(lp[0].d,1)));
+      if(k2!==undefined) r24[k2] += vat;
+    }
+  } else { R.landVat = 0; }
+
+  /* ---- DPE: annual buckets, spread monthly (IRR rows 10/11) --------- */
+  const NB = Math.ceil(n/12)+1;
+  const blkMonth = [], blkDate = [];
+  for(let j=0;j<NB;j++){ blkMonth.push(firstIdx+12*j); blkDate.push(addM(cfStart,12*j)); }
+  const preAlloc = new Map();
+  (I.preDev||[]).forEach(f=>{
+    const d=fromISO(f.d); if(!d || !n0(f.a)) return;
+    let best=null;
+    for(let j=0;j<NB;j++) if(cmpM(blkDate[j],d)<=0) best=blkMonth[j];   // HLOOKUP(...,TRUE)
+    if(best!==null) preAlloc.set(best,(preAlloc.get(best)||0)+n0(f.a));
+  });
+  const dpeBlk=[]; let used=0;
+  for(let j=0;j<NB;j++){
+    let v;
+    if(blkMonth[j] <= 0) v = preAlloc.get(blkMonth[j]) || 0;
+    else v = used < P50 ? Math.max(P50-used,0) : 0;
+    dpeBlk.push(v); used += v;
+  }
+  R.dpeBlk=dpeBlk; R.blkMonth=blkMonth; R.blkDate=blkDate;
+  for(let j=0;j<NB;j++) for(let t=0;t<12;t++){ const k=12*j+t; if(k<n) r28[k] -= dpeBlk[j]/12; }
+
+  /* ---- build distribution curve ('Build Distribution') -------------- */
+  const ramp=[10,25,45,75,90,100];
+  const bw = m => {
+    if(m<1 || m>salesPeriods) return 0;
+    if(m<=6) return ramp[m-1];
+    if(m>salesPeriods-6) return ramp[salesPeriods-m];
+    return 100;
+  };
+  const buildStart = 1+C18;
+  const w = idxs.map(i => i>0 ? bw(i-buildStart+1) : 0);
+  const sw = w.reduce((a,b)=>a+b,0);
+  for(let k=0;k<n;k++){
+    const f = sw ? w[k]/sw : 0;
+    r30[k] = -P49*f; r31[k] = -P56*f; r36[k] = -P58*f;
+  }
+
+  /* ---- infrastructure release schedule ------------------------------ */
+  const F18 = n0(I.enablingDur);
+  const relOff = [2,30,60,84,120,142,180,204];
+  const relSched = (total, rel, offs, tailDen) => {
+    const out = row(); let cum = 0;
+    const tail = 1 - rel.reduce((a,b)=>a+n0(b),0);
+    for(let k=0;k<n;k++){
+      const ix = idxs[k];
+      if(ix < 0) continue;
+      let v = 0, hit = false;
+      for(let q=0;q<offs.length && q<rel.length;q++){
+        const o = offs[q]+F18;
+        if(ix===o || ix===o+1 || ix===o+2 || ix===o+3){ v = total*(n0(rel[q])/4); hit = true; break; }
+      }
+      if(!hit){
+        const nxt = (k+1<n) ? idxs[k+1] : ix+1;
+        if(nxt > L23) v = total - cum;
+        else if(Math.round(cum) < total) v = tailDen>0 ? total*tail/tailDen : 0;
+      }
+      out[k] = -v; cum += v;
+    }
+    return out;
+  };
+  const rel9 = (I.infraRel||[]).map(n0);
+  const swiRow = relSched(P55, rel9, relOff, L23-3);
+  const abnRow = relSched(P57, rel9.slice(0,2), relOff.slice(0,2), L23-3);
+  for(let k=0;k<n;k++){ r29[k]=swiRow[k]; r35[k]=abnRow[k]; }
+  R.relTotal = rel9.reduce((a,b)=>a+b,0);
+  R.relOk = R.relTotal <= 1.0000001;
+
+  /* ---- prelims (C - Prelims rows 106-108) --------------------------- */
+  for(let k=0;k<n;k++){
+    const ix = idxs[k]; let v = 0;
+    if(ix === 1+F18) v += P54*0.70;
+    if(ix === L23)   v += P54*0.30;
+    if(ix >= 4+F18 && L23>3) v += (P52+P53)/(L23-3);
+    r32[k] = -v;
+  }
+
+  /* ---- enabling infrastructure (CF row 41) -------------------------- */
+  const eM = n0(I.enablingMonth), eD = n0(I.enablingDur);
+  for(let k=0;k<n;k++){
+    const ix = idxs[k];
+    if(ix>0 && ix>=eM && ix<=eD && eD) r41[k] = -P60/eD;
+  }
+
+  /* ---- S106 (CF row 42, driven by IRR rows 14/15) ------------------- */
+  const s106map = new Map();
+  (I.s106Pays||[]).forEach((p,k)=>{
+    const amt = (k===0 && (p.a===null || p.a===undefined)) ? P51 : n0(p.a);
+    if(!amt) return;
+    const m = Math.round(n0(p.m));
+    s106map.set(m,(s106map.get(m)||0)+amt);
+  });
+  let s106Total = 0; s106map.forEach(v=>s106Total+=v);
+  R.s106Scheduled = s106Total;
+  R.s106Total = s106Total; R.s106Ok = Math.round(s106Total) === Math.round(P51);
+  for(let k=0;k<n;k++){ const v=s106map.get(idxs[k]); if(v) r42[k]-=v; }
+
+  /* ---- customer care, sales & marketing ----------------------------- */
+  const ccEnd = addM(siteStart, C25), F43 = difM(firstLC, ccEnd);
+  for(let k=0;k<n;k++){
+    const d = dates[k];
+    if(F43>0 && cmpM(d,firstLC)>=0 && cmpM(d,ccEnd)<0) r43[k] = -P59/F43;
+  }
+  const tempDate = addM(outletOpen,-1);
+  const G45 = -n0(I.tempSales);
+  const G47 = -P64 - G45;
+  const F47 = difM(outletOpen, salesFinish);
+  { const k=pos.get(mkey(tempDate)); if(k!==undefined) r45[k]=G45; }
+  for(let k=0;k<n;k++){
+    const d = dates[k];
+    if(F47>0 && cmpM(d,outletOpen)>=0 && cmpM(d,salesFinish)<0) r47[k] = G47/F47;
+  }
+
+  /* ---- contingency, pro rata to construction (CF row 39) ------------ */
+  const Gcons = -(P50+P55+P49+P56+P52+P53+P54+P57+P58);
+  const G39 = -P62;
+  for(let k=0;k<n;k++){
+    const s = r28[k]+r29[k]+r30[k]+r31[k]+r32[k]+r35[k]+r36[k];
+    r39[k] = Gcons ? G39/Gcons*s : 0;
+  }
+
+  /* ---- revenue rows (CF 53/54/62/63) -------------------------------- */
+  const r53=row(), r54=row(), r62=row(), r63=row(), r66=row();
+  const saleEnd = new Date(jsDate(lastLC).getTime() + 31*MS_DAY);
+  const per = (L23+n0(I.closeout)) ? n0(I.salesRate)/(L23+n0(I.closeout))*L23 : 0;
+  let cumU = 0;
+  for(let k=0;k<n;k++){
+    const d = dates[k];
+    if(cmpM(d,firstLC)>=0 && jsDate(d) <= saleEnd){
+      const v = (cumU + n0(I.salesRate) <= omU) ? per : Math.max(omU-cumU,0);
+      r53[k]=v; cumU+=v;
+    }
+  }
+  const G62 = rslU+discU, G63 = Math.round(P42+P43);
+  for(let k=0;k<n;k++){
+    r54[k] = omU ? P41/omU*r53[k] : 0;
+    r62[k] = omU ? G62/omU*r53[k] : 0;
+    r63[k] = G62 ? G63/G62*r62[k] : 0;
+    r66[k] = r54[k]+r63[k];
+  }
+
+  /* ---- roll up, interest, cumulative -------------------------------- */
+  const exp=row(), net=row(), cumX=row(), intr=row(), cumI=row(), cumT=row();
+  let sX=0, sI=0;
+  const rate = n0(I.interestRate)/12;
+  for(let k=0;k<n;k++){
+    exp[k] = r22[k]+r23[k]+r24[k]+r28[k]+r29[k]+r30[k]+r31[k]+r32[k]+r35[k]+r36[k]
+           + r39[k]+r41[k]+r42[k]+r43[k]+r45[k]+r47[k];
+    net[k] = exp[k]+r66[k];
+    sX += net[k]; cumX[k] = sX;
+    intr[k] = cumX[k] < 0 ? cumX[k]*rate : 0;
+    sI += intr[k]; cumI[k] = sI;
+    cumT[k] = cumX[k]+cumI[k];
+  }
+  const P65 = -Math.round(intr.reduce((a,b)=>a+b,0));                // cost of finance
+  const P66 = P63+P64+P65;
+  const P68 = P44-P66-P72;                                           // net margin GBP
+  Object.assign(R,{rows:{r22,r23,r24,r28,r29,r30,r31,r32,r35,r36,r39,r41,r42,r43,r45,r47,r53,r54,r63,r66},
+                   exp,net,cumX,intr,cumT,P65,P66,P68});
+
+  R.headlineMargin = P44 ? (P44-P63-P72)/P44 : 0;                    // VS E19
+  R.headlineGBP    = P44-P63-P72;
+  R.opMargin       = P44 ? (P44-P66-P72+P65)/P44 : 0;                // VS E20
+  R.opGBP          = P44-P66-P72+P65;
+  R.netMargin      = P44 ? P68/P44 : 0;                              // VS E21
+  R.netPerOMPlot   = omU ? P68/omU : 0;
+  R.netPerAcre     = netAcres ? P68/netAcres : 0;
+
+  /* ---- peak debt, break even ---------------------------------------- */
+  let peak = 0, peakK = 0;
+  for(let k=0;k<n;k++) if(cumT[k] < peak){ peak = cumT[k]; peakK = k; }
+  R.peakDebt = peak; R.peakDate = n ? dates[peakK] : null; R.peakK = peakK;
+  R.beK = cumT.findIndex(v => v > 0);
+  R.breakEven = R.beK >= 0 ? dates[R.beK] : null;
+
+  /* ---- IRR / NPV ----------------------------------------------------- */
+  const W = I.irrWindow === "full" ? n : Math.min(n,197);            // CF J85
+  R.irrWindowMonths = W;
+  const cf = net.slice(0,W), cd = dates.slice(0,W).map(jsDate);
+  R.irr = xirr(cf,cd);
+  R.irrFull = (W===n) ? R.irr : xirr(net, dates.map(jsDate));
+  const d0 = cd[0];
+  R.npv = cd.length ? cf.reduce((s,c,k)=> s + c/Math.pow(1+n0(I.npvRate), (cd[k]-d0)/MS_DAY/365), 0) : 0;
+
+  /* ---- group overhead, PBT (CVMS AH/L block) ------------------------ */
+  R.overheadGBP = n0(I.overheadPA)/12*L23;
+  R.overheadPct = P44 ? R.overheadGBP/P44 : 0;
+  R.PBT = P68 - P44*R.overheadPct;
+  R.PBTpct = P44 ? R.PBT/P44 : 0;
+  R.roi = peak ? R.PBT/(-peak) : 0;
+
+  /* ---- known land value mode (VS rows 82-92) ------------------------ */
+  const T82 = n0(I.acceptedLandOffer);
+  R.T82 = T82;
+  R.costOfLand = T82 ? T82 + P74 + P75 + P76 : 0;
+  R.knownNetGBP = T82 ? P44-P63-P64-R.costOfLand-P65 : 0;
+  R.knownNetPct = (T82 && P44) ? R.knownNetGBP/P44 : 0;
+  R.knownHeadPct = (T82 && P44) ? (P44-P63-R.costOfLand)/P44 : 0;
+
+  /* ---- cost of planning failure (CVMS rows 93-103) ------------------- */
+  const planD = fromISO(I.planDate);
+  let failLand=0, failFees=0, failInt=0, failCont=0;
+  if(planD){
+    for(let k=0;k<n;k++) if(cmpM(dates[k],planD)<0){
+      failLand += -r22[k]; failInt += -intr[k]; failCont += -r39[k];
+    }
+    (I.preDev||[]).forEach(f=>{ const d=fromISO(f.d); if(d && cmpM(d,planD)<0) failFees += n0(f.a); });
+  }
+  R.failLand=failLand; R.failFees=failFees; R.failInt=failInt; R.failCont=failCont;
+  R.failTotal = failLand+failFees+failInt+failCont;
+
+  /* ---- disposal exit (CVMS rows 121-127) ---------------------------- */
+  R.landReceipts = n0(I.mvLandPerAcre)*netAcres;
+  const bookValue = (I.preDev||[]).filter(f=>/book value/i.test(f.n)).reduce((s,f)=>s+n0(f.a),0);
+  const planFees  = (I.preDev||[]).filter(f=>/planning|technical/i.test(f.n)).reduce((s,f)=>s+n0(f.a),0);
+  R.disposalProfit = R.landReceipts - bookValue - (N78+P74+P75+P76+
+       (I.preDev||[]).filter(f=>/legal|agent/i.test(f.n)).reduce((s,f)=>s+n0(f.a),0)) - (planFees+failCont);
+  return R;
+}
+
+/* XIRR — actual/365, bisection on a bracketed root */
+function xirr(cf, dates){
+  if(!cf.length) return 0;
+  const d0 = dates[0];
+  const f = r => cf.reduce((s,c,k)=> s + c/Math.pow(1+r,(dates[k]-d0)/MS_DAY/365), 0);
+  let lo=-0.9999, hi=10, flo=f(lo), fhi=f(hi);
+  if(!isFinite(flo) || !isFinite(fhi) || flo*fhi > 0) return 0;
+  for(let i=0;i<300;i++){
+    const mid=(lo+hi)/2, fm=f(mid);
+    if(flo*fm <= 0){ hi=mid; fhi=fm; } else { lo=mid; flo=fm; }
+  }
+  return (lo+hi)/2;
+}
+</script>
+
+<script>
+"use strict";
+/* =======================================================================
+   UI — state, formatting, rendering, charting
+   ======================================================================= */
+const STORE = "cvm.scenario.v1";
+let S = load();
+let R = calc(S);
+
+function load(){
+  try{
+    const raw = localStorage.getItem(STORE);
+    if(raw) return Object.assign(structuredClone(DEFAULTS), JSON.parse(raw));
+  }catch(e){}
+  return structuredClone(DEFAULTS);
+}
+
+/* ---------- formatting (mirrors the workbook number formats) --------- */
+const nf = (v,d=0) => (isFinite(v)?v:0).toLocaleString("en-GB",{minimumFractionDigits:d,maximumFractionDigits:d});
+const gbp  = (v,d=0) => (v<0?"-":"") + "£" + nf(Math.abs(v),d);
+const gbp2 = v => gbp(v,2);
+const pct  = (v,d=2) => nf((isFinite(v)?v:0)*100,d) + "%";
+const MON = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const mon  = d => d ? `${MON[d.m-1]}-${String(d.y).slice(2)}` : "—";
+const monL = d => d ? `${MON[d.m-1]} ${d.y}` : "—";
+const esc  = s => String(s??"").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+/* input cell helpers — every one of these renders a yellow cell */
+function cell(path, kind, opts){
+  opts = opts||{};
+  const v = get(path);
+  let disp;
+  if(kind==="pct")        disp = v===null||v===undefined||v==="" ? "" : nf(v*100, opts.d ?? 2);
+  else if(kind==="num")   disp = v===null||v===undefined||v==="" ? "" : nf(v, opts.d ?? 0);
+  else if(kind==="month") disp = v===null||v===undefined||v==="" ? "" : String(v);
+  else                    disp = v ?? "";
+  const attrs = kind==="date"
+    ? `type="date" value="${esc(v||"")}"`
+    : `type="text" value="${esc(disp)}" inputmode="${kind==="text"?"text":"decimal"}"`;
+  const cls = kind==="text" ? "txt" : "";
+  const ph  = opts.ph ? ` placeholder="${esc(opts.ph)}"` : "";
+  return `<input class="${cls}" ${attrs}${ph} data-path="${path}" data-kind="${kind}" data-d="${opts.d ?? ""}" aria-label="${esc(opts.label||path)}">`;
+}
+function get(path){
+  return path.split(".").reduce((o,k)=> o==null ? o : o[/^\d+$/.test(k) ? +k : k], S);
+}
+function set(path, val){
+  const ks = path.split(".");
+  let o = S;
+  for(let i=0;i<ks.length-1;i++){ const k = /^\d+$/.test(ks[i]) ? +ks[i] : ks[i]; o = o[k]; }
+  const last = /^\d+$/.test(ks[ks.length-1]) ? +ks[ks.length-1] : ks[ks.length-1];
+  o[last] = val;
+}
+function parseVal(str, kind){
+  if(kind==="text" || kind==="date") return str;
+  const clean = str.replace(/[,\s£%]/g,"");
+  if(clean==="") return kind==="pct" ? 0 : (kind==="month" ? 0 : 0);
+  const num = Number(clean);
+  if(!isFinite(num)) return null;
+  return kind==="pct" ? num/100 : num;
+}
+
+/* ---------- row builders ---------- */
+const r  = (lbl, val, unit, cls) => `<tr class="${cls||""}"><td class="lbl">${lbl}</td><td class="num">${val}</td><td class="unit">${unit||""}</td></tr>`;
+const ri = (lbl, val, unit, cls) => `<tr class="${cls||""}"><td class="lbl ind">${lbl}</td><td class="num">${val}</td><td class="unit">${unit||""}</td></tr>`;
+const rIn = (lbl, input, hint) => `<tr><td class="lbl">${lbl}${hint?`<div class="hint">${hint}</div>`:""}</td><td class="in">${input}</td></tr>`;
+const sub = lbl => `<tr class="sub"><td class="lbl" colspan="3">${lbl}</td></tr>`;
+const panel = (title, note, body, checks) =>
+  `<div class="panel"><header><h2>${title}</h2>${note?`<span class="note">${note}</span>`:""}</header>
+   <div class="body">${body}</div>${checks?`<div class="checks">${checks}</div>`:""}</div>`;
+const pill = (ok, okTxt, badTxt, warn) =>
+  `<span class="pill ${ok ? "ok" : (warn?"warn":"bad")}">${ok ? okTxt : badTxt}</span>`;
+
+/* ---------- KPI ribbon ---------- */
+function renderRibbon(){
+  const k = [
+    ["Net offer value", gbp(R.N78), gbp(R.landPerAcre)+" / net dev acre", R.N78>0?"":"crit"],
+    ["Headline margin", pct(R.headlineMargin), gbp(R.headlineGBP), ""],
+    ["Operating margin", pct(R.opMargin), gbp(R.opGBP), ""],
+    ["Net margin", pct(R.netMargin), gbp(R.P68), R.netMargin<0?"crit":""],
+    ["IRR", pct(R.irr,1), R.irrWindowMonths+"-month window", R.irr<0?"crit":""],
+    ["Peak debt", gbp(R.peakDebt), monL(R.peakDate), "crit"],
+    ["Break even", monL(R.breakEven), R.breakEven?`month ${R.beK>=0?R.idxs[R.beK]:""}`:"not reached", ""],
+    ["Units", nf(R.totalUnits), `${nf(R.omU)} OM · ${nf(R.rslU)} RSL · ${nf(R.discU)} disc`, ""]
+  ];
+  document.getElementById("ribbon").innerHTML = k.map(([a,b,c,cls])=>
+    `<div class="kpi"><div class="k">${a}</div><div class="v ${cls}">${b}</div><div class="s">${c}</div></div>`).join("");
+}
+
+/* ---------- Viability Summary ---------- */
+function renderSummary(){
+  const scheme = panel("Appraisal", "Story Homes · RLV calculation", `<table class="rows">
+    ${rIn("Development", cell("development","text",{label:"Development",ph:"Scheme name"}))}
+    ${rIn("Address", cell("address","text",{label:"Address"}))}
+    ${rIn("Local authority", cell("localAuthority","text",{label:"Local authority"}))}
+    ${rIn("Region", cell("region","text",{label:"Region"}))}
+    ${rIn("Appraisal ref.", cell("appraisalRef","text",{label:"Appraisal reference"}))}
+    ${rIn("Author", cell("author","text",{label:"Author"}))}
+    ${rIn("Date", cell("appraisalDate","date",{label:"Appraisal date"}))}
+    ${rIn("Land deal type", cell("landDealType","text",{label:"Land deal type"}))}
+    ${rIn("Planning status", cell("planningStatus","text",{label:"Planning status"}))}
+  </table>`);
+
+  const site = panel("Site &amp; mix", "inputs drive the unit calculator", `<table class="rows">
+    ${rIn("Gross site area (ac)", cell("grossAcres","num",{d:2,label:"Gross site area"}))}
+    ${rIn("Non-developable area (ac)", cell("nonDevAcres","num",{d:2,label:"Non developable area"}))}
+    ${rIn("Sq ft per net acre", cell("sqftPerAcre","num",{label:"Sq ft per acre"}))}
+    ${rIn("Avg open market unit (sq ft)", cell("avgOM","num",{label:"Average open market unit size"}))}
+    ${rIn("Avg RSL unit (sq ft)", cell("avgRSL","num",{label:"Average RSL unit size"}))}
+    ${rIn("Avg discounted unit (sq ft)", cell("avgDisc","num",{label:"Average discounted unit size"}))}
+    ${rIn("RSL %", cell("rslPct","pct",{d:1,label:"RSL percentage"}))}
+    ${rIn("Discounted %", cell("discPct","pct",{d:1,label:"Discounted percentage"}))}
+    ${rIn("Affordable % required", cell("affReq","pct",{d:1,label:"Affordable percentage required"}))}
+  </table>`, `${pill(R.affOk,"Affordable "+pct(R.affAchieved,1)+" achieved","Affordable short: "+pct(R.affAchieved,1)+" vs "+pct(S.affReq,1))}
+     <span class="pill ok">Open market ${pct(R.omPct,1)}</span>`);
+
+  const derived = panel("Site summary", "calculated", `<div class="mgrid">
+    <div><div class="k">Net developable area</div><div class="v">${nf(R.netAcres,2)} ac</div></div>
+    <div><div class="k">Area efficiency</div><div class="v">${pct(R.areaEff,0)}</div></div>
+    <div><div class="k">Total units</div><div class="v">${nf(R.totalUnits)}</div></div>
+    <div><div class="k">Total sq ft</div><div class="v">${nf(R.totalSqft)}</div></div>
+    <div><div class="k">Density</div><div class="v">${nf(R.density,1)} u/ac</div></div>
+    <div><div class="k">Sq ft per net acre</div><div class="v">${nf(R.sqftPerAcreAchieved)}</div></div>
+    <div><div class="k">Land value per plot</div><div class="v">${gbp(R.landPerPlot)}</div></div>
+    <div><div class="k">Land value per net acre</div><div class="v">${gbp(R.landPerAcre)}</div></div>
+    <div><div class="k">Build duration</div><div class="v">${nf(R.L23)} months</div></div>
+    <div><div class="k">Site duration</div><div class="v">${nf(R.C25)} months</div></div>
+    <div><div class="k">Net margin / OM plot</div><div class="v">${gbp(R.netPerOMPlot)}</div></div>
+    <div><div class="k">Net profit / net acre</div><div class="v">${gbp(R.netPerAcre)}</div></div>
+  </div>`);
+
+  const sales = panel("Sales assumptions", "", `<table class="rows">
+    ${rIn("Open market revenue £/sq ft", cell("pdRevPsf","num",{d:2,label:"Open market revenue per sq ft"}))}
+    ${rIn("RSL revenue, % of OM", cell("rslDisc","pct",{d:0,label:"RSL revenue percentage of open market"}))}
+    ${rIn("Discounted revenue, % of OM", cell("discSale","pct",{d:0,label:"Discounted revenue percentage of open market"}))}
+    ${rIn("Sales rate per month", cell("salesRate","num",{d:1,label:"Sales rate per month"}))}
+    ${r("RSL revenue £/sq ft", gbp2(R.rslPsf))}
+    ${r("Discounted revenue £/sq ft", gbp2(R.discPsf))}
+    ${r("PD average selling price", gbp(R.omU?R.P41/R.omU:0))}
+    ${r("Blended revenue £/sq ft", gbp2(R.totalSqft?R.P44/R.totalSqft:0))}
+  </table>`);
+
+  const psf = v => R.totalSqft ? gbp2(v/R.totalSqft) : "—";
+  const appraisal = panel("Viability calculation", "whole development", `<table class="rows">
+    ${sub("Revenue")}
+    ${ri("Sales of open market dwellings", gbp(R.P41), psf(R.P41))}
+    ${ri("Sales of RSL dwellings", gbp(R.P42), psf(R.P42))}
+    ${ri("Sales of discounted dwellings", gbp(R.P43), psf(R.P43))}
+    ${r("Total sales revenue", gbp(R.P44), psf(R.P44), "tot")}
+    ${sub("Less cost of development, excluding land")}
+    ${ri("Build cost — open market", gbp(R.P46), psf(R.P46))}
+    ${ri("Build cost — RSL", gbp(R.P47), psf(R.P47))}
+    ${ri("Build cost — discounted", gbp(R.P48), psf(R.P48))}
+    ${ri("Design, planning &amp; engineering", gbp(R.P50), psf(R.P50))}
+    ${ri("S106 &amp; CIL", gbp(R.P51), psf(R.P51))}
+    ${ri("Preliminaries — duration related", gbp(R.P52), psf(R.P52))}
+    ${ri("Preliminaries — plot specific", gbp(R.P53), psf(R.P53))}
+    ${ri("Preliminaries — one-off items", gbp(R.P54), psf(R.P54))}
+    ${ri("Site works &amp; infrastructure", gbp(R.P55), psf(R.P55))}
+    ${ri("Future homes allowance &amp; BNG", gbp(R.P56), psf(R.P56))}
+    ${ri("Infra &amp; build abnormals", gbp(R.P57), psf(R.P57))}
+    ${ri("Plot abnormals", gbp(R.P58), psf(R.P58))}
+    ${ri("Customer care", gbp(R.P59), psf(R.P59))}
+    ${ri("Shared / enabling infrastructure", gbp(R.P60), psf(R.P60))}
+    ${r("Total costs of development", gbp(R.P61), psf(R.P61), "tot")}
+    ${ri("Contingency @ "+pct(S.contingency,1), gbp(R.P62), psf(R.P62))}
+    ${r("Total development cost, inc. contingency", gbp(R.P63), psf(R.P63), "tot")}
+    ${ri("Marketing &amp; sales", gbp(R.P64), psf(R.P64))}
+    ${ri("Cost of finance @ "+pct(S.interestRate,1)+" — solved from cashflow", gbp(R.P65), psf(R.P65))}
+    ${r("Total cost, inc. sales &amp; interest", gbp(R.P66), psf(R.P66), "tot")}
+    ${sub("Margin")}
+    ${r("Headline margin target", pct(S.headlineTarget,2), gbp(R.P70))}
+    ${r("Net margin (inc. interest and M&amp;S)", pct(R.netMargin,2), gbp(R.P68), "tot")}
+    ${sub("Residual land")}
+    ${r("Residual land value", gbp(R.P72), gbp(R.rlvPerAcre)+" /ac", "tot")}
+    ${ri("less legal fees", gbp(R.P74))}
+    ${ri("less agent fees", gbp(R.P75))}
+    ${ri("less stamp duty @ "+pct(S.sdltPct,1), gbp(R.P76))}
+    ${r("Net offer value for land", gbp(R.N78), gbp(R.landPerAcre)+" /ac", "grand")}
+  </table>`);
+
+  const costs = panel("Cost assumptions", "yellow cells are inputs", `<table class="rows">
+    ${rIn("Open market build £/sq ft", cell("omBuildPsf","num",{d:2,label:"Open market build cost per sq ft"}))}
+    ${rIn("RSL build £/sq ft", cell("rslBuildPsf","num",{d:2,label:"RSL build cost per sq ft"}))}
+    ${rIn("Discounted build £/sq ft", cell("discBuildPsf","num",{d:2,label:"Discounted build cost per sq ft"}))}
+    ${rIn("Design, planning &amp; eng £/sq ft", cell("dpePsf","num",{d:2,label:"Design planning and engineering per sq ft"}))}
+    ${rIn("S106 &amp; CIL £/plot", cell("s106PerPlot","num",{label:"S106 and CIL per plot"}), "Total "+gbp(R.P51))}
+    ${rIn("Prelims £/month", cell("prelimsPerMonth","num",{label:"Prelims per month"}))}
+    ${rIn("Plot specific prelims £/plot", cell("plotSpecPerPlot","num",{label:"Plot specific prelims per plot"}))}
+    ${rIn("Compound &amp; one-off costs", cell("compound","num",{label:"Compound and one off costs"}))}
+    ${rIn("Site works &amp; infra £/net acre", cell("swiPerAcre","num",{label:"Site works and infrastructure per net acre"}))}
+    ${rIn("Future homes &amp; BNG £/plot", cell("futureHomesPerPlot","num",{label:"Future homes and BNG per plot"}))}
+    ${rIn("Infra &amp; build abnormals £/sq ft", cell("infraAbnPsf","num",{d:2,label:"Infra and build abnormals per sq ft"}))}
+    ${rIn("Plot abnormals £/sq ft", cell("plotAbnPsf","num",{d:2,label:"Plot abnormals per sq ft"}))}
+    ${rIn("Customer care £/plot", cell("ccPerPlot","num",{label:"Customer care per plot"}))}
+    ${rIn("Shared / enabling infrastructure", cell("enablingInfra","num",{label:"Shared enabling infrastructure"}))}
+    ${rIn("Contingency %", cell("contingency","pct",{d:1,label:"Contingency percentage"}))}
+    ${rIn("Marketing &amp; sales £/month", cell("dsePerMonth","num",{label:"Marketing and sales per month"}))}
+    ${rIn("Number of show homes", cell("showhomes","num",{label:"Number of show homes"}))}
+    ${rIn("Show home fit-out each", cell("showhomeFitout","num",{label:"Show home fit out cost"}))}
+    ${rIn("Temporary sales", cell("tempSales","num",{label:"Temporary sales"}))}
+    ${rIn("Interest rate on cost", cell("interestRate","pct",{d:1,label:"Interest rate on cost"}))}
+    ${rIn("Legal fees", cell("legal","num",{label:"Legal fees"}))}
+    ${rIn("Agent fees", cell("agent","num",{label:"Agent fees"}))}
+    ${rIn("SDLT %", cell("sdltPct","pct",{d:1,label:"SDLT percentage"}))}
+    ${rIn("Headline margin % to achieve", cell("headlineTarget","pct",{d:2,label:"Headline margin percentage to achieve"}), "Drives the residual land value")}
+    ${rIn("Group overhead £ per annum", cell("overheadPA","num",{label:"Group overhead per annum"}))}
+    ${rIn("NPV discount factor", cell("npvRate","pct",{d:1,label:"NPV discount factor"}))}
+  </table>`);
+
+  const solveBody = `<table class="rows">
+    ${rIn("Target land value £/net dev acre", cell("landOfferPerAcre","num",{label:"Target land value per net developable acre"}))}
+    ${r("Land value at current margin", gbp(R.landPerAcre)+" /ac")}
+    ${r("Gap", gbp(R.landPerAcre - (S.landOfferPerAcre||0))+" /ac")}
+    <tr><td class="lbl" colspan="3">
+      <button class="btn primary" id="btnSolve" type="button">Solve headline margin</button>
+      <div class="hint" style="margin-top:6px">Finds the headline margin % that makes the net offer value land on your target — the workbook's goal seek, done for you.</div>
+    </td></tr>
+  </table>`;
+
+  const known = panel("Known land value — profit margin", "Enter an agreed price to invert the model", `<table class="rows">
+    ${rIn("Accepted land offer", cell("acceptedLandOffer","num",{label:"Accepted land offer"}))}
+    ${ri("less legal fees", gbp(R.T82?R.P74:0))}
+    ${ri("less agent fees", gbp(R.T82?R.P75:0))}
+    ${ri("less stamp duty", gbp(R.T82?R.P76:0))}
+    ${r("Cost of land", gbp(R.costOfLand), "", "tot")}
+    ${r("Net margin at this price", pct(R.knownNetPct,2), gbp(R.knownNetGBP), "grand")}
+    ${r("Memo: headline margin check", pct(R.knownHeadPct,2))}
+  </table>`);
+
+  const risk = panel("Planning risk", "cost of failure &amp; disposal exit", `<table class="rows">
+    ${rIn("Site planning / allocation date", cell("planDate","date",{label:"Site planning or allocation date"}))}
+    ${rIn("Allocation likelihood", cell("allocationChance","pct",{d:0,label:"Allocation likelihood"}))}
+    ${rIn("Market value of land at allocation £/net acre", cell("mvLandPerAcre","num",{label:"Market value of land at allocation per net acre"}))}
+    ${sub("Cost of planning failure")}
+    <tr><td class="lbl" colspan="3"><div class="hint">Everything drawn from the cashflow before the allocation date above.</div></td></tr>
+    ${ri("Land payments before allocation", gbp(R.failLand))}
+    ${ri("Promotion, legal &amp; technical fees", gbp(R.failFees))}
+    ${ri("Contingency", gbp(R.failCont))}
+    ${ri("Cost of finance", gbp(R.failInt))}
+    ${r("Total investment at risk", gbp(R.failTotal), "", "tot")}
+    ${sub("Disposal exit")}
+    ${r("Land receipts at market value", gbp(R.landReceipts))}
+    ${r("Exit profit on planning", gbp(R.disposalProfit), "", "tot")}
+  </table>`);
+
+  document.getElementById("p-summary").innerHTML = `
+    <div class="grid cols-32">
+      <div class="grid">${appraisal}</div>
+      <div class="grid">${scheme}${site}${derived}${sales}
+        ${panel("Land value goal seek","",solveBody)}${known}${risk}</div>
+    </div>
+    <div class="grid" style="margin-top:16px">${costs}</div>`;
+}
+
+/* ---------- IRR Input ---------- */
+function renderIrr(){
+  const payRows = S.landPays.map((p,i)=>{
+    const amt = (i===0 && (p.a===null||p.a===undefined||p.a===0)) ? R.N78 : (p.a||0);
+    return `<tr><td class="lbl">Payment ${i+1}</td>
+      <td class="in wide">${cell(`landPays.${i}.d`,"date",{label:`Land payment ${i+1} date`})}</td>
+      <td class="in">${i===0
+        ? `<input type="text" value="${nf(amt)}" data-path="landPays.0.a" data-kind="num" data-d="0" aria-label="Land payment 1 amount">`
+        : cell(`landPays.${i}.a`,"num",{label:`Land payment ${i+1} amount`})}</td></tr>`;
+  }).join("");
+
+  const land = panel("Net land payment", "Total must equal the net offer value", `<table class="rows">
+    ${r("Net offer value for land", gbp(R.N78), "", "tot")}
+    <tr class="sub"><td class="lbl">Schedule</td><td class="lbl" style="text-align:right">Date</td><td class="lbl" style="text-align:right">Amount</td></tr>
+    ${payRows}
+    ${r("Entered", gbp(R.landPayTotal), "", "tot")}
+    ${rIn("Land is VATable", `<select data-path="landVatable" data-kind="bool" aria-label="Land is VATable"><option value="true"${S.landVatable?" selected":""}>Yes</option><option value="false"${!S.landVatable?" selected":""}>No</option></select>`)}
+    ${rIn("VAT rate", cell("vatRate","pct",{d:0,label:"VAT rate"}), "Paid on completion, reclaimed the following month")}
+    ${r("VAT on land", gbp(R.landVat))}
+  </table>`, pill(R.landPayOk, "Payments match", "Payments differ from total by "+gbp(R.landPayTotal-R.N78))
+     + (R.landUndated ? pill(false, "", gbp(R.landUndated)+" has no date and will not reach the cashflow", true) : ""));
+
+  const s106Rows = S.s106Pays.map((p,i)=>{
+    const amt = (i===0 && (p.a===null||p.a===undefined)) ? R.P51 : (p.a||0);
+    return `<tr><td class="lbl">Payment ${i+1}</td>
+      <td class="in">${cell(`s106Pays.${i}.m`,"month",{label:`S106 payment ${i+1} month`})}</td>
+      <td class="in">${i===0
+        ? `<input type="text" value="${nf(amt)}" data-path="s106Pays.0.a" data-kind="num" data-d="0" aria-label="S106 payment 1 amount">`
+        : cell(`s106Pays.${i}.a`,"num",{label:`S106 payment ${i+1} amount`})}</td></tr>`;
+  }).join("");
+
+  const s106 = panel("S106 payments", "Month is counted from site start", `<table class="rows">
+    ${r("S106 &amp; CIL total", gbp(R.P51), "", "tot")}
+    <tr class="sub"><td class="lbl">Schedule</td><td class="lbl" style="text-align:right">Month</td><td class="lbl" style="text-align:right">Amount</td></tr>
+    ${s106Rows}
+    ${r("Scheduled", gbp(R.s106Total), "", "tot")}
+  </table>`, pill(R.s106Ok, "Payments match", "Payments differ from total by "+gbp(R.s106Total-R.P51)));
+
+  const enabling = panel("Enabling / shared infrastructure", "Opens the site up", `<table class="rows">
+    ${r("Amount", gbp(R.P60), "", "tot")}
+    ${rIn("First month", cell("enablingMonth","month",{label:"Enabling infrastructure first month"}))}
+    ${rIn("Duration (months)", cell("enablingDur","month",{label:"Enabling infrastructure duration"}),
+        "Also sets the slab lead-in: first slab at month "+nf(R.C18)+", first legal completion at month "+nf(R.C19))}
+    ${r("Spend per month", gbp(S.enablingDur ? R.P60/S.enablingDur : 0))}
+  </table>`);
+
+  const relLabels = ["First 4 months","After ~2 years (month 30)","After 5 years (month 60)","After 7 years (month 84)",
+    "After 10 years (month 120)","After 12 years (month 142)","After 15 years (month 180)","After 17 years (month 204)","After 20 years — held back"];
+  const relRows = S.infraRel.map((v,i)=>
+    `<tr><td class="lbl">Infra release ${i+1} — ${relLabels[i]}</td>
+     <td class="in">${cell(`infraRel.${i}`,"pct",{d:0,label:`Infrastructure release ${i+1}`})}</td></tr>`).join("");
+
+  const infra = panel("Infrastructure release profile", "% of site works &amp; infra spend, released in 4-month tranches", `<table class="rows">
+    ${relRows}
+    ${r("Released in tranches", pct(R.relTotal,0), "", "tot")}
+    ${r("Balance spread evenly over the build", pct(1-R.relTotal,0))}
+  </table>`, pill(R.relOk, "Profile totals "+pct(R.relTotal,0), "Releases exceed 100%"));
+
+  const feeRows = S.preDev.map((f,i)=>
+    `<tr><td class="lbl">${esc(f.n)}</td>
+     <td class="in wide">${cell(`preDev.${i}.d`,"date",{label:`${f.n} date`})}</td>
+     <td class="in">${cell(`preDev.${i}.a`,"num",{label:`${f.n} amount`})}</td></tr>`).join("");
+  const feeTotal = S.preDev.reduce((s,f)=>s+(f.a||0),0);
+
+  const fees = panel("Pre-development fees", "Drawn before the site starts — these set the early cash profile and the cost of planning failure", `<table class="rows">
+    <tr class="sub"><td class="lbl">Item</td><td class="lbl" style="text-align:right">Date</td><td class="lbl" style="text-align:right">Amount</td></tr>
+    ${feeRows}
+    ${r("Total pre-development fees", gbp(feeTotal), "", "tot")}
+  </table>`);
+
+  const dates = panel("Programme", "Dates cascade from these three", `<table class="rows">
+    ${rIn("Cashflow start date", cell("cfStart","date",{label:"Cashflow start date"}))}
+    ${rIn("Site start date", cell("siteStart","date",{label:"Site start date"}))}
+    ${rIn("Construction close-out (months after final LC)", cell("closeout","month",{label:"Construction close out months"}))}
+    ${sub("Derived")}
+    ${r("First month of cashflow", monL(R.dates[0]), "month "+R.firstIdx)}
+    ${r("First slab", monL(addM(R.siteStart,R.C18)), "month "+nf(R.C18))}
+    ${r("Sales outlet opening", monL(R.outletOpen))}
+    ${r("First legal completion", monL(R.firstLC), "month "+nf(R.C19))}
+    ${r("Sales periods", nf(R.salesPeriods)+" months")}
+    ${r("Last legal completion", monL(R.lastLC))}
+    ${r("Site end date", monL(R.siteEnd), nf(R.C25)+" months")}
+    ${r("Cashflow length", nf(R.n)+" months")}
+  </table>`);
+
+  const dpeRows = R.dpeBlk.map((v,j)=> v ? `<tr><td class="lbl">Year from ${monL(R.blkDate[j])}</td><td class="num">${gbp(v)}</td><td class="unit">${gbp(v/12)} /mo</td></tr>` : "").join("");
+  const dpe = panel("Design, planning &amp; engineering profile", "Annual buckets, spread monthly", `<table class="rows">
+    ${r("DPE total", gbp(R.P50), "", "tot")}
+    ${dpeRows}
+    <tr><td class="lbl" colspan="3"><div class="hint">Buckets before site start are filled by the pre-development fees above; the balance falls in the first year after site start, exactly as the workbook allocates it.</div></td></tr>
+  </table>`);
+
+  document.getElementById("p-irr").innerHTML =
+    `<div class="grid cols-2">
+       <div class="grid">${dates}${land}${fees}</div>
+       <div class="grid">${enabling}${infra}${s106}${dpe}</div>
+     </div>`;
+}
+
+/* ---------- Cashflow ---------- */
+function renderCash(){
+  const rowsSpec = [
+    ["Land", k => R.rows.r22[k]+R.rows.r23[k]+R.rows.r24[k]],
+    ["Build", k => R.rows.r30[k]+R.rows.r31[k]+R.rows.r36[k]],
+    ["Infrastructure", k => R.rows.r29[k]+R.rows.r35[k]+R.rows.r41[k]],
+    ["DPE &amp; S106", k => R.rows.r28[k]+R.rows.r42[k]],
+    ["Prelims", k => R.rows.r32[k]],
+    ["Other", k => R.rows.r39[k]+R.rows.r43[k]+R.rows.r45[k]+R.rows.r47[k]]
+  ];
+  const head = `<tr><th>Month</th><th>#</th>${rowsSpec.map(s=>`<th>${s[0]}</th>`).join("")}
+    <th>Expenditure</th><th>Revenue</th><th>Net</th><th>Cumulative</th><th>Interest</th><th>Cum. inc. interest</th></tr>`;
+  const num = v => `<span class="${v<0?"neg":""}">${v?nf(Math.round(v)):"—"}</span>`;
+  let body = "";
+  for(let k=0;k<R.n;k++){
+    const cls = k===R.peakK ? "peak" : (k===R.beK ? "be" : "");
+    body += `<tr class="${cls}"><td>${mon(R.dates[k])}</td><td>${R.idxs[k]}</td>`
+      + rowsSpec.map(s=>`<td>${num(s[1](k))}</td>`).join("")
+      + `<td>${num(R.exp[k])}</td><td>${num(R.rows.r66[k])}</td><td>${num(R.net[k])}</td>`
+      + `<td>${num(R.cumX[k])}</td><td>${num(R.intr[k])}</td><td>${num(R.cumT[k])}</td></tr>`;
+  }
+
+  const kpis = panel("Cashflow result", `${R.n} months · ${monL(R.dates[0])} to ${monL(R.dates[R.n-1])}`, `<div class="mgrid">
+    <div><div class="k">IRR (${R.irrWindowMonths}-month window)</div><div class="v">${pct(R.irr,2)}</div></div>
+    <div><div class="k">IRR, full cashflow</div><div class="v">${pct(R.irrFull,2)}</div></div>
+    <div><div class="k">NPV @ ${pct(S.npvRate,0)}</div><div class="v">${gbp(R.npv)}</div></div>
+    <div><div class="k">Peak debt</div><div class="v">${gbp(R.peakDebt)}</div></div>
+    <div><div class="k">Peak debt month</div><div class="v">${monL(R.peakDate)}</div></div>
+    <div><div class="k">Break even</div><div class="v">${monL(R.breakEven)}</div></div>
+    <div><div class="k">Cost of finance</div><div class="v">${gbp(R.P65)}</div></div>
+    <div><div class="k">PBT after ${pct(R.overheadPct,1)} overhead</div><div class="v">${gbp(R.PBT)}</div></div>
+    <div><div class="k">ROI on peak debt</div><div class="v">${pct(R.roi,0)}</div></div>
+  </div>
+  <table class="rows">
+    ${rIn("IRR calculation window", `<select data-path="irrWindow" data-kind="raw" aria-label="IRR calculation window">
+      <option value="model"${S.irrWindow==="model"?" selected":""}>Match workbook (197 months)</option>
+      <option value="full"${S.irrWindow==="full"?" selected":""}>Full cashflow (${R.n} months)</option></select>`,
+      "The workbook's XIRR reads a fixed 197-column range. Matching it reproduces the sheet exactly; the full option values every month.")}
+  </table>`);
+
+  const chart = panel("Cumulative cash position", "including interest", `
+    <canvas id="cfChart" width="1600" height="440" role="img" aria-label="Cumulative cash position over the life of the scheme"></canvas>
+    <div class="legend">
+      <span><i style="background:var(--accent)"></i>Cumulative, inc. interest</span>
+      <span><i style="background:var(--crit)"></i>Peak debt ${gbp(R.peakDebt)} · ${monL(R.peakDate)}</span>
+      <span><i style="background:var(--pos)"></i>Break even ${monL(R.breakEven)}</span>
+    </div>`);
+
+  document.getElementById("p-cash").innerHTML =
+    `<div class="grid">${kpis}${chart}
+      ${panel("Monthly cashflow","values in £",`<div class="scroll" style="max-height:620px"><table class="cf"><thead>${head}</thead><tbody>${body}</tbody></table></div>`)}
+    </div>`;
+  drawChart();
+}
+
+function drawChart(){
+  const cv = document.getElementById("cfChart");
+  if(!cv) return;
+  const ctx = cv.getContext("2d");
+  const cs = getComputedStyle(document.documentElement);
+  const col = n => cs.getPropertyValue(n).trim();
+  const W = cv.width, H = cv.height, PL = 108, PR = 24, PT = 18, PB = 40;
+  ctx.clearRect(0,0,W,H);
+  const vals = R.cumT, n = vals.length;
+  if(!n) return;
+  const lo = Math.min(0, ...vals), hi = Math.max(0, ...vals);
+  const span = (hi-lo) || 1;
+  const X = i => PL + (W-PL-PR) * (n>1 ? i/(n-1) : 0);
+  const Y = v => PT + (H-PT-PB) * (1 - (v-lo)/span);
+
+  ctx.font = "500 20px 'IBM Plex Mono', monospace";
+  ctx.fillStyle = col("--ink-3");
+  ctx.strokeStyle = col("--rule");
+  ctx.lineWidth = 1;
+  const step = span/5;
+  for(let i=0;i<=5;i++){
+    const v = lo + step*i, y = Math.round(Y(v))+0.5;
+    ctx.beginPath(); ctx.moveTo(PL,y); ctx.lineTo(W-PR,y); ctx.stroke();
+    ctx.textAlign = "right"; ctx.textBaseline = "middle";
+    ctx.fillText((v<0?"-":"")+"£"+nf(Math.abs(v)/1e6,1)+"m", PL-12, y);
+  }
+  // zero line
+  ctx.strokeStyle = col("--rule-strong"); ctx.lineWidth = 1.5;
+  ctx.beginPath(); const y0 = Math.round(Y(0))+0.5; ctx.moveTo(PL,y0); ctx.lineTo(W-PR,y0); ctx.stroke();
+
+  // area
+  const grad = ctx.createLinearGradient(0,PT,0,H-PB);
+  grad.addColorStop(0, col("--accent")+"38");
+  grad.addColorStop(1, col("--accent")+"08");
+  ctx.beginPath(); ctx.moveTo(X(0), Y(0));
+  for(let i=0;i<n;i++) ctx.lineTo(X(i), Y(vals[i]));
+  ctx.lineTo(X(n-1), Y(0)); ctx.closePath();
+  ctx.fillStyle = grad; ctx.fill();
+
+  ctx.beginPath();
+  for(let i=0;i<n;i++){ const x=X(i), y=Y(vals[i]); i?ctx.lineTo(x,y):ctx.moveTo(x,y); }
+  ctx.strokeStyle = col("--accent"); ctx.lineWidth = 3; ctx.lineJoin="round"; ctx.stroke();
+
+  // markers
+  const mark = (i, color, label) => {
+    if(i<0 || i>=n) return;
+    const x = X(i), y = Y(vals[i]);
+    ctx.strokeStyle = color; ctx.lineWidth = 2; ctx.setLineDash([5,5]);
+    ctx.beginPath(); ctx.moveTo(x,PT); ctx.lineTo(x,H-PB); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle = color; ctx.beginPath(); ctx.arc(x,y,6,0,7); ctx.fill();
+    // chip so the label stays legible over the line and clear of the axis
+    const padX = 10, padY = 7, tw = ctx.measureText(label).width, th = 22;
+    let bx = x + 14, by = Math.min(Math.max(y - 34, PT + 4), H - PB - th - padY*2 - 4);
+    if(bx + tw + padX*2 > W - PR) bx = x - 14 - tw - padX*2;
+    ctx.fillStyle = col("--panel");
+    ctx.strokeStyle = color; ctx.lineWidth = 1.5;
+    const w = tw + padX*2, h = th + padY*2, rad = 4;
+    ctx.beginPath(); ctx.roundRect(bx, by, w, h, rad); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = color; ctx.textAlign = "left"; ctx.textBaseline = "middle";
+    ctx.fillText(label, bx + padX, by + h/2 + 1);
+  };
+  mark(R.peakK, col("--crit"), "Peak debt " + gbp(R.peakDebt));
+  mark(R.beK,   col("--pos"),  "Break even " + mon(R.breakEven));
+
+  // x axis: year ticks
+  ctx.fillStyle = col("--ink-3"); ctx.textAlign="center"; ctx.textBaseline="top";
+  ctx.strokeStyle = col("--rule"); ctx.lineWidth = 1;
+  for(let i=0;i<n;i++){
+    if(R.dates[i].m !== 1) continue;
+    if(R.dates[i].y % 2) continue;
+    const x = Math.round(X(i))+0.5;
+    ctx.beginPath(); ctx.moveTo(x,H-PB); ctx.lineTo(x,H-PB+6); ctx.stroke();
+    ctx.fillText(String(R.dates[i].y), x, H-PB+11);
+  }
+}
+
+/* ---------- render + events ---------- */
+function renderAll(){
+  R = calc(S);
+  renderRibbon(); renderSummary(); renderIrr(); renderCash();
+}
+
+document.addEventListener("input", e => {
+  const el = e.target;
+  if(!el.dataset || !el.dataset.path) return;
+  const {path, kind} = el.dataset;
+  if(kind === "bool"){ set(path, el.value === "true"); }
+  else if(kind === "raw"){ set(path, el.value); }
+  else {
+    const v = parseVal(el.value, kind);
+    if(v === null) return;
+    set(path, v);
+  }
+  // Keep the field the user is typing in exactly as they left it — reformatting
+  // mid-keystroke would shove the caret around every time a comma appears.
+  const key = el.dataset.path;
+  const raw = el.value;
+  const caret = el.setSelectionRange ? el.selectionStart : null;
+  renderAll();
+  const again = document.querySelector(`[data-path="${key}"]`);
+  if(again){
+    if(again.value !== raw && again.type !== "date") again.value = raw;
+    again.focus();
+    if(caret !== null && again.setSelectionRange){
+      try{ again.setSelectionRange(caret, caret); }catch(err){}
+    }
+  }
+});
+
+// Formatting settles when the field is left.
+document.addEventListener("focusout", e => {
+  if(e.target.dataset && e.target.dataset.path && e.target.tagName === "INPUT") renderAll();
+});
+
+document.addEventListener("change", e => {
+  const el = e.target;
+  if(el.dataset && el.dataset.path && (el.tagName === "SELECT" || el.type === "date")) renderAll();
+});
+
+document.addEventListener("click", e => {
+  const t = e.target.closest("button");
+  if(!t) return;
+  if(t.classList.contains("tab")){
+    document.querySelectorAll(".tab").forEach(b => b.setAttribute("aria-selected", String(b === t)));
+    ["p-summary","p-irr","p-cash"].forEach(id =>
+      document.getElementById(id).classList.toggle("hidden", id !== t.dataset.panel));
+    if(t.dataset.panel === "p-cash") drawChart();
+    return;
+  }
+  if(t.id === "btnSolve") solveLandValue();
+  if(t.id === "btnTheme") toggleTheme();
+  if(t.id === "btnSave"){ save(); flash(t, "Saved"); }
+  if(t.id === "btnReset"){
+    if(confirm("Reset every input back to the workbook's shipped assumptions?")){
+      localStorage.removeItem(STORE); S = structuredClone(DEFAULTS); renderAll();
+    }
+  }
+  if(t.id === "btnCsv") exportCsv();
+});
+
+function flash(btn, msg){
+  const old = btn.textContent; btn.textContent = msg;
+  setTimeout(()=> btn.textContent = old, 1400);
+}
+function save(){
+  try{ localStorage.setItem(STORE, JSON.stringify(S)); }catch(e){}
+}
+function toggleTheme(){
+  const root = document.documentElement;
+  const now = root.getAttribute("data-theme");
+  const sysDark = matchMedia("(prefers-color-scheme: dark)").matches;
+  const next = now ? (now === "dark" ? "light" : "dark") : (sysDark ? "light" : "dark");
+  root.setAttribute("data-theme", next);
+  try{ localStorage.setItem("cvm.theme", next); }catch(e){}
+  drawChart();
+}
+
+/* Goal seek: solve the headline margin that hits a target land value per acre */
+function solveLandValue(){
+  const target = S.landOfferPerAcre || 0;
+  if(!target){ alert("Enter a target land value per net developable acre first."); return; }
+  let lo = -0.5, hi = 0.9;
+  const f = m => { const t = Object.assign({}, S, {headlineTarget:m}); const rr = calc(t); return rr.landPerAcre - target; };
+  if(f(lo) < 0 && f(hi) < 0){ alert("The scheme cannot reach that land value at any margin."); return; }
+  for(let i=0;i<80;i++){ const mid=(lo+hi)/2; if(f(mid) > 0) lo = mid; else hi = mid; }
+  S.headlineTarget = Math.round((lo+hi)/2*1e6)/1e6;
+  renderAll();
+}
+
+function exportCsv(){
+  const head = ["Month","Index","Land","Build","Infrastructure","DPE & S106","Prelims","Other",
+                "Expenditure","Revenue","Net","Cumulative","Interest","Cumulative inc interest"];
+  const lines = [head.join(",")];
+  for(let k=0;k<R.n;k++){
+    lines.push([
+      `${MON[R.dates[k].m-1]}-${R.dates[k].y}`, R.idxs[k],
+      R.rows.r22[k]+R.rows.r23[k]+R.rows.r24[k],
+      R.rows.r30[k]+R.rows.r31[k]+R.rows.r36[k],
+      R.rows.r29[k]+R.rows.r35[k]+R.rows.r41[k],
+      R.rows.r28[k]+R.rows.r42[k],
+      R.rows.r32[k],
+      R.rows.r39[k]+R.rows.r43[k]+R.rows.r45[k]+R.rows.r47[k],
+      R.exp[k], R.rows.r66[k], R.net[k], R.cumX[k], R.intr[k], R.cumT[k]
+    ].map(v => typeof v === "number" ? Math.round(v) : v).join(","));
+  }
+  const blob = new Blob([lines.join("\n")], {type:"text/csv"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "concept-viability-cashflow.csv";
+  document.body.appendChild(a); a.click();
+  setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); }, 0);
+}
+
+try{ const th = localStorage.getItem("cvm.theme"); if(th) document.documentElement.setAttribute("data-theme", th); }catch(e){}
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", drawChart);
+addEventListener("resize", drawChart);
+renderAll();
+</script>
