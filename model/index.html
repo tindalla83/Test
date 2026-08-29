@@ -1184,9 +1184,17 @@ document.addEventListener("input", e => {
   }
 });
 
-// Formatting settles when the field is left.
+// Formatting settles when the field is left. Only that field is touched —
+// rebuilding the page from inside a blur would tear out the node being left.
 document.addEventListener("focusout", e => {
-  if(e.target.dataset && e.target.dataset.path && e.target.tagName === "INPUT") renderAll();
+  const el = e.target;
+  if(!el.dataset || !el.dataset.path || el.tagName !== "INPUT") return;
+  const {kind} = el.dataset;
+  if(kind === "text" || kind === "date") return;
+  const d = el.dataset.d === "" ? undefined : Number(el.dataset.d);
+  const v = get(el.dataset.path);
+  if(v === null || v === undefined || v === "") { el.value = ""; return; }
+  el.value = kind === "pct" ? nf(v*100, d ?? 2) : nf(v, d ?? 0);
 });
 
 document.addEventListener("change", e => {
@@ -1212,7 +1220,7 @@ document.addEventListener("click", e => {
       localStorage.removeItem(STORE); S = structuredClone(DEFAULTS); renderAll();
     }
   }
-  if(t.id === "btnCsv") exportCsv();
+  if(t.id === "btnCsv") exportCsv(t);
 });
 
 function flash(btn, msg){
@@ -1244,7 +1252,7 @@ function solveLandValue(){
   renderAll();
 }
 
-function exportCsv(){
+function buildCsv(){
   const head = ["Month","Index","Land","Build","Infrastructure","DPE & S106","Prelims","Other",
                 "Expenditure","Revenue","Net","Cumulative","Interest","Cumulative inc interest"];
   const lines = [head.join(",")];
@@ -1260,10 +1268,35 @@ function exportCsv(){
       R.exp[k], R.rows.r66[k], R.net[k], R.cumX[k], R.intr[k], R.cumT[k]
     ].map(v => typeof v === "number" ? Math.round(v) : v).join(","));
   }
-  const blob = new Blob([lines.join("\n")], {type:"text/csv"});
+  return lines.join("\n");
+}
+
+/* Saving a file differs by host: the claude.ai viewer mediates it through the
+   downloads capability, plain hosting uses an object URL. */
+const hosted = !!(window.claude && typeof window.claude.use === "function");
+let downloadsNs, downloadsAsked = false;
+async function getDownloads(){
+  if(downloadsAsked) return downloadsNs;
+  downloadsAsked = true;
+  try{ downloadsNs = hosted ? await window.claude.use("downloads") : null; }
+  catch(e){ downloadsNs = null; }
+  return downloadsNs;
+}
+
+async function exportCsv(btn){
+  const csv = buildCsv();
+  const name = "concept-viability-cashflow.csv";
+  if(hosted){
+    const dl = await getDownloads();
+    if(!dl){ flash(btn, "Not available here"); return; }
+    try{ await dl.save({filename:name, data:csv}); flash(btn, "Saved"); }
+    catch(err){ if(err && err.code === "declined") return; flash(btn, "Could not save"); }
+    return;
+  }
+  const blob = new Blob([csv], {type:"text/csv"});
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
-  a.download = "concept-viability-cashflow.csv";
+  a.download = name;
   document.body.appendChild(a); a.click();
   setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); }, 0);
 }
