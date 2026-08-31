@@ -29,6 +29,8 @@
   --crit:#9c2318;
   --crit-bg:#f4ddda;
   --shadow:0 1px 2px rgba(25,29,24,.06), 0 8px 24px -18px rgba(25,29,24,.4);
+  /* categorical slots for scenario comparison — validated against --panel */
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --s5:#e87ba4; --s6:#008300;
   --f-display:"Archivo","Helvetica Neue",Arial,sans-serif;
   --f-body:"IBM Plex Sans","Helvetica Neue",Arial,sans-serif;
   --f-data:"IBM Plex Mono","SFMono-Regular",Consolas,monospace;
@@ -43,6 +45,7 @@
     --input-bg:#4a3f12; --input-bg-focus:#665617; --input-ink:#ffe9a3; --input-rule:#8a7526;
     --pos:#6fc79a; --pos-bg:#1d3129; --warn:#dfae5c; --warn-bg:#352b17; --crit:#e88a7d; --crit-bg:#3a221f;
     --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -18px rgba(0,0,0,.9);
+    --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300;
   }
 }
 :root[data-theme="dark"]{
@@ -54,6 +57,7 @@
   --input-bg:#4a3f12; --input-bg-focus:#665617; --input-ink:#ffe9a3; --input-rule:#8a7526;
   --pos:#6fc79a; --pos-bg:#1d3129; --warn:#dfae5c; --warn-bg:#352b17; --crit:#e88a7d; --crit-bg:#3a221f;
   --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -18px rgba(0,0,0,.9);
+    --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300;
 }
 
 *{box-sizing:border-box}
@@ -189,6 +193,60 @@ table.cf tr.be td:first-child{background:var(--pos-bg)}
 .neg{color:var(--crit)}
 
 canvas{display:block; width:100%; height:auto}
+.chartwrap{position:relative}
+.tip{
+  position:absolute; pointer-events:none; z-index:5; min-width:150px;
+  background:var(--panel); border:1px solid var(--rule-strong); border-radius:3px;
+  box-shadow:var(--shadow); padding:8px 10px; font-size:12px; opacity:0; transition:opacity .08s;
+}
+.tip[data-on="1"]{opacity:1}
+.tip .th{font-family:var(--f-display); font-size:10px; font-weight:700; letter-spacing:.08em;
+  text-transform:uppercase; color:var(--ink-3); margin-bottom:5px}
+.tip .tr{display:flex; align-items:center; gap:7px; white-space:nowrap; line-height:1.7}
+.tip .tr b{margin-left:auto; font-family:var(--f-data); font-variant-numeric:tabular-nums; font-weight:500}
+.tip i{width:9px; height:9px; border-radius:2px; flex:none}
+
+/* scenario comparison */
+table.cmp{border-collapse:collapse; min-width:100%; font-size:13px}
+table.cmp th, table.cmp td{border-bottom:1px solid var(--rule); padding:6px 14px; text-align:right; vertical-align:top}
+table.cmp thead th{
+  position:sticky; top:0; z-index:2; background:var(--panel-2); border-bottom:1px solid var(--rule-strong);
+  text-align:left; vertical-align:bottom; min-width:212px;
+}
+table.cmp th.metric, table.cmp td.metric{
+  position:sticky; left:0; z-index:1; background:var(--panel); text-align:left;
+  border-right:1px solid var(--rule); min-width:230px; color:var(--ink-2);
+}
+table.cmp thead th.metric{z-index:3; background:var(--panel-2)}
+table.cmp tr.sub td, table.cmp tr.sub th{
+  background:var(--panel-2); font-family:var(--f-display); font-size:10px; font-weight:600;
+  letter-spacing:.09em; text-transform:uppercase; color:var(--ink-3);
+}
+table.cmp .val{font-family:var(--f-data); font-variant-numeric:tabular-nums; white-space:nowrap}
+table.cmp .dlt{font-family:var(--f-data); font-size:11px; font-variant-numeric:tabular-nums; color:var(--ink-3); display:block}
+table.cmp .dlt.up{color:var(--pos)}
+table.cmp .dlt.dn{color:var(--crit)}
+table.cmp td.base{background:var(--accent-soft)}
+table.cmp th.base{box-shadow:inset 0 -3px 0 var(--accent)}
+
+.scol{display:flex; flex-direction:column; gap:6px}
+.scol .top{display:flex; align-items:center; gap:8px}
+.scol .chip{width:11px; height:11px; border-radius:2px; flex:none}
+.scol input.txt{background:var(--input-bg); color:var(--input-ink); font-family:var(--f-body); font-size:13px; font-weight:600}
+.scol .meta{font-family:var(--f-data); font-size:10.5px; color:var(--ink-3)}
+.scol .acts{display:flex; gap:4px; flex-wrap:wrap}
+.mini{
+  font-family:var(--f-display); font-size:10px; font-weight:600; letter-spacing:.05em; text-transform:uppercase;
+  background:transparent; border:1px solid var(--rule-strong); border-radius:2px; padding:3px 7px; cursor:pointer; color:var(--ink-2);
+}
+.mini:hover{background:var(--panel-2); border-color:var(--accent); color:var(--ink)}
+.mini.danger:hover{border-color:var(--crit); color:var(--crit)}
+.mini[aria-pressed="true"]{background:var(--accent); color:var(--accent-ink); border-color:var(--accent)}
+label.pick{display:inline-flex; align-items:center; gap:6px; font-size:11.5px; color:var(--ink-2); cursor:pointer}
+label.pick input{width:auto; accent-color:var(--accent)}
+.empty{padding:34px 20px; text-align:center; color:var(--ink-2)}
+.empty h3{font-size:15px; margin-bottom:6px}
+.empty p{max-width:52ch; margin:0 auto; font-size:13px; color:var(--ink-3)}
 .legend{display:flex; gap:16px; flex-wrap:wrap; padding:8px 14px 12px; font-size:11.5px; color:var(--ink-2)}
 .legend i{display:inline-block; width:14px; height:3px; vertical-align:middle; margin-right:6px; border-radius:2px}
 
@@ -216,6 +274,7 @@ footer code{font-family:var(--f-data); font-size:11px}
     <button class="tab" role="tab" data-panel="p-summary" aria-selected="true">Viability Summary</button>
     <button class="tab" role="tab" data-panel="p-irr" aria-selected="false">IRR Input</button>
     <button class="tab" role="tab" data-panel="p-cash" aria-selected="false">Cashflow</button>
+    <button class="tab" role="tab" data-panel="p-scen" aria-selected="false">Scenarios<span id="scenCount"></span></button>
   </div>
 </div>
 
@@ -223,6 +282,7 @@ footer code{font-family:var(--f-data); font-size:11px}
   <section id="p-summary"></section>
   <section id="p-irr" class="hidden"></section>
   <section id="p-cash" class="hidden"></section>
+  <section id="p-scen" class="hidden"></section>
 </main>
 
 <footer>
@@ -610,8 +670,12 @@ function calc(I){
   const W = I.irrWindow === "full" ? n : Math.min(n,197);            // CF J85
   R.irrWindowMonths = W;
   const cf = net.slice(0,W), cd = dates.slice(0,W).map(jsDate);
-  R.irr = xirr(cf,cd);
-  R.irrFull = (W===n) ? R.irr : xirr(net, dates.map(jsDate));
+  const solved = xirr(cf,cd);
+  R.irrSolved = solved !== null;
+  R.irr = solved === null ? 0 : solved;              // the workbook's IFERROR(XIRR(...),0)
+  const full = (W===n) ? solved : xirr(net, dates.map(jsDate));
+  R.irrFullSolved = full !== null;
+  R.irrFull = full === null ? 0 : full;
   const d0 = cd[0];
   R.npv = cd.length ? cf.reduce((s,c,k)=> s + c/Math.pow(1+n0(I.npvRate), (cd[k]-d0)/MS_DAY/365), 0) : 0;
 
@@ -653,11 +717,11 @@ function calc(I){
 
 /* XIRR — actual/365, bisection on a bracketed root */
 function xirr(cf, dates){
-  if(!cf.length) return 0;
+  if(!cf.length) return null;
   const d0 = dates[0];
   const f = r => cf.reduce((s,c,k)=> s + c/Math.pow(1+r,(dates[k]-d0)/MS_DAY/365), 0);
   let lo=-0.9999, hi=10, flo=f(lo), fhi=f(hi);
-  if(!isFinite(flo) || !isFinite(fhi) || flo*fhi > 0) return 0;
+  if(!isFinite(flo) || !isFinite(fhi) || flo*fhi > 0) return null;   // no sign change to bracket
   for(let i=0;i<300;i++){
     const mid=(lo+hi)/2, fm=f(mid);
     if(flo*fm <= 0){ hi=mid; fhi=fm; } else { lo=mid; flo=fm; }
@@ -671,9 +735,14 @@ function xirr(cf, dates){
 /* =======================================================================
    UI — state, formatting, rendering, charting
    ======================================================================= */
-const STORE = "cvm.scenario.v1";
-let S = load();
-let R = calc(S);
+const STORE = "cvm.scenario.v1";     // the working draft
+const SCEN  = "cvm.scenarios.v1";    // named, saved scenarios
+const SLOTS = 6;                     // categorical colour slots
+
+let S  = load();
+let SC = loadScenarios();
+let R  = calc(S);
+let baselineId = "working";
 
 function load(){
   try{
@@ -682,6 +751,38 @@ function load(){
   }catch(e){}
   return structuredClone(DEFAULTS);
 }
+function loadScenarios(){
+  try{
+    const a = JSON.parse(localStorage.getItem(SCEN) || "[]");
+    if(Array.isArray(a)) return a.filter(x => x && x.id && x.inputs);
+  }catch(e){}
+  return [];
+}
+function saveScenarios(){
+  try{ localStorage.setItem(SCEN, JSON.stringify(SC)); }catch(e){}
+}
+// A scenario keeps its colour for life, so filtering the chart never repaints
+// the series that remain.
+function freeSlot(){
+  const taken = new Set(SC.map(x => x.slot));
+  for(let i=0;i<SLOTS;i++) if(!taken.has(i)) return i;
+  return SC.length % SLOTS;
+}
+function addScenario(inputs, name){
+  const n = SC.length + 1;
+  const sc = {
+    id: "s" + Date.now().toString(36) + Math.random().toString(36).slice(2,6),
+    name: name || (inputs.development || "").trim() || ("Scenario " + n),
+    slot: freeSlot(),
+    savedAt: new Date().toISOString(),
+    inputs: structuredClone(inputs),
+    show: true
+  };
+  SC.push(sc); saveScenarios();
+  return sc;
+}
+const scenColor = sc => `var(--s${(sc.slot % SLOTS) + 1})`;
+const findScen = id => SC.find(x => x.id === id);
 
 /* ---------- formatting (mirrors the workbook number formats) --------- */
 const nf = (v,d=0) => (isFinite(v)?v:0).toLocaleString("en-GB",{minimumFractionDigits:d,maximumFractionDigits:d});
@@ -691,6 +792,9 @@ const pct  = (v,d=2) => nf((isFinite(v)?v:0)*100,d) + "%";
 const MON = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 const mon  = d => d ? `${MON[d.m-1]}-${String(d.y).slice(2)}` : "—";
 const monL = d => d ? `${MON[d.m-1]} ${d.y}` : "—";
+// A cashflow that never crosses zero has no IRR; the workbook shows 0, which
+// reads as a real return. Say so instead.
+const irrTxt = (r,d) => r.irrSolved ? pct(r.irr,d) : "n/a";
 const esc  = s => String(s??"").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
 /* input cell helpers — every one of these renders a yellow cell */
@@ -746,7 +850,7 @@ function renderRibbon(){
     ["Headline margin", pct(R.headlineMargin), gbp(R.headlineGBP), ""],
     ["Operating margin", pct(R.opMargin), gbp(R.opGBP), ""],
     ["Net margin", pct(R.netMargin), gbp(R.P68), R.netMargin<0?"crit":""],
-    ["IRR", pct(R.irr,1), R.irrWindowMonths+"-month window", R.irr<0?"crit":""],
+    ["IRR", irrTxt(R,1), R.irrWindowMonths+"-month window", R.irrSolved && R.irr<0?"crit":""],
     ["Peak debt", gbp(R.peakDebt), monL(R.peakDate), "crit"],
     ["Break even", monL(R.breakEven), R.breakEven?`month ${R.beK>=0?R.idxs[R.beK]:""}`:"not reached", ""],
     ["Units", nf(R.totalUnits), `${nf(R.omU)} OM · ${nf(R.rslU)} RSL · ${nf(R.discU)} disc`, ""]
@@ -1043,8 +1147,8 @@ function renderCash(){
   }
 
   const kpis = panel("Cashflow result", `${R.n} months · ${monL(R.dates[0])} to ${monL(R.dates[R.n-1])}`, `<div class="mgrid">
-    <div><div class="k">IRR (${R.irrWindowMonths}-month window)</div><div class="v">${pct(R.irr,2)}</div></div>
-    <div><div class="k">IRR, full cashflow</div><div class="v">${pct(R.irrFull,2)}</div></div>
+    <div><div class="k">IRR (${R.irrWindowMonths}-month window)</div><div class="v">${irrTxt(R,2)}</div></div>
+    <div><div class="k">IRR, full cashflow</div><div class="v">${R.irrFullSolved ? pct(R.irrFull,2) : "n/a"}</div></div>
     <div><div class="k">NPV @ ${pct(S.npvRate,0)}</div><div class="v">${gbp(R.npv)}</div></div>
     <div><div class="k">Peak debt</div><div class="v">${gbp(R.peakDebt)}</div></div>
     <div><div class="k">Peak debt month</div><div class="v">${monL(R.peakDate)}</div></div>
@@ -1151,10 +1255,302 @@ function drawChart(){
   }
 }
 
+/* ---------- Scenarios ---------- */
+
+// The headline set, grouped the way an appraisal reads. `dir` says which way is
+// better, so a delta can be coloured; null means the metric has no direction.
+const KPIS = [
+  ["group","Scheme"],
+  ["Total units",                      r => nf(r.totalUnits),            r => r.totalUnits,   "num",  null],
+  ["Total sq ft",                      r => nf(r.totalSqft),             r => r.totalSqft,    "num",  null],
+  ["Net developable area",             r => nf(r.netAcres,2)+" ac",      r => r.netAcres,     "num",  null],
+  ["Site duration",                    r => nf(r.C25)+" months",         r => r.C25,          "num",  null],
+  ["group","Revenue and cost"],
+  ["Total sales revenue",              r => gbp(r.P44),                  r => r.P44,          "gbp",  1],
+  ["Total development cost",           r => gbp(r.P63),                  r => r.P63,          "gbp", -1],
+  ["Marketing and sales",              r => gbp(r.P64),                  r => r.P64,          "gbp", -1],
+  ["Cost of finance",                  r => gbp(r.P65),                  r => r.P65,          "gbp", -1],
+  ["group","Land"],
+  ["Residual land value",              r => gbp(r.P72),                  r => r.P72,          "gbp",  1],
+  ["Net offer value for land",         r => gbp(r.N78),                  r => r.N78,          "gbp",  1],
+  ["Land value per net dev acre",      r => gbp(r.landPerAcre),          r => r.landPerAcre,  "gbp",  1],
+  ["Land value per plot",              r => gbp(r.landPerPlot),          r => r.landPerPlot,  "gbp",  1],
+  ["group","Margin"],
+  ["Headline margin",                  r => pct(r.headlineMargin),       r => r.headlineMargin, "pct", 1],
+  ["Operating margin",                 r => pct(r.opMargin),             r => r.opMargin,     "pct",  1],
+  ["Net margin",                       r => pct(r.netMargin),            r => r.netMargin,    "pct",  1],
+  ["Net margin (£)",                   r => gbp(r.P68),                  r => r.P68,          "gbp",  1],
+  ["PBT after group overhead",         r => gbp(r.PBT),                  r => r.PBT,          "gbp",  1],
+  ["group","Cashflow"],
+  ["IRR",                              r => irrTxt(r,2),                 r => r.irrSolved ? r.irr : null, "pct", 1],
+  ["NPV",                              r => gbp(r.npv),                  r => r.npv,          "gbp",  1],
+  ["Peak debt",                        r => gbp(r.peakDebt),             r => r.peakDebt,     "gbp",  1],
+  ["Peak debt month",                  r => monL(r.peakDate),            null,                "txt",  null],
+  ["Break even",                       r => monL(r.breakEven),           null,                "txt",  null],
+  ["ROI on peak debt",                 r => pct(r.roi,0),                r => r.roi,          "pct",  1]
+];
+
+function columns(){
+  const cols = [{id:"working", name:"Working", meta:"unsaved — what the other tabs show",
+                 color:"var(--accent)", res:R, inputs:S, show:true, working:true}];
+  SC.forEach(sc => cols.push({
+    id: sc.id, name: sc.name, sc,
+    meta: new Date(sc.savedAt).toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"}),
+    color: scenColor(sc), res: calc(sc.inputs), inputs: sc.inputs, show: sc.show !== false
+  }));
+  return cols;
+}
+
+let COLS = [];
+function renderScenarios(){
+  const cols = COLS = columns();
+  const badge = document.getElementById("scenCount");
+  if(badge) badge.textContent = SC.length ? ` (${SC.length})` : "";
+
+  if(!SC.length){
+    document.getElementById("p-scen").innerHTML = panel("Saved scenarios", "", `
+      <div class="empty">
+        <h3>No scenarios saved yet</h3>
+        <p>Set the inputs up the way you want them on the Viability Summary and IRR Input tabs,
+           then press <strong>Save scenario</strong> in the top bar. Each one you save gets a column
+           here, compared against the others on the headline numbers.</p>
+        <div style="margin-top:16px"><button class="btn primary" id="btnSaveScen" type="button">Save the current inputs as a scenario</button></div>
+      </div>`);
+    return;
+  }
+
+  if(!cols.some(c => c.id === baselineId)) baselineId = "working";
+  const base = cols.find(c => c.id === baselineId);
+
+  const head = `<tr><th class="metric">
+      <div class="scol"><div class="top"><span style="font-family:var(--f-display);font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase">Metric</span></div>
+      <div class="meta">Delta shown against ${esc(base.name)}</div></div></th>` +
+    cols.map(c => `<th class="${c.id===baselineId?"base":""}">
+      <div class="scol">
+        <div class="top">
+          <span class="chip" style="background:${c.color}"></span>
+          ${c.working
+            ? `<span style="font-weight:600">Working</span>`
+            : `<input class="txt" value="${esc(c.name)}" data-scen-name="${c.id}" aria-label="Scenario name">`}
+        </div>
+        <div class="meta">${esc(c.meta)}</div>
+        <div class="acts">
+          <label class="pick"><input type="checkbox" data-act="show" data-id="${c.id}" ${c.show?"checked":""}${c.working?" disabled":""}> chart</label>
+          <button class="mini" data-act="base" data-id="${c.id}" aria-pressed="${c.id===baselineId}" type="button">Baseline</button>
+          ${c.working ? "" : `
+          <button class="mini" data-act="load" data-id="${c.id}" type="button">Load</button>
+          <button class="mini" data-act="update" data-id="${c.id}" type="button">Update</button>
+          <button class="mini" data-act="dup" data-id="${c.id}" type="button">Copy</button>
+          <button class="mini danger" data-act="del" data-id="${c.id}" type="button">Delete</button>`}
+        </div>
+      </div></th>`).join("") + "</tr>";
+
+  let body = "";
+  for(const k of KPIS){
+    if(k[0] === "group"){
+      body += `<tr class="sub"><td class="metric">${k[1]}</td>${cols.map(()=>"<td></td>").join("")}</tr>`;
+      continue;
+    }
+    const [label, fmt, num, , dir] = k;
+    body += `<tr><td class="metric">${label}</td>` + cols.map(c => {
+      let d = "";
+      if(num && dir !== null && c.id !== baselineId){
+        const a = num(c.res), b = num(base.res);
+        // null means "no value" (an IRR with no root); isFinite(null) is true,
+        // so it has to be excluded before the arithmetic.
+        if(a != null && b != null && isFinite(a) && isFinite(b)){
+          const diff = a - b;
+          // Half a display unit — anything smaller rounds away, so calling it a
+          // change would print "+0.00%" and mean nothing.
+          const eps = k[3] === "pct" ? 0.00005 : (k[3] === "gbp" ? 0.5 : 0.05);
+          if(Math.abs(diff) < eps) d = `<span class="dlt">no change</span>`;
+          else {
+            const cls = diff * dir > 0 ? "up" : "dn";
+            const mag = k[3] === "pct" ? pct(Math.abs(diff),2) : gbp(Math.abs(diff));
+            d = `<span class="dlt ${cls}">${diff > 0 ? "+" : "−"}${mag}</span>`;
+          }
+        }
+      }
+      return `<td class="${c.id===baselineId?"base":""}"><span class="val">${fmt(c.res)}</span>${d}</td>`;
+    }).join("") + "</tr>";
+  }
+
+  const table = panel("Headline comparison", `${cols.length} columns · baseline ${esc(base.name)}`,
+    `<div class="scroll" style="max-height:70vh"><table class="cmp"><thead>${head}</thead><tbody>${body}</tbody></table></div>`,
+    `<button class="btn primary" id="btnSaveScen" type="button">Save current as scenario</button>
+     <span class="hint" style="align-self:center">Rename a column by typing in it. <strong>Load</strong> pulls a scenario back into the working inputs; <strong>Update</strong> overwrites it with the working inputs.</span>`);
+
+  const plotted = cols.filter(c => c.show);
+  const chart = panel("Cumulative cash position", "including interest", `
+    <div class="chartwrap">
+      <canvas id="cmpChart" width="1600" height="460" role="img"
+        aria-label="Cumulative cash position for each selected scenario"></canvas>
+      <div class="tip" id="cmpTip"></div>
+    </div>
+    <div class="legend">${plotted.map(c =>
+      `<span data-legend="${c.id}"><i style="${c.working
+        ? `background:repeating-linear-gradient(90deg,${c.color} 0 6px,transparent 6px 10px)`
+        : `background:${c.color}`}"></i>${esc(c.name)}</span>`).join("")}
+      ${plotted.length ? "" : "<span>Tick <em>chart</em> on a column to plot it.</span>"}</div>`);
+
+  document.getElementById("p-scen").innerHTML = `<div class="grid">${table}${chart}</div>`;
+  drawCompare();
+}
+
+/* ---------- comparison chart ---------- */
+function drawCompare(hover){
+  const cv = document.getElementById("cmpChart");
+  if(!cv) return;
+  const cols = (COLS.length ? COLS : (COLS = columns())).filter(c => c.show && c.res.n);
+  const cs = getComputedStyle(document.documentElement);
+  const col = n => cs.getPropertyValue(n).trim();
+  const resolve = c => c.startsWith("var(") ? cs.getPropertyValue(c.slice(4,-1)).trim() : c;
+  const ctx = cv.getContext("2d");
+  const W = cv.width, H = cv.height, PL = 112, PR = 216, PT = 20, PB = 42;
+  ctx.clearRect(0,0,W,H);
+  ctx.font = "500 20px 'IBM Plex Mono', monospace";
+
+  if(!cols.length){
+    ctx.fillStyle = col("--ink-3"); ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    ctx.fillText("No scenarios selected", W/2, H/2);
+    cv._hover = null;
+    return;
+  }
+
+  const series = cols.map(c => ({name:c.name, color:resolve(c.color), dash:!!c.working,
+                                dates:c.res.dates, values:c.res.cumT}));
+  let t0 = Infinity, t1 = -Infinity, lo = 0, hi = 0;
+  series.forEach(sr => sr.dates.forEach((d,i) => {
+    const t = d.y*12 + d.m;
+    if(t < t0) t0 = t; if(t > t1) t1 = t;
+    if(sr.values[i] < lo) lo = sr.values[i];
+    if(sr.values[i] > hi) hi = sr.values[i];
+  }));
+  const span = (hi-lo) || 1, tspan = (t1-t0) || 1;
+  const X = d => PL + (W-PL-PR) * ((d.y*12+d.m) - t0) / tspan;
+  const Y = v => PT + (H-PT-PB) * (1 - (v-lo)/span);
+
+  // recessive grid
+  ctx.strokeStyle = col("--rule"); ctx.lineWidth = 1; ctx.fillStyle = col("--ink-3");
+  for(let i=0;i<=5;i++){
+    const v = lo + span/5*i, y = Math.round(Y(v))+0.5;
+    ctx.beginPath(); ctx.moveTo(PL,y); ctx.lineTo(W-PR,y); ctx.stroke();
+    ctx.textAlign = "right"; ctx.textBaseline = "middle";
+    ctx.fillText((v<0?"−":"")+"£"+nf(Math.abs(v)/1e6,1)+"m", PL-12, y);
+  }
+  ctx.strokeStyle = col("--rule-strong"); ctx.lineWidth = 1.5;
+  const y0 = Math.round(Y(0))+0.5;
+  ctx.beginPath(); ctx.moveTo(PL,y0); ctx.lineTo(W-PR,y0); ctx.stroke();
+
+  // year ticks
+  ctx.strokeStyle = col("--rule"); ctx.lineWidth = 1;
+  ctx.textAlign = "center"; ctx.textBaseline = "top"; ctx.fillStyle = col("--ink-3");
+  const yr0 = Math.ceil(t0/12), yr1 = Math.floor(t1/12);
+  const stepY = Math.max(1, Math.ceil((yr1-yr0+1)/10));
+  for(let y=yr0; y<=yr1; y+=stepY){
+    const x = Math.round(X({y, m:1}))+0.5;
+    if(x < PL || x > W-PR) continue;
+    ctx.beginPath(); ctx.moveTo(x,H-PB); ctx.lineTo(x,H-PB+6); ctx.stroke();
+    ctx.fillText(String(y), x, H-PB+11);
+  }
+
+  // crosshair sits under the marks
+  let hx = null;
+  if(hover != null){
+    hx = Math.round(PL + (W-PL-PR)*hover)+0.5;
+    ctx.strokeStyle = col("--rule-strong"); ctx.lineWidth = 1.5; ctx.setLineDash([4,4]);
+    ctx.beginPath(); ctx.moveTo(hx,PT); ctx.lineTo(hx,H-PB); ctx.stroke(); ctx.setLineDash([]);
+  }
+
+  series.forEach(sr => {
+    ctx.beginPath();
+    sr.dates.forEach((d,i) => { const x=X(d), y=Y(sr.values[i]); i?ctx.lineTo(x,y):ctx.moveTo(x,y); });
+    ctx.strokeStyle = sr.color; ctx.lineWidth = 3; ctx.lineJoin = "round";
+    // the unsaved working line is dashed, so it reads as the reference rather
+    // than a peer even where its colour is quiet
+    ctx.setLineDash(sr.dash ? [10,7] : []);
+    ctx.stroke(); ctx.setLineDash([]);
+  });
+
+  // direct end labels — identity is never carried by colour alone
+  const ends = series.map(sr => {
+    const last = sr.dates.length-1;
+    const y = Y(sr.values[last]);
+    return {name:sr.name, color:sr.color, x:X(sr.dates[last]), y, ly:y};
+  }).sort((a,b)=>a.ly-b.ly);
+  for(let i=1;i<ends.length;i++) if(ends[i].ly - ends[i-1].ly < 26) ends[i].ly = ends[i-1].ly + 26;
+  ends.forEach(e => {
+    const lx = Math.min(e.x, W-PR) + 14;
+    const room = W - 10 - lx;
+    let label = e.name;
+    while(label.length > 1 && ctx.measureText(label).width > room) label = label.slice(0,-1);
+    if(label !== e.name) label = label.slice(0,-1) + "…";
+    ctx.strokeStyle = e.color; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(e.x, e.y); ctx.lineTo(lx - 4, e.ly); ctx.stroke();
+    ctx.fillStyle = e.color;
+    ctx.beginPath(); ctx.arc(e.x, e.y, 5, 0, 7); ctx.fill();
+    ctx.textAlign = "left"; ctx.textBaseline = "middle";
+    ctx.fillText(label, lx, e.ly);
+  });
+
+  if(hover != null && hx != null){
+    series.forEach(sr => {
+      const i = nearestIdx(sr.dates, t0 + hover*tspan);
+      if(i < 0) return;
+      ctx.fillStyle = col("--panel"); ctx.beginPath(); ctx.arc(X(sr.dates[i]), Y(sr.values[i]), 8, 0, 7); ctx.fill();
+      ctx.fillStyle = sr.color; ctx.beginPath(); ctx.arc(X(sr.dates[i]), Y(sr.values[i]), 5.5, 0, 7); ctx.fill();
+    });
+  }
+  cv._hover = {series, t0, tspan, PL, PR, W};
+}
+
+function nearestIdx(dates, t){
+  let best = -1, bd = Infinity;
+  for(let i=0;i<dates.length;i++){
+    const d = Math.abs((dates[i].y*12+dates[i].m) - t);
+    if(d < bd){ bd = d; best = i; }
+  }
+  return bd <= 1.5 ? best : -1;
+}
+
+function compareHover(e){
+  const cv = document.getElementById("cmpChart");
+  const tip = document.getElementById("cmpTip");
+  if(!cv || !tip || !cv._hover) return;
+  const {series, t0, tspan, PL, PR, W} = cv._hover;
+  const box = cv.getBoundingClientRect();
+  const px = (e.clientX - box.left) / box.width * W;
+  const frac = (px - PL) / (W - PL - PR);
+  if(frac < 0 || frac > 1){ tip.dataset.on = "0"; drawCompare(); return; }
+  const t = t0 + frac*tspan;
+  const T = Math.round(t), my = ((T-1) % 12) + 1, yy = Math.floor((T-1)/12);
+  const rows = series.map(sr => {
+    const i = nearestIdx(sr.dates, t);
+    return i < 0 ? null : `<div class="tr"><i style="background:${sr.color}"></i>${esc(sr.name)}<b>${gbp(sr.values[i])}</b></div>`;
+  }).filter(Boolean);
+  tip.innerHTML = `<div class="th">${MON[my-1]} ${yy}</div>${rows.join("") || "<div class='tr'>no data</div>"}`;
+  tip.dataset.on = "1";
+  const left = e.clientX - box.left;
+  tip.style.left = Math.min(Math.max(left + 16, 8), box.width - tip.offsetWidth - 8) + "px";
+  tip.style.top = Math.min(Math.max(e.clientY - box.top - 12, 8), box.height - tip.offsetHeight - 8) + "px";
+  drawCompare(frac);
+}
+
 /* ---------- render + events ---------- */
+const PANELS = ["p-summary","p-irr","p-cash","p-scen"];
 function renderAll(){
   R = calc(S);
-  renderRibbon(); renderSummary(); renderIrr(); renderCash();
+  renderRibbon(); renderSummary(); renderIrr(); renderCash(); renderScenarios();
+  autosave();
+}
+
+// The working draft persists on its own; Save scenario is for keeping a named one.
+let autosaveTimer;
+function autosave(){
+  clearTimeout(autosaveTimer);
+  autosaveTimer = setTimeout(() => {
+    try{ localStorage.setItem(STORE, JSON.stringify(S)); }catch(e){}
+  }, 400);
 }
 
 document.addEventListener("input", e => {
@@ -1200,36 +1596,102 @@ document.addEventListener("focusout", e => {
 document.addEventListener("change", e => {
   const el = e.target;
   if(el.dataset && el.dataset.path && (el.tagName === "SELECT" || el.type === "date")) renderAll();
+  if(el.dataset && el.dataset.act === "show"){
+    const sc = findScen(el.dataset.id);
+    if(sc){ sc.show = el.checked; saveScenarios(); renderScenarios(); }
+  }
+});
+
+// Renaming a column writes straight through, without rebuilding the field.
+document.addEventListener("input", e => {
+  const id = e.target.dataset ? e.target.dataset.scenName : null;
+  if(!id) return;
+  const sc = findScen(id);
+  if(!sc) return;
+  sc.name = e.target.value;
+  saveScenarios();
+  const col = COLS.find(c => c.id === id);
+  if(col) col.name = sc.name;
+  const cap = document.querySelector(".cmp thead .metric .meta");
+  if(cap && baselineId === id) cap.textContent = "Delta shown against " + sc.name;
+  const chip = [...document.querySelectorAll(".legend span")].find(x => x.dataset.legend === id);
+  if(chip) chip.lastChild.textContent = sc.name;
+  drawCompare();
 });
 
 document.addEventListener("click", e => {
   const t = e.target.closest("button");
   if(!t) return;
   if(t.classList.contains("tab")){
-    document.querySelectorAll(".tab").forEach(b => b.setAttribute("aria-selected", String(b === t)));
-    ["p-summary","p-irr","p-cash"].forEach(id =>
-      document.getElementById(id).classList.toggle("hidden", id !== t.dataset.panel));
-    if(t.dataset.panel === "p-cash") drawChart();
+    showTab(t.dataset.panel);
     return;
   }
   if(t.id === "btnSolve") solveLandValue();
   if(t.id === "btnTheme") toggleTheme();
-  if(t.id === "btnSave"){ save(); flash(t, "Saved"); }
+  if(t.id === "btnCsv") exportCsv(t);
+  if(t.id === "btnSave" || t.id === "btnSaveScen"){
+    const sc = addScenario(S);
+    renderAll(); showTab("p-scen");
+    const f = document.getElementById("btnSave");
+    if(f) flash(f, "Saved");
+    const field = document.querySelector(`[data-scen-name="${sc.id}"]`);
+    if(field){ field.focus(); field.select(); }
+  }
+  // Two-step rather than a modal: confirm() is blocked in some embeds.
   if(t.id === "btnReset"){
-    if(confirm("Reset every input back to the workbook's shipped assumptions?")){
+    if(t.dataset.armed){
+      delete t.dataset.armed; t.textContent = "Reset";
       localStorage.removeItem(STORE); S = structuredClone(DEFAULTS); renderAll();
+    } else {
+      t.dataset.armed = "1"; t.textContent = "Confirm reset";
+      setTimeout(() => { if(t.dataset.armed){ delete t.dataset.armed; t.textContent = "Reset"; } }, 4000);
+    }
+    return;
+  }
+
+  // scenario column actions
+  const act = t.dataset.act, id = t.dataset.id;
+  if(!act) return;
+  if(act === "base"){ baselineId = id; renderScenarios(); }
+  if(act === "load"){
+    const sc = findScen(id);
+    if(sc){ S = Object.assign(structuredClone(DEFAULTS), structuredClone(sc.inputs)); renderAll(); showTab("p-summary"); }
+  }
+  if(act === "update"){
+    const sc = findScen(id);
+    if(sc){
+      if(t.dataset.armed){ sc.inputs = structuredClone(S); sc.savedAt = new Date().toISOString(); saveScenarios(); renderScenarios(); }
+      else { t.dataset.armed = "1"; t.textContent = "Overwrite?"; setTimeout(()=>{ if(t.dataset.armed){ delete t.dataset.armed; t.textContent = "Update"; } }, 4000); }
     }
   }
-  if(t.id === "btnCsv") exportCsv(t);
+  if(act === "dup"){
+    const sc = findScen(id);
+    if(sc){ addScenario(sc.inputs, sc.name + " copy"); renderScenarios(); }
+  }
+  if(act === "del"){
+    if(t.dataset.armed){
+      SC = SC.filter(x => x.id !== id); saveScenarios();
+      if(baselineId === id) baselineId = "working";
+      renderScenarios();
+    } else {
+      t.dataset.armed = "1"; t.textContent = "Sure?";
+      setTimeout(()=>{ if(t.dataset.armed){ delete t.dataset.armed; t.textContent = "Delete"; } }, 4000);
+    }
+  }
 });
+
+function showTab(panel){
+  document.querySelectorAll(".tab").forEach(b => b.setAttribute("aria-selected", String(b.dataset.panel === panel)));
+  PANELS.forEach(id => document.getElementById(id).classList.toggle("hidden", id !== panel));
+  if(panel === "p-cash") drawChart();
+  if(panel === "p-scen") drawCompare();
+}
 
 function flash(btn, msg){
   const old = btn.textContent; btn.textContent = msg;
   setTimeout(()=> btn.textContent = old, 1400);
 }
-function save(){
-  try{ localStorage.setItem(STORE, JSON.stringify(S)); }catch(e){}
-}
+
 function toggleTheme(){
   const root = document.documentElement;
   const now = root.getAttribute("data-theme");
@@ -1237,7 +1699,7 @@ function toggleTheme(){
   const next = now ? (now === "dark" ? "light" : "dark") : (sysDark ? "light" : "dark");
   root.setAttribute("data-theme", next);
   try{ localStorage.setItem("cvm.theme", next); }catch(e){}
-  drawChart();
+  drawChart(); drawCompare();
 }
 
 /* Goal seek: solve the headline margin that hits a target land value per acre */
@@ -1302,7 +1764,19 @@ async function exportCsv(btn){
 }
 
 try{ const th = localStorage.getItem("cvm.theme"); if(th) document.documentElement.setAttribute("data-theme", th); }catch(e){}
-matchMedia("(prefers-color-scheme: dark)").addEventListener("change", drawChart);
-addEventListener("resize", drawChart);
+document.addEventListener("mousemove", e => {
+  if(e.target && e.target.id === "cmpChart") compareHover(e);
+});
+document.addEventListener("mouseleave", e => {
+  if(e.target && e.target.id === "cmpChart"){
+    const tip = document.getElementById("cmpTip");
+    if(tip) tip.dataset.on = "0";
+    drawCompare();
+  }
+}, true);
+
+const redrawCharts = () => { drawChart(); drawCompare(); };
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", redrawCharts);
+addEventListener("resize", redrawCharts);
 renderAll();
 </script>

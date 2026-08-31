@@ -73,9 +73,25 @@ else recalculates on each keystroke:
   linear customer care and sales & marketing, land VAT out and back
 - interest, IRR, NPV, peak debt, break-even and cost of planning failure
 
-A third **Cashflow** tab shows the monthly detail, a cumulative cash chart and a
-CSV export. Scenarios save to browser storage; **Reset** restores the workbook's
-shipped assumptions.
+A **Cashflow** tab shows the monthly detail, a cumulative cash chart and a CSV
+export. **Reset** restores the workbook's shipped assumptions.
+
+## Scenarios
+
+**Save scenario** keeps a named snapshot of every input. The **Scenarios** tab
+lines them up as columns against the headline numbers — units, revenue, cost,
+residual land value, net offer value, the three margins, PBT, IRR, NPV, peak
+debt and break-even — with the working inputs pinned as the first column so
+unsaved edits compare against saved work.
+
+Pick any column as the baseline and the rest show their delta beneath each
+figure, coloured by whether the move helps or hurts (revenue up is good, cost of
+finance up is not). Rename a column by typing in it; **Load** pulls a scenario
+back into the working inputs, **Update** overwrites it with them, **Copy**
+branches it. Below the table, the cumulative cash curves overlay on one chart —
+tick *chart* on a column to include it, hover for every scenario's position in
+that month. Each scenario keeps its colour for life, so hiding one never
+repaints the others. Everything lives in browser storage on your machine.
 
 ## Reconciliation
 
@@ -93,14 +109,19 @@ On the workbook's own inputs the page reproduces it exactly:
 | Peak debt | −£69,447,126 (Dec 2028) | −£69,447,126 (Dec 2028) |
 | NPV @ 5% | −£9,764,645 | −£9,764,645 |
 
-Two deliberate differences:
+Three deliberate differences:
 
 1. **Interest is solved, not pasted.** The workbook breaks its own circular
    reference by hard-coding the cashflow interest into `Concept Viab Model
    Strat!AH64` and goal-seeking it by hand — the shipped file is out by
    £2.59m on that cell. Interest here is read straight off the cashflow, so
    *Cost of Finance* is always current.
-2. **The IRR window is switchable.** `Cash_flow!L85` runs XIRR over
+2. **An IRR with no solution says so.** Where a cashflow never crosses zero
+   there is no rate that discounts it to nil. `Cash_flow!L85` wraps XIRR in
+   `IFERROR(...,0)`, so the workbook prints `0.0%` — which reads as a real
+   return of zero. The page shows `n/a` instead. This matters most in scenario
+   comparison, where a fabricated 0% would sort as if it beat a negative one.
+3. **The IRR window is switchable.** `Cash_flow!L85` runs XIRR over
    `OFFSET(L68,0,0,1,J85)`, and `J85` counts a fixed 197-column range — so the
    workbook's IRR ignores the last three years of the scheme. That is the
    default here, to tie out. The Cashflow tab offers the full-series IRR
