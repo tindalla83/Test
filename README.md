@@ -95,6 +95,15 @@ Acquisition costs (legals, agent, SDLT) fall on the first instalment, when title
 passes. VAT is charged on each instalment as it is paid and reclaimed the month
 after.
 
+## Land value goal seek
+
+Type a target land value per net developable acre and the panel solves the
+headline margin that reaches it, showing the residual land value, stamp duty,
+net offer value and net margin at that target as you type. **Apply this margin**
+writes it into the appraisal so every other tab follows. If the only way to
+reach the target is at a loss, the panel says so rather than quietly returning
+a negative margin.
+
 ## Scenarios
 
 **Save scenario** keeps a named snapshot of every input. The **Scenarios** tab
@@ -128,7 +137,7 @@ On the workbook's own inputs the page reproduces it exactly:
 | Peak debt | −£69,447,126 (Dec 2028) | −£69,447,126 (Dec 2028) |
 | NPV @ 5% | −£9,764,645 | −£9,764,645 |
 
-Four deliberate differences:
+Five deliberate differences:
 
 1. **Interest is solved, not pasted.** The workbook breaks its own circular
    reference by hard-coding the cashflow interest into `Concept Viab Model
@@ -147,7 +156,15 @@ Four deliberate differences:
    instalment carries its own VAT, apportioned from the same base the workbook
    uses (`Stamp!E5`, the gross payment before SDLT is netted off), so a single
    payment still reconciles exactly.
-4. **The IRR window is switchable.** `Cash_flow!L85` runs XIRR over
+4. **Stamp duty follows the price being paid.** In the *known land value*
+   block the workbook links duty to `Concept Viab Model Strat!P76`
+   (`'Viabililty Summary'!T88`), which is the duty on the *residual* land
+   value — so entering an agreed price of £8m or £25m leaves the duty, the
+   cost of land and the resulting margin all computed on £16.9m. Duty here is
+   charged on the accepted offer. At the residual price the two agree exactly,
+   because `P76` grosses down a duty-inclusive pot, which is the same as
+   charging the rate on the net figure — so the shipped case still reconciles.
+5. **The IRR window is switchable.** `Cash_flow!L85` runs XIRR over
    `OFFSET(L68,0,0,1,J85)`, and `J85` counts a fixed 197-column range — so the
    workbook's IRR ignores the last three years of the scheme. That is the
    default here, to tie out. The Cashflow tab offers the full-series IRR

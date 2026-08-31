@@ -293,7 +293,7 @@ footer code{font-family:var(--f-data); font-size:11px}
 
 <footer>
   <p><strong>How this maps to the workbook.</strong> Yellow cells are inputs, exactly as in <code>Strat_Land_Concept_Viab_Res_Land_v6.0 (Freehold).xlsm</code>. Everything else is calculated live: the unit calculator, the development appraisal, the residual land value, the 229&#8209;month cashflow, interest, IRR and NPV all recalculate on every keystroke. Figures reconcile to the workbook to the penny on its shipped assumptions.</p>
-  <p>Four differences worth knowing. Interest is solved directly from the cashflow rather than pasted in by goal seek, so <em>Cost of Finance</em> is always current. The workbook's XIRR reads a fixed 197&#8209;month window; that is reproduced as the default so numbers tie out, with a switch to run IRR across the full cashflow. An IRR with no root reads <em>n/a</em> rather than the workbook's 0%. And VAT is charged on each land instalment as it falls due, rather than in full on the first — on a staged purchase the workbook front&#8209;loads it.</p>
+  <p>Five differences worth knowing. Interest is solved directly from the cashflow rather than pasted in by goal seek, so <em>Cost of Finance</em> is always current. The workbook's XIRR reads a fixed 197&#8209;month window; that is reproduced as the default so numbers tie out, with a switch to run IRR across the full cashflow. An IRR with no root reads <em>n/a</em> rather than the workbook's 0%. VAT is charged on each land instalment as it falls due, rather than in full on the first &mdash; on a staged purchase the workbook front&#8209;loads it. And in the known&#8209;land&#8209;value block, stamp duty is charged on the price you enter rather than on the residual land value, which is what the workbook links to.</p>
 </footer>
 
 <script>
@@ -735,7 +735,13 @@ function calc(I){
   /* ---- known land value mode (VS rows 82-92) ------------------------ */
   const T82 = n0(I.acceptedLandOffer);
   R.T82 = T82;
-  R.costOfLand = T82 ? T82 + P74 + P75 + P76 : 0;
+  // Duty is charged on the price being paid, not on the residual land value.
+  // At the residual price the two agree — P76 grosses down a duty-inclusive
+  // pot, which is the same as charging the rate on the net figure — so this
+  // reproduces the workbook wherever the workbook is right, and moves with the
+  // accepted offer where the workbook leaves it stuck.
+  R.sdltAccepted = T82 * n0(I.sdltPct);
+  R.costOfLand = T82 ? T82 + P74 + P75 + R.sdltAccepted : 0;
   R.knownNetGBP = T82 ? P44-P63-P64-R.costOfLand-P65 : 0;
   R.knownNetPct = (T82 && P44) ? R.knownNetGBP/P44 : 0;
   R.knownHeadPct = (T82 && P44) ? (P44-P63-R.costOfLand)/P44 : 0;
@@ -761,14 +767,23 @@ function calc(I){
   return R;
 }
 
-/* XIRR — actual/365, bisection on a bracketed root */
+/* XIRR — actual/365, bisection on a bracketed root.
+   The year fractions are hoisted out of the loop and the bracket closes on a
+   tolerance rather than a fixed iteration count; this runs on every keystroke,
+   through the goal seek, and once per scenario. */
 function xirr(cf, dates){
-  if(!cf.length) return null;
-  const d0 = dates[0];
-  const f = r => cf.reduce((s,c,k)=> s + c/Math.pow(1+r,(dates[k]-d0)/MS_DAY/365), 0);
+  const n = cf.length;
+  if(!n) return null;
+  const d0 = dates[0], t = new Array(n);
+  for(let i=0;i<n;i++) t[i] = (dates[i]-d0)/MS_DAY/365;
+  const f = r => {
+    const b = 1+r; let s = 0;
+    for(let i=0;i<n;i++) s += cf[i]*Math.pow(b, -t[i]);
+    return s;
+  };
   let lo=-0.9999, hi=10, flo=f(lo), fhi=f(hi);
   if(!isFinite(flo) || !isFinite(fhi) || flo*fhi > 0) return null;   // no sign change to bracket
-  for(let i=0;i<300;i++){
+  for(let i=0;i<80 && (hi-lo) > 1e-15; i++){
     const mid=(lo+hi)/2, fm=f(mid);
     if(flo*fm <= 0){ hi=mid; fhi=fm; } else { lo=mid; flo=fm; }
   }
@@ -1026,13 +1041,26 @@ function renderSummary(){
     ${rIn("NPV discount factor", cell("npvRate","pct",{d:1,label:"NPV discount factor"}))}
   </table>`);
 
+  const gs = goalSeekPreview();
+  const gsRows = !gs ? ""
+    : !gs.reachable
+      ? `<tr><td class="lbl" colspan="3"><span class="pill bad">No margin reaches ${gbp(gs.target)} per acre</span></td></tr>`
+      : `${sub("At that target")}
+         ${gs.res.netMargin < 0 ? `<tr><td class="lbl" colspan="3"><span class="pill bad">Reaching ${gbp(gs.target)} per acre costs the scheme money</span></td></tr>` : ""}
+         ${ri("Headline margin", pct(gs.margin,2))}
+         ${ri("Residual land value", gbp(gs.res.P72))}
+         ${ri("Stamp duty @ "+pct(S.sdltPct,1), gbp(gs.res.P76))}
+         ${ri("Net offer value for land", gbp(gs.res.N78), gbp(gs.res.landPerAcre)+" /ac")}
+         ${ri("Net margin", pct(gs.res.netMargin,2), gbp(gs.res.P68))}`;
+
   const solveBody = `<table class="rows">
     ${rIn("Target land value £/net dev acre", cell("landOfferPerAcre","num",{label:"Target land value per net developable acre"}))}
     ${r("Land value at current margin", gbp(R.landPerAcre)+" /ac")}
     ${r("Gap", gbp(R.landPerAcre - (S.landOfferPerAcre||0))+" /ac")}
+    ${gsRows}
     <tr><td class="lbl" colspan="3">
-      <button class="btn primary" id="btnSolve" type="button">Solve headline margin</button>
-      <div class="hint" style="margin-top:6px">Finds the headline margin % that makes the net offer value land on your target — the workbook's goal seek, done for you.</div>
+      <button class="btn primary" id="btnSolve" type="button">Apply this margin</button>
+      <div class="hint" style="margin-top:6px">The figures above update as you type. Applying writes the headline margin into the appraisal, so every other tab follows.</div>
     </td></tr>
   </table>`;
 
@@ -1040,7 +1068,7 @@ function renderSummary(){
     ${rIn("Accepted land offer", cell("acceptedLandOffer","num",{label:"Accepted land offer"}))}
     ${ri("less legal fees", gbp(R.T82?R.P74:0))}
     ${ri("less agent fees", gbp(R.T82?R.P75:0))}
-    ${ri("less stamp duty", gbp(R.T82?R.P76:0))}
+    ${ri("less stamp duty @ "+pct(S.sdltPct,1), gbp(R.T82 ? R.sdltAccepted : 0))}
     ${r("Cost of land", gbp(R.costOfLand), "", "tot")}
     ${r("Net margin at this price", pct(R.knownNetPct,2), gbp(R.knownNetGBP), "grand")}
     ${r("Memo: headline margin check", pct(R.knownHeadPct,2))}
@@ -1413,8 +1441,6 @@ function columns(){
 let COLS = [];
 function renderScenarios(){
   const cols = COLS = columns();
-  const badge = document.getElementById("scenCount");
-  if(badge) badge.textContent = SC.length ? ` (${SC.length})` : "";
 
   if(!SC.length){
     document.getElementById("p-scen").innerHTML = panel("Saved scenarios", "", `
@@ -1647,10 +1673,24 @@ function compareHover(e){
 
 /* ---------- render + events ---------- */
 const PANELS = ["p-summary","p-irr","p-cash","p-scen"];
+const RENDERERS = {"p-summary":renderSummary, "p-irr":renderIrr, "p-cash":renderCash, "p-scen":renderScenarios};
+let activeTab = "p-summary";
+let stale = new Set();
+
+// Only the visible tab is rebuilt on a keystroke; the others are marked stale
+// and redrawn when you switch to them. The cashflow table alone is 229 rows,
+// and rebuilding it behind your back on every character is what makes a page
+// like this feel slow.
 function renderAll(){
   R = calc(S);
-  renderRibbon(); renderSummary(); renderIrr(); renderCash(); renderScenarios();
+  renderRibbon(); renderScenCount();
+  stale = new Set(PANELS.filter(id => id !== activeTab));
+  RENDERERS[activeTab]();
   autosave();
+}
+function renderScenCount(){
+  const badge = document.getElementById("scenCount");
+  if(badge) badge.textContent = SC.length ? ` (${SC.length})` : "";
 }
 
 // The working draft persists on its own; Save scenario is for keeping a named one.
@@ -1794,13 +1834,13 @@ document.addEventListener("click", e => {
   }
   if(act === "dup"){
     const sc = findScen(id);
-    if(sc){ addScenario(sc.inputs, sc.name + " copy"); renderScenarios(); }
+    if(sc){ addScenario(sc.inputs, sc.name + " copy"); renderScenCount(); renderScenarios(); }
   }
   if(act === "del"){
     if(t.dataset.armed){
       SC = SC.filter(x => x.id !== id); saveScenarios();
       if(baselineId === id) baselineId = "working";
-      renderScenarios();
+      renderScenCount(); renderScenarios();
     } else {
       t.dataset.armed = "1"; t.textContent = "Sure?";
       setTimeout(()=>{ if(t.dataset.armed){ delete t.dataset.armed; t.textContent = "Delete"; } }, 4000);
@@ -1809,8 +1849,10 @@ document.addEventListener("click", e => {
 });
 
 function showTab(panel){
+  activeTab = panel;
   document.querySelectorAll(".tab").forEach(b => b.setAttribute("aria-selected", String(b.dataset.panel === panel)));
   PANELS.forEach(id => document.getElementById(id).classList.toggle("hidden", id !== panel));
+  if(stale.has(panel)){ stale.delete(panel); RENDERERS[panel](); }
   if(panel === "p-cash") drawChart();
   if(panel === "p-scen") drawCompare();
 }
@@ -1831,16 +1873,36 @@ function toggleTheme(){
 }
 
 /* Goal seek: solve the headline margin that hits a target land value per acre */
+// Land value per acre is all but linear in the headline margin, so a secant
+// solve lands on it in a handful of passes — cheap enough to run on every
+// keystroke and show the answer before the button is pressed.
+function solveMargin(target){
+  if(!(target > 0)) return null;
+  const at = m => calc(Object.assign({}, S, {headlineTarget:m})).landPerAcre;
+  let m0 = n0(S.headlineTarget), v0 = at(m0);
+  let m1 = m0 + 0.01, v1 = at(m1);
+  for(let i=0;i<14 && Math.abs(v1-target) > 0.5; i++){
+    if(Math.abs(v1-v0) < 1e-9) break;
+    const next = Math.min(Math.max(m1 + (target-v1)*(m1-m0)/(v1-v0), -0.5), 0.95);
+    m0=m1; v0=v1; m1=next; v1=at(next);
+  }
+  return Math.abs(v1-target) < 5 ? Math.round(m1*1e8)/1e8 : null;
+}
+function goalSeekPreview(){
+  const target = n0(S.landOfferPerAcre);
+  if(!target) return null;
+  const m = solveMargin(target);
+  if(m === null) return {target, reachable:false};
+  return {target, reachable:true, margin:m, res:calc(Object.assign({}, S, {headlineTarget:m}))};
+}
 function solveLandValue(){
-  const target = S.landOfferPerAcre || 0;
-  if(!target){ alert("Enter a target land value per net developable acre first."); return; }
-  let lo = -0.5, hi = 0.9;
-  const f = m => { const t = Object.assign({}, S, {headlineTarget:m}); const rr = calc(t); return rr.landPerAcre - target; };
-  if(f(lo) < 0 && f(hi) < 0){ alert("The scheme cannot reach that land value at any margin."); return; }
-  for(let i=0;i<80;i++){ const mid=(lo+hi)/2; if(f(mid) > 0) lo = mid; else hi = mid; }
-  S.headlineTarget = Math.round((lo+hi)/2*1e6)/1e6;
+  const g = goalSeekPreview();
+  if(!g){ flash(document.getElementById("btnSolve"), "Enter a target"); return; }
+  if(!g.reachable){ flash(document.getElementById("btnSolve"), "Out of reach"); return; }
+  S.headlineTarget = g.margin;
   renderAll();
 }
+function n0(v){ return (typeof v === "number" && isFinite(v)) ? v : 0; }
 
 function buildCsv(){
   const head = ["Month","Index","Land","Build","Infrastructure","DPE & S106","Prelims","Other",
