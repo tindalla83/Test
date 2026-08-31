@@ -123,6 +123,9 @@ main{max-width:1400px; margin:0 auto; padding:20px 20px 72px}
 .rows tbody tr{border-top:1px solid var(--rule)}
 .rows tbody tr:first-child{border-top:0}
 .rows .lbl{color:var(--ink-2); font-size:13px}
+.rows.sched .lbl{min-width:190px}
+.rows.sched .hint{max-width:46ch}
+.rows.sched .lbl:first-child{width:26%}
 .rows .lbl.ind{padding-left:28px}
 .rows .num{
   font-family:var(--f-data); font-variant-numeric:tabular-nums; text-align:right; white-space:nowrap;
@@ -148,6 +151,7 @@ input:focus{background:var(--input-bg-focus); outline:2px solid var(--accent); o
 input.txt, select{text-align:left}
 select{padding:3px 5px}
 td.in{width:1%; padding:3px 14px 3px 6px}
+td.in.wide{min-width:0}
 td.in input{min-width:104px}
 td.in select{min-width:210px}
 td.in.wide input{min-width:150px}
@@ -223,9 +227,11 @@ table.cmp tr.sub td, table.cmp tr.sub th{
   letter-spacing:.09em; text-transform:uppercase; color:var(--ink-3);
 }
 table.cmp .val{font-family:var(--f-data); font-variant-numeric:tabular-nums; white-space:nowrap}
-table.cmp .dlt{font-family:var(--f-data); font-size:11px; font-variant-numeric:tabular-nums; color:var(--ink-3); display:block}
-table.cmp .dlt.up{color:var(--pos)}
-table.cmp .dlt.dn{color:var(--crit)}
+/* Deltas appear in the comparison table and in the land schedule, so these
+   stay unscoped — and the state rules outrank the base rule on their own. */
+.dlt{font-family:var(--f-data); font-size:11px; font-variant-numeric:tabular-nums; color:var(--ink-3); display:block}
+.dlt.up{color:var(--pos)}
+.dlt.dn{color:var(--crit)}
 table.cmp td.base{background:var(--accent-soft)}
 table.cmp th.base{box-shadow:inset 0 -3px 0 var(--accent)}
 
@@ -287,7 +293,7 @@ footer code{font-family:var(--f-data); font-size:11px}
 
 <footer>
   <p><strong>How this maps to the workbook.</strong> Yellow cells are inputs, exactly as in <code>Strat_Land_Concept_Viab_Res_Land_v6.0 (Freehold).xlsm</code>. Everything else is calculated live: the unit calculator, the development appraisal, the residual land value, the 229&#8209;month cashflow, interest, IRR and NPV all recalculate on every keystroke. Figures reconcile to the workbook to the penny on its shipped assumptions.</p>
-  <p>Two differences worth knowing. Interest is solved directly from the cashflow rather than pasted in by goal seek, so <em>Cost of Finance</em> is always current. And the workbook's XIRR reads a fixed 197&#8209;month window; that is reproduced as the default so numbers tie out, with a switch to run IRR across the full cashflow.</p>
+  <p>Four differences worth knowing. Interest is solved directly from the cashflow rather than pasted in by goal seek, so <em>Cost of Finance</em> is always current. The workbook's XIRR reads a fixed 197&#8209;month window; that is reproduced as the default so numbers tie out, with a switch to run IRR across the full cashflow. An IRR with no root reads <em>n/a</em> rather than the workbook's 0%. And VAT is charged on each land instalment as it falls due, rather than in full on the first — on a staged purchase the workbook front&#8209;loads it.</p>
 </footer>
 
 <script>
@@ -346,7 +352,9 @@ const DEFAULTS = {
   landVatable:true, vatRate:0.20,                       // CP C48, C51
   landValueKnown:false, acceptedLandOffer:16000000,     // CP C11, C12
   // --- IRR input tab ---
-  landPays:[{d:"2026-11-01", a:null},{d:"",a:0},{d:"",a:0},{d:"",a:0},{d:"",a:0}],
+  landSplitMode:"pct",                                  // "pct" of net offer value, or "gbp"
+  landPays:[{d:"2026-11-01", pct:1, a:null},{d:"",pct:0,a:0},{d:"",pct:0,a:0},
+            {d:"",pct:0,a:0},{d:"",pct:0,a:0}],
   s106Pays:[{m:1,a:null},{m:36,a:0},{m:100,a:0},{m:150,a:0},{m:200,a:0}],
   enablingMonth:1, enablingDur:3,                       // IRR E18, F18
   infraRel:[0.20,0.10,0,0,0,0,0,0,0],                   // IRR C21:C29
@@ -460,37 +468,75 @@ function calc(I){
   const pos = new Map(); dates.forEach((d,k)=> pos.set(mkey(d),k));
   const row = () => new Array(n).fill(0);
 
-  /* ---- land payments (Land Input rows 13-24) ------------------------ */
-  const lp=[];
-  let landEntered = 0, landUndated = 0;
-  (I.landPays||[]).forEach((p,k)=>{
+  /* ---- land payments: up to five instalments ------------------------
+     Shares are the default because the net offer value moves whenever an
+     appraisal input changes; a percentage schedule stays reconciled, a fixed
+     one does not. The last dated instalment absorbs rounding so the schedule
+     always pays exactly the net offer value.                              */
+  const pctMode = (I.landSplitMode || "pct") === "pct";
+  const rows5 = (I.landPays || []);
+  const dated = [];
+  let landEntered = 0, landUndated = 0, shareTotal = 0;
+  rows5.forEach((p,k) => {
     const d = fromISO(p.d);
-    const amt = (k===0 && (p.a===null || p.a===undefined || p.a===0)) ? N78 : n0(p.a);
+    let amt;
+    if(pctMode){
+      const share = n0(p.pct);
+      shareTotal += share;
+      amt = N78 * share;
+    } else {
+      amt = (k===0 && (p.a===null || p.a===undefined || p.a===0)) ? N78 : n0(p.a);
+    }
     landEntered += amt;
-    if(d && amt) lp.push({d,amt}); else if(amt) landUndated += amt;
+    if(d && amt) dated.push({i:k, d, amt}); else if(amt) landUndated += amt;
   });
-  R.landPayTotal = landEntered;                                   // IRR H7 check
-  R.landPayScheduled = lp.reduce((s,p)=>s+p.amt,0);
+  // exact reconciliation on the final dated instalment
+  if(pctMode && dated.length){
+    const drift = N78 - dated.reduce((t,x) => t + x.amt, 0);
+    dated[dated.length-1].amt += drift;
+  }
+  const lp = dated;
+  R.landSplitMode = pctMode ? "pct" : "gbp";
+  R.landShareTotal = shareTotal;
+  R.landPayTotal = pctMode ? N78 * shareTotal : landEntered;
+  R.landPayScheduled = lp.reduce((t,p) => t + p.amt, 0);
   R.landUndated = landUndated;
-  R.landPayOk = Math.round(landEntered) === Math.round(N78);
+  R.landPayOk = pctMode
+    ? Math.abs(shareTotal - 1) < 5e-5
+    : Math.round(landEntered) === Math.round(N78);
+  R.landInstalments = lp.length;
 
   const r22=row(), r23=row(), r24=row(), r28=row(), r29=row(), r30=row(), r31=row(),
         r32=row(), r35=row(), r36=row(), r39=row(), r41=row(), r42=row(),
         r43=row(), r45=row(), r47=row();
 
   lp.forEach(p => { const k=pos.get(mkey(p.d)); if(k!==undefined) r22[k]-=p.amt; });
+  R.landVat = 0;
   if(lp.length){
-    const k=pos.get(mkey(lp[0].d));
-    if(k!==undefined) r23[k] -= (P74+P75+P76);                      // legals, agent, SDLT
-    // VAT on land out on completion, reclaimed the following month (Stamp!E7)
-    const vat = I.landVatable ? (P72-P74-P75)*n0(I.vatRate) : 0;
-    R.landVat = vat;
-    if(vat){
-      if(k!==undefined) r24[k] -= vat;
-      const k2 = pos.get(mkey(addM(lp[0].d,1)));
-      if(k2!==undefined) r24[k2] += vat;
+    // Title passes on the first instalment, so the acquisition costs sit there.
+    const k0 = pos.get(mkey(lp[0].d));
+    if(k0!==undefined) r23[k0] -= (P74+P75+P76);                    // legals, agent, SDLT
+    // VAT is charged on each instalment as it is paid and reclaimed the month
+    // after, so a staged purchase never carries the whole VAT up front.
+    const vatRate = I.landVatable ? n0(I.vatRate) : 0;
+    if(vatRate){
+      // Stamp!E5 — the gross land payment, before SDLT is netted off.
+      const vatBase = (P72 - P74 - P75) * vatRate;
+      const paid = lp.reduce((t,p) => t + p.amt, 0) || 1;
+      lp.forEach(p => {
+        const vat = vatBase * (p.amt / paid);                       // apportioned by instalment
+        R.landVat += vat;
+        const ka = pos.get(mkey(p.d)), kb = pos.get(mkey(addM(p.d,1)));
+        if(ka!==undefined) r24[ka] -= vat;
+        if(kb!==undefined) r24[kb] += vat;
+      });
     }
-  } else { R.landVat = 0; }
+  }
+  R.landSchedule = lp.map(p => ({
+    i: p.i, date: p.d, amount: p.amt,
+    month: pos.has(mkey(p.d)) ? idxs[pos.get(mkey(p.d))] : null,
+    inRange: pos.has(mkey(p.d))
+  }));
 
   /* ---- DPE: annual buckets, spread monthly (IRR rows 10/11) --------- */
   const NB = Math.ceil(n/12)+1;
@@ -1027,25 +1073,86 @@ function renderSummary(){
 
 /* ---------- IRR Input ---------- */
 function renderIrr(){
+  const pctMode = R.landSplitMode === "pct";
+  const sched = new Map(R.landSchedule.map(x => [x.i, x]));
   const payRows = S.landPays.map((p,i)=>{
-    const amt = (i===0 && (p.a===null||p.a===undefined||p.a===0)) ? R.N78 : (p.a||0);
-    return `<tr><td class="lbl">Payment ${i+1}</td>
-      <td class="in wide">${cell(`landPays.${i}.d`,"date",{label:`Land payment ${i+1} date`})}</td>
-      <td class="in">${i===0
-        ? `<input type="text" value="${nf(amt)}" data-path="landPays.0.a" data-kind="num" data-d="0" aria-label="Land payment 1 amount">`
-        : cell(`landPays.${i}.a`,"num",{label:`Land payment ${i+1} amount`})}</td></tr>`;
+    const row = sched.get(i);
+    const amountCell = pctMode
+      ? cell(`landPays.${i}.pct`, "pct", {d:1, label:`Instalment ${i+1} share`})
+      : (i===0
+          ? `<input type="text" value="${nf(row ? row.amount : R.N78)}" data-path="landPays.0.a" data-kind="num" data-d="0" aria-label="Instalment 1 amount">`
+          : cell(`landPays.${i}.a`, "num", {label:`Instalment ${i+1} amount`}));
+    const when = row
+      ? (row.inRange ? `month ${row.month}` : `<span style="color:var(--warn)">outside cashflow</span>`)
+      : "—";
+    return `<tr>
+      <td class="lbl">Instalment ${i+1}</td>
+      <td class="in wide">${cell(`landPays.${i}.d`,"date",{label:`Instalment ${i+1} date`})}</td>
+      <td class="in">${amountCell}</td>
+      <td class="num">${row ? gbp(row.amount) : "—"}</td>
+      <td class="unit">${when}</td></tr>`;
   }).join("");
 
-  const land = panel("Net land payment", "Total must equal the net offer value", `<table class="rows">
-    ${r("Net offer value for land", gbp(R.N78), "", "tot")}
-    <tr class="sub"><td class="lbl">Schedule</td><td class="lbl" style="text-align:right">Date</td><td class="lbl" style="text-align:right">Amount</td></tr>
+  // What the schedule is worth: the same appraisal with everything paid on the
+  // first date is the thing a land buyer is trading against.
+  const single = structuredClone(S);
+  single.landSplitMode = "pct";
+  single.landPays = single.landPays.map((p,i) => ({...p, pct: i===0 ? 1 : 0}));
+  if(!fromISO(single.landPays[0].d) && R.landSchedule.length)
+    single.landPays[0].d = toISO(R.landSchedule[0].date);
+  const S1 = calc(single);
+  const cmp = (now, base, dir, fmt) => {
+    const diff = now - base;
+    const eps = fmt === pct ? 0.00005 : 0.5;
+    if(Math.abs(diff) < eps) return `<span class="dlt">no change</span>`;
+    return `<span class="dlt ${diff*dir>0?"up":"dn"}">${diff>0?"+":"−"}${fmt(Math.abs(diff), fmt===pct?2:0)}</span>`;
+  };
+
+  // The schedule table is five columns wide; every row has to fill all five or
+  // the label column collapses.
+  const sr  = (l,v,n,cls) => `<tr class="${cls||""}"><td class="lbl">${l}</td><td class="num" colspan="3">${v}</td><td class="unit">${n||""}</td></tr>`;
+  const sri = (l,v,n) => `<tr><td class="lbl ind">${l}</td><td class="num" colspan="3">${v}</td><td class="unit">${n||""}</td></tr>`;
+  const sin = (l,inp,h) => `<tr><td class="lbl">${l}${h?`<div class="hint">${h}</div>`:""}</td><td class="in" colspan="4">${inp}</td></tr>`;
+  const ssub = l => `<tr class="sub"><td class="lbl" colspan="5">${l}</td></tr>`;
+
+  const land = panel("Land payment schedule",
+    `${R.landInstalments} instalment${R.landInstalments===1?"":"s"}`, `<div class="scroll"><table class="rows sched">
+    ${sr("Net offer value for land", gbp(R.N78), "", "tot")}
+    ${sin("Split by", `<select data-path="landSplitMode" data-kind="raw" aria-label="Split land payment by">
+        <option value="pct"${pctMode?" selected":""}>Share of the net offer value</option>
+        <option value="gbp"${pctMode?"":" selected"}>Fixed amounts</option></select>`,
+      pctMode
+        ? "Shares re-price themselves whenever the appraisal moves the net offer value."
+        : "Fixed amounts stay put, so they need re-checking whenever the net offer value moves.")}
+    <tr><td class="lbl" colspan="5"><div class="acts" style="display:flex;gap:4px;flex-wrap:wrap">
+      <button class="mini" data-pay="1" type="button">Single payment</button>
+      <button class="mini" data-pay="2" type="button">2 equal, annual</button>
+      <button class="mini" data-pay="3" type="button">3 equal, annual</button>
+      <button class="mini" data-pay="5" type="button">5 equal, annual</button>
+    </div></td></tr>
+    <tr class="sub"><td class="lbl">Schedule</td><td class="lbl" style="text-align:right">Date</td>
+      <td class="lbl" style="text-align:right">${pctMode?"Share":"Amount"}</td>
+      <td class="lbl" style="text-align:right">Payable</td><td></td></tr>
     ${payRows}
-    ${r("Entered", gbp(R.landPayTotal), "", "tot")}
-    ${rIn("Land is VATable", `<select data-path="landVatable" data-kind="bool" aria-label="Land is VATable"><option value="true"${S.landVatable?" selected":""}>Yes</option><option value="false"${!S.landVatable?" selected":""}>No</option></select>`)}
-    ${rIn("VAT rate", cell("vatRate","pct",{d:0,label:"VAT rate"}), "Paid on completion, reclaimed the following month")}
-    ${r("VAT on land", gbp(R.landVat))}
-  </table>`, pill(R.landPayOk, "Payments match", "Payments differ from total by "+gbp(R.landPayTotal-R.N78))
-     + (R.landUndated ? pill(false, "", gbp(R.landUndated)+" has no date and will not reach the cashflow", true) : ""));
+    ${sr(pctMode ? "Shares total" : "Entered", pctMode ? pct(R.landShareTotal,1) : gbp(R.landPayTotal), gbp(R.landPayScheduled), "tot")}
+    ${ssub("Acquisition costs — payable on the first instalment, when title passes")}
+    ${sri("Legal fees", gbp(R.P74))}
+    ${sri("Agent fees", gbp(R.P75))}
+    ${sri("Stamp duty", gbp(R.P76))}
+    ${sin("Land is VATable", `<select data-path="landVatable" data-kind="bool" aria-label="Land is VATable"><option value="true"${S.landVatable?" selected":""}>Yes</option><option value="false"${!S.landVatable?" selected":""}>No</option></select>`)}
+    ${sin("VAT rate", cell("vatRate","pct",{d:0,label:"VAT rate"}), "Charged on each instalment as it is paid, reclaimed the month after")}
+    ${sr("VAT on land", gbp(R.landVat))}
+    ${ssub("What this schedule is worth")}
+    <tr><td class="lbl">Cost of finance</td><td class="num" colspan="2">${gbp(R.P65)}</td><td class="num" colspan="2">${cmp(R.P65, S1.P65, -1, gbp)}</td></tr>
+    <tr><td class="lbl">Peak debt</td><td class="num" colspan="2">${gbp(R.peakDebt)}</td><td class="num" colspan="2">${cmp(R.peakDebt, S1.peakDebt, 1, gbp)}</td></tr>
+    <tr><td class="lbl">IRR</td><td class="num" colspan="2">${irrTxt(R,2)}</td><td class="num" colspan="2">${R.irrSolved && S1.irrSolved ? cmp(R.irr, S1.irr, 1, pct) : ""}</td></tr>
+    <tr><td class="lbl">Net margin</td><td class="num" colspan="2">${pct(R.netMargin)}</td><td class="num" colspan="2">${cmp(R.netMargin, S1.netMargin, 1, pct)}</td></tr>
+    <tr><td class="lbl" colspan="5"><div class="hint">Measured against paying the whole ${gbp(R.N78)} on ${monL(R.landSchedule.length ? R.landSchedule[0].date : null)}. Deferring land lowers the interest bill and lifts the return; the residual land value itself does not move, because it is struck before finance.</div></td></tr>
+  </table></div>`, pill(R.landPayOk,
+       pctMode ? "Shares total 100%" : "Payments match the net offer value",
+       pctMode ? "Shares total " + pct(R.landShareTotal,1) + ", not 100%"
+               : "Payments differ from the total by " + gbp(R.landPayTotal - R.N78))
+     + (R.landUndated ? pill(false, "", (pctMode ? pct(R.landUndated/(R.N78||1),1)+" of the value" : gbp(R.landUndated)) + " has no date and will not reach the cashflow", true) : ""));
 
   const s106Rows = S.s106Pays.map((p,i)=>{
     const amt = (i===0 && (p.a===null||p.a===undefined)) ? R.P51 : (p.a||0);
@@ -1117,9 +1224,11 @@ function renderIrr(){
     <tr><td class="lbl" colspan="3"><div class="hint">Buckets before site start are filled by the pre-development fees above; the balance falls in the first year after site start, exactly as the workbook allocates it.</div></td></tr>
   </table>`);
 
+  // The schedule is five columns wide, so it gets the full width of the tab.
   document.getElementById("p-irr").innerHTML =
-    `<div class="grid cols-2">
-       <div class="grid">${dates}${land}${fees}</div>
+    `<div class="grid">${land}</div>
+     <div class="grid cols-2" style="margin-top:16px">
+       <div class="grid">${dates}${fees}</div>
        <div class="grid">${enabling}${infra}${s106}${dpe}</div>
      </div>`;
 }
@@ -1558,7 +1667,16 @@ document.addEventListener("input", e => {
   if(!el.dataset || !el.dataset.path) return;
   const {path, kind} = el.dataset;
   if(kind === "bool"){ set(path, el.value === "true"); }
-  else if(kind === "raw"){ set(path, el.value); }
+  else if(kind === "raw"){
+    if(path === "landSplitMode" && el.value !== S.landSplitMode){
+      // carry the current schedule into the other mode instead of dropping it
+      const sched = new Map(R.landSchedule.map(x => [x.i, x.amount]));
+      S.landPays = S.landPays.map((p,i) => el.value === "gbp"
+        ? {...p, a: sched.get(i) || 0}
+        : {...p, pct: R.N78 ? (sched.get(i) || 0) / R.N78 : 0});
+    }
+    set(path, el.value);
+  }
   else {
     const v = parseVal(el.value, kind);
     if(v === null) return;
@@ -1624,6 +1742,16 @@ document.addEventListener("click", e => {
   if(!t) return;
   if(t.classList.contains("tab")){
     showTab(t.dataset.panel);
+    return;
+  }
+  if(t.dataset.pay){
+    const n = +t.dataset.pay;
+    const first = fromISO(S.landPays[0].d) || fromISO(S.planDate) || fromISO(S.siteStart);
+    S.landSplitMode = "pct";
+    S.landPays = S.landPays.map((p,i) => i < n
+      ? {d: toISO(addM(first, 12*i)), pct: 1/n, a: 0}
+      : {d: "", pct: 0, a: 0});
+    renderAll();
     return;
   }
   if(t.id === "btnSolve") solveLandValue();

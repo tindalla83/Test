@@ -76,6 +76,25 @@ else recalculates on each keystroke:
 A **Cashflow** tab shows the monthly detail, a cumulative cash chart and a CSV
 export. **Reset** restores the workbook's shipped assumptions.
 
+## Land payment schedule
+
+Land can be paid in up to five instalments, each with its own date. Split it by
+**share of the net offer value** (the default) and the schedule re-prices itself
+whenever an appraisal input moves that value, so it stays reconciled; split it by
+**fixed amounts** and it holds the numbers you typed. Presets cover the common
+shapes — single payment, or two, three or five equal annual instalments.
+
+The schedule reaches the cashflow, so it moves the cost of finance, peak debt,
+IRR and net margin. It does *not* move the residual land value, which is struck
+before finance. The panel shows exactly what the deferral is worth against
+paying the whole sum on the first date — on the shipped assumptions, five equal
+annual instalments cut the interest bill by £480,000, lift IRR from 2.69% to
+2.86% and net margin from 10.56% to 10.72%, and take £5.4m off peak debt.
+
+Acquisition costs (legals, agent, SDLT) fall on the first instalment, when title
+passes. VAT is charged on each instalment as it is paid and reclaimed the month
+after.
+
 ## Scenarios
 
 **Save scenario** keeps a named snapshot of every input. The **Scenarios** tab
@@ -109,7 +128,7 @@ On the workbook's own inputs the page reproduces it exactly:
 | Peak debt | −£69,447,126 (Dec 2028) | −£69,447,126 (Dec 2028) |
 | NPV @ 5% | −£9,764,645 | −£9,764,645 |
 
-Three deliberate differences:
+Four deliberate differences:
 
 1. **Interest is solved, not pasted.** The workbook breaks its own circular
    reference by hard-coding the cashflow interest into `Concept Viab Model
@@ -121,7 +140,14 @@ Three deliberate differences:
    `IFERROR(...,0)`, so the workbook prints `0.0%` — which reads as a real
    return of zero. The page shows `n/a` instead. This matters most in scenario
    comparison, where a fabricated 0% would sort as if it beat a negative one.
-3. **The IRR window is switchable.** `Cash_flow!L85` runs XIRR over
+3. **VAT follows the instalments.** The workbook charges the whole VAT bill at
+   the first land payment (`Land Input!H27 = H14`) and reclaims it a month
+   later, whatever the payment schedule. On a staged purchase that front-loads
+   several million pounds of outflow and overstates the interest. Here each
+   instalment carries its own VAT, apportioned from the same base the workbook
+   uses (`Stamp!E5`, the gross payment before SDLT is netted off), so a single
+   payment still reconciles exactly.
+4. **The IRR window is switchable.** `Cash_flow!L85` runs XIRR over
    `OFFSET(L68,0,0,1,J85)`, and `J85` counts a fixed 197-column range — so the
    workbook's IRR ignores the last three years of the scheme. That is the
    default here, to tie out. The Cashflow tab offers the full-series IRR
