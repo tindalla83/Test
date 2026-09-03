@@ -47,3 +47,51 @@ Netlify Forms, your own endpoint) and add a privacy notice covering how enquirie
 
 Defined as custom properties at the top of `assets/css/styles.css` — change `--navy`
 and `--accent` to rebrand the whole site.
+
+---
+
+## House Type Valuation Tool
+
+A small Node/Express app that gives developers AI-generated indicative selling-price
+predictions for a list of house types on a development, using Claude with live web
+search to research current new-build asking prices and recent second-hand sold prices
+near the site. Linked from the marketing site's nav ("Valuation Tool").
+
+### Running it
+
+```sh
+npm install
+cp .env.example .env   # then add your ANTHROPIC_API_KEY
+npm start               # or: node server.js
+```
+
+Then visit http://localhost:3000 (or `PORT` from `.env`, if set).
+
+The server boots and serves the tool even without an API key — only a submitted
+valuation request will fail, with a clear "Server is not configured with an Anthropic
+API key" message, until `ANTHROPIC_API_KEY` is set.
+
+### Files
+
+```
+server.js              Express app + POST /api/valuation (Claude + web search)
+package.json           Dependencies (@anthropic-ai/sdk, express, dotenv)
+.env.example           ANTHROPIC_API_KEY, optional MODEL and PORT
+public/index.html      Tool UI (location + repeatable house type rows)
+public/css/app.css     Tool styling, layered on assets/css/styles.css's palette
+public/js/app.js       Form handling, fetch to /api/valuation, results rendering
+```
+
+### How it works
+
+The developer enters a development location and one or more house types (name, sqft,
+bedrooms, parking, typology). The backend validates the input, then sends a single
+request to Claude with the web search tool enabled, asking it to research comparable
+new-build asking prices and recent Land Registry / portal sold prices for each house
+type, reconcile the two, and return strict JSON with a predicted price, price range,
+£/sqft, confidence level, market summary and comparables per house type, plus an
+overall area market overview. The model, request timeout and other defaults can be
+tuned via `.env` (see `.env.example`).
+
+**These are AI-generated indicative estimates, not a formal RICS valuation** — a
+disclaimer to that effect is shown on the tool itself.

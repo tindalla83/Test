@@ -1,0 +1,230 @@
+/* ==========================================================================
+   House Type Valuation Tool — styles layered on top of the marketing site's
+   assets/css/styles.css, reusing the same custom properties (--navy, --accent,
+   etc. — see that file for the palette).
+   ========================================================================== */
+
+.tool-body { background: var(--paper); }
+
+.tool-intro { padding-bottom: 2rem; }
+
+.tool-disclaimer {
+  margin-top: 1.5rem;
+  padding: .9rem 1.1rem;
+  background: var(--accent-soft);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius);
+  font-size: .92rem;
+  color: var(--navy);
+  max-width: 68ch;
+}
+
+.tool-disclaimer strong { color: var(--accent-dark); }
+
+/* Form ---------------------------------------------------------------- */
+
+.tool-form-section { padding-top: 2.5rem; }
+
+.field { display: flex; flex-direction: column; gap: .35rem; margin-bottom: 1.25rem; }
+
+.field label {
+  font-size: .85rem;
+  font-weight: 600;
+  color: var(--navy);
+}
+
+.field input,
+.field select {
+  font: inherit;
+  font-size: .95rem;
+  padding: .65rem .75rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff;
+  color: var(--navy);
+}
+
+.field input:focus,
+.field select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.field__hint { margin: 0; font-size: .8rem; color: var(--muted); }
+
+#valuation-form > .field { max-width: 32rem; }
+
+.house-types { margin-top: 2rem; }
+
+.house-types__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.house-types__head h2 { margin: 0; font-size: 1.3rem; }
+
+.btn--small { padding: .5rem 1rem; font-size: .85rem; }
+
+.house-type-row {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.1rem 1.25rem .3rem;
+  margin-bottom: 1rem;
+  box-shadow: var(--shadow);
+}
+
+.house-type-row__grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1.3fr 1.3fr auto;
+  gap: 1rem;
+  align-items: end;
+}
+
+.field--narrow input { width: 100%; }
+.field--action { justify-content: flex-end; }
+
+.btn-remove {
+  background: none;
+  border: 1px solid var(--line);
+  color: var(--slate);
+  border-radius: var(--radius);
+  padding: .65rem .9rem;
+  font-size: .85rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.btn-remove:hover { border-color: #b23b3b; color: #b23b3b; }
+
+@media (max-width: 860px) {
+  .house-type-row__grid { grid-template-columns: 1fr 1fr; }
+  .field--action { grid-column: 1 / -1; justify-content: flex-start; }
+}
+
+.form-error {
+  background: #fdecec;
+  border: 1px solid #e3a5a5;
+  color: #8a2b2b;
+  border-radius: var(--radius);
+  padding: .8rem 1rem;
+  margin: 1rem 0;
+  font-size: .92rem;
+}
+
+.form-actions { margin-top: 1.75rem; }
+
+/* Loading state --------------------------------------------------------- */
+
+.loading {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding: 1rem 1.25rem;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  max-width: 40rem;
+}
+
+.loading p { margin: 0; font-size: .92rem; color: var(--slate); }
+
+.loading__spinner {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  border: 3px solid var(--line);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin .8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Results ----------------------------------------------------------------- */
+
+.results-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+
+.results-meta { color: var(--muted); font-size: .92rem; margin: .3rem 0 0; }
+
+.market-overview {
+  background: var(--paper-alt);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.5rem 1.75rem;
+  margin-bottom: 2rem;
+}
+
+.market-overview h3 { margin-bottom: .5rem; font-size: 1.05rem; }
+.market-overview p { margin: 0; }
+
+.result-card__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: .75rem;
+}
+
+.result-card__head h3 { margin: 0; font-size: 1.1rem; }
+
+.confidence-badge {
+  flex: none;
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  padding: .3rem .6rem;
+  border-radius: 999px;
+}
+
+.confidence-badge--high { background: #e3f5e9; color: #1e7a44; }
+.confidence-badge--medium { background: #fff2da; color: #93650b; }
+.confidence-badge--low { background: #fdecec; color: #a13a3a; }
+
+.result-card__price {
+  font-family: var(--serif);
+  font-size: 1.9rem;
+  color: var(--navy);
+  margin: .75rem 0 .1rem;
+}
+
+.result-card__range { margin: 0 0 .2rem; color: var(--slate); font-size: .92rem; }
+.result-card__sqft { margin: 0 0 .9rem; color: var(--muted); font-size: .85rem; }
+.result-card__summary { font-size: .93rem; }
+
+.comparables { margin-top: .75rem; font-size: .87rem; }
+.comparables summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--accent-dark);
+}
+.comparables ul { margin: .6rem 0 0; padding-left: 1.1rem; }
+.comparables li { margin-bottom: .4rem; }
+.comparables .comparable-source { color: var(--muted); }
+
+/* Print ------------------------------------------------------------------- */
+
+@media print {
+  .no-print { display: none !important; }
+  body { background: #fff; }
+  .section { padding: .5rem 0; }
+  .card, .result-card, .market-overview, .house-type-row {
+    box-shadow: none;
+    break-inside: avoid;
+  }
+  .results-grid { display: block; }
+  .results-grid .result-card { margin-bottom: 1rem; }
+}
