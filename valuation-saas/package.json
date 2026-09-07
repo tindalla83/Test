@@ -1,0 +1,25 @@
+{
+  "name": "house-type-valuer-saas",
+  "version": "1.0.0",
+  "description": "Hosted SaaS: AI-assisted house-type valuations for residential development viability (accounts, Stripe billing, saved projects, teams, PDF export).",
+  "type": "commonjs",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.123.0",
+    "bcryptjs": "^2.4.3",
+    "better-sqlite3": "^11.7.0",
+    "connect-sqlite3": "^0.9.15",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2",
+    "express-session": "^1.18.1",
+    "pdfkit": "^0.15.2",
+    "stripe": "^17.5.0"
+  }
+}

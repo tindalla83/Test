@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Team — House Type Valuer</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%2316202E'/%3E%3Cpath d='M9 27V16l11-7 11 7v11' fill='none' stroke='%234FA8A6' stroke-width='2.4' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+<header class="top"><div class="top__inner">
+  <a class="brand" href="/app.html"><svg class="brand__mark" viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="9" fill="#16202E"></rect><path d="M9 27V16l11-7 11 7v11" fill="none" stroke="#4FA8A6" stroke-width="2.4" stroke-linejoin="round"></path></svg><span class="brand__name">House Type Valuer</span></a>
+  <div class="topnav" id="topnav"></div>
+</div></header>
+
+<main class="wrap" style="padding-top:28px; padding-bottom:40px;">
+  <p class="eyebrow">Team</p>
+  <h1 class="serif" style="font-size:26px; margin:6px 0 4px;">Members &amp; invites</h1>
+  <p class="muted" id="seat-note" style="font-size:13.5px; margin:0 0 16px;"></p>
+
+  <div class="panel" id="invite-box" style="margin-bottom:18px;" hidden>
+    <h2 style="font-size:15px; margin:0 0 12px;">Invite a colleague</h2>
+    <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:end;">
+      <div class="field" style="flex:1; min-width:220px;"><label class="lbl" for="inv-email">Email</label><input id="inv-email" type="email" placeholder="colleague@company.com"></div>
+      <div class="field" style="width:150px;"><label class="lbl" for="inv-role">Role</label><select id="inv-role"><option value="member">Member</option><option value="admin">Admin</option></select></div>
+      <button class="btn btn--primary" id="inv-send">Send invite</button>
+    </div>
+    <p class="err" id="inv-err" hidden></p>
+    <div id="inv-link" class="ok" hidden style="margin-top:10px; word-break:break-all;"></div>
+  </div>
+
+  <div class="panel" style="padding:0; overflow:hidden;">
+    <table class="tbl"><thead><tr><th>Member</th><th>Email</th><th>Role</th><th></th></tr></thead><tbody id="members"></tbody></table>
+  </div>
+
+  <h2 style="font-size:15px; margin:24px 0 8px;">Pending invites</h2>
+  <div class="panel" style="padding:0; overflow:hidden;">
+    <table class="tbl"><thead><tr><th>Email</th><th>Role</th><th>Invite link</th><th></th></tr></thead><tbody id="invites"></tbody></table>
+  </div>
+</main>
+
+<script src="/js/common.js"></script>
+<script>
+  const { api, requireSession, renderTopnav, el, fmtDate } = App;
+  let me;
+  async function init() {
+    me = await requireSession(); if (!me) return;
+    renderTopnav(me, 'team');
+    const canInvite = me.user.role === 'owner' || me.user.role === 'admin';
+    document.getElementById('invite-box').hidden = !canInvite;
+    if (canInvite) document.getElementById('inv-send').onclick = sendInvite;
+    await load();
+  }
+  async function load() {
+    const t = await api('GET', '/api/team');
+    document.getElementById('seat-note').textContent = 'Using ' + t.seats.used + ' of ' + t.seats.seats + ' seats on your plan.';
+    const mb = document.getElementById('members'); mb.innerHTML = '';
+    const canManage = me.user.role === 'owner' || me.user.role === 'admin';
+    t.members.forEach((m) => {
+      const tr = document.createElement('tr');
+      tr.appendChild(el('td', null, m.name || '—'));
+      tr.appendChild(el('td', 'mono', m.email));
+      const roleTd = el('td'); roleTd.appendChild(el('span','badge', m.role)); tr.appendChild(roleTd);
+      const act = el('td');
+      if (canManage && m.role !== 'owner' && m.id !== me.user.id) {
+        const b = el('button','btn btn--danger btn--sm','Remove'); b.onclick = () => removeUser(m.id); act.appendChild(b);
+      }
+      tr.appendChild(act); mb.appendChild(tr);
+    });
+    const ib = document.getElementById('invites'); ib.innerHTML = '';
+    if (!t.invites.length) { const tr=document.createElement('tr'); const td=el('td','muted','No pending invites.'); td.colSpan=4; tr.appendChild(td); ib.appendChild(tr); }
+    t.invites.forEach((i) => {
+      const tr = document.createElement('tr');
+      tr.appendChild(el('td','mono', i.email));
+      tr.appendChild(el('td', null, i.role));
+      const linkTd = el('td'); const a = el('a','','Copy link'); a.href='#'; a.onclick=(e)=>{e.preventDefault(); navigator.clipboard.writeText(i.link); a.textContent='Copied!'; setTimeout(()=>a.textContent='Copy link',1500);}; linkTd.appendChild(a); tr.appendChild(linkTd);
+      const act = el('td');
+      if (canManage) { const b=el('button','btn btn--danger btn--sm','Revoke'); b.onclick=()=>revokeInvite(i.id); act.appendChild(b); }
+      tr.appendChild(act); ib.appendChild(tr);
+    });
+  }
+  async function sendInvite() {
+    const err = document.getElementById('inv-err'); err.hidden = true;
+    const link = document.getElementById('inv-link'); link.hidden = true;
+    try {
+      const { invite } = await api('POST', '/api/team/invite', { email: document.getElementById('inv-email').value, role: document.getElementById('inv-role').value });
+      link.textContent = 'Invite link (send to your colleague): ' + invite.link; link.hidden = false;
+      document.getElementById('inv-email').value = '';
+      await load();
+    } catch (e) { err.textContent = e.message; err.hidden = false; }
+  }
+  async function revokeInvite(id) { await api('DELETE', '/api/team/invite/' + id); await load(); }
+  async function removeUser(id) { if (!confirm('Remove this member?')) return; await api('DELETE', '/api/team/user/' + id); await load(); }
+  init();
+</script>
+</body>
+</html>

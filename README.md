@@ -95,3 +95,14 @@ tuned via `.env` (see `.env.example`).
 
 **These are AI-generated indicative estimates, not a formal RICS valuation** — a
 disclaimer to that effect is shown on the tool itself.
+
+---
+
+## Production SaaS (`valuation-saas/`)
+
+A full, sellable hosted version of the tool lives in [`valuation-saas/`](valuation-saas/):
+customer accounts and teams, Stripe subscriptions with per-plan usage quotas, saved
+projects and valuation history, branded PDF export, and a platform-admin dashboard —
+wrapping the same live web-search valuation engine. See
+[`valuation-saas/README.md`](valuation-saas/README.md) for setup, Stripe wiring, deployment,
+and the pre-launch checklist.
