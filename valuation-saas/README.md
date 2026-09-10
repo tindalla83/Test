@@ -69,7 +69,7 @@ is lost on every restart/redeploy.
 ### Deploy to Render (recommended, uses `render.yaml`)
 
 1. Push this repo to GitHub (done if you're reading this on GitHub).
-2. In Render → **New → Blueprint** → pick this repo. Render reads `valuation-saas/render.yaml`
+2. In Render → **New → Blueprint** → pick this repo. Render reads the root `render.yaml`
    and provisions a web service **with a 1 GB persistent disk mounted at `/data`**.
    - The disk requires a **paid** instance type (the free tier has no persistent disk and
      sleeps) — Render will prompt you to choose one.
