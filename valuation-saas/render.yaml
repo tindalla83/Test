@@ -1,0 +1,46 @@
+# Render Blueprint for the House Type Valuer SaaS.
+# Deploy: push to GitHub, then in Render → New → Blueprint, pick this repo.
+# Render reads this file, provisions the service + persistent disk, and prompts
+# for the secret values marked `sync: false` (paste them in the dashboard).
+#
+# NOTE: the persistent disk (for the SQLite database + sessions) requires a
+# PAID instance type — the free tier has no persistent disk and sleeps.
+services:
+  - type: web
+    name: house-type-valuer
+    runtime: node
+    plan: starter            # paid tier — needed for the persistent disk below
+    region: frankfurt        # pick the region nearest your users (e.g. oregon, frankfurt)
+    rootDir: valuation-saas
+    buildCommand: npm install
+    startCommand: node src/server.js
+    healthCheckPath: /api/health
+    autoDeploy: true
+    disk:
+      name: valuer-data
+      mountPath: /data       # matches DATA_DIR below — DB + sessions persist here
+      sizeGB: 1
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATA_DIR
+        value: /data
+      - key: MODEL
+        value: claude-sonnet-5
+      - key: SESSION_SECRET
+        generateValue: true  # Render generates a strong random secret for you
+      # --- secrets: paste these in the Render dashboard (never committed) ---
+      - key: APP_URL
+        sync: false          # set to your Render URL, e.g. https://house-type-valuer.onrender.com
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: PLATFORM_ADMIN_EMAILS
+        sync: false
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: STRIPE_WEBHOOK_SECRET
+        sync: false
+      - key: STRIPE_PRICE_STARTER
+        sync: false
+      - key: STRIPE_PRICE_PRO
+        sync: false

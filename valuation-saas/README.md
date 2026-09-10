@@ -62,10 +62,34 @@ Prices shown on the marketing/billing pages are display copy in `src/plans.js`
 
 ## Deploy
 
-Any host that runs a Node process with a persistent volume works (Render, Railway, Fly,
-a VPS). The SQLite DB and sessions live under `DATA_DIR` — mount a volume there.
+Any host that runs a Node process with a **persistent volume** works (Render, Railway, Fly,
+a VPS). The SQLite DB and sessions live under `DATA_DIR` — mount a volume there, or the data
+is lost on every restart/redeploy.
 
-With Docker:
+### Deploy to Render (recommended, uses `render.yaml`)
+
+1. Push this repo to GitHub (done if you're reading this on GitHub).
+2. In Render → **New → Blueprint** → pick this repo. Render reads `valuation-saas/render.yaml`
+   and provisions a web service **with a 1 GB persistent disk mounted at `/data`**.
+   - The disk requires a **paid** instance type (the free tier has no persistent disk and
+     sleeps) — Render will prompt you to choose one.
+3. Render prompts for the secret env vars (marked `sync: false` in the blueprint). Paste:
+   `ANTHROPIC_API_KEY`, `PLATFORM_ADMIN_EMAILS` (your email), and — when ready to charge —
+   `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_STARTER`, `STRIPE_PRICE_PRO`.
+   `SESSION_SECRET` is auto-generated; `MODEL`/`DATA_DIR`/`NODE_ENV` are preset.
+4. Deploy. Once it's live, copy the service URL and set **`APP_URL`** to it (e.g.
+   `https://house-type-valuer.onrender.com`), then redeploy so Stripe redirects and invite
+   links use the right domain.
+5. Add the Stripe webhook (see "Wiring up Stripe" above) pointing at
+   `https://YOUR_APP_URL/webhooks/stripe`, and paste its signing secret into
+   `STRIPE_WEBHOOK_SECRET`.
+
+Health check: `GET /api/health` returns `{"anthropic":true,...}` once the key is set.
+
+Railway/Fly/VPS work the same way — run `node src/server.js` (or the Docker image), set the
+same env vars, and attach a persistent volume at `/data`.
+
+### Docker
 
 ```sh
 docker compose up --build      # reads env from your shell / .env
