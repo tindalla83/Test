@@ -157,9 +157,10 @@
     if (v) { $('run-err').textContent = v; $('run-err').hidden = false; return; }
 
     $('run').disabled = true;
-    $('run-status').innerHTML = '<span class="spinner"></span> Researching live market data — up to a minute…';
+    $('run-status').innerHTML = '<span class="spinner"></span> Researching live market data — this can take a few minutes. You can leave this tab open…';
     try {
-      const data = await api('POST', '/api/projects/' + currentId + '/valuation', { location: current.project.location, houseTypes: rows });
+      const start = await api('POST', '/api/projects/' + currentId + '/valuation', { location: current.project.location, houseTypes: rows });
+      const data = await pollJob(start.jobId);
       $('run-status').textContent = '';
       // refresh detail + list
       current = await api('GET', '/api/projects/' + currentId);
@@ -174,6 +175,26 @@
     } finally {
       $('run').disabled = false;
     }
+  }
+
+  // Poll a background valuation job until it finishes. Resolves with the final
+  // status payload (carrying the fresh quota) or rejects with an error.
+  function pollJob(jobId) {
+    return new Promise(function (resolve, reject) {
+      var started = Date.now();
+      var maxMs = 8 * 60 * 1000; // safety ceiling
+      function tick() {
+        api('GET', '/api/projects/' + currentId + '/valuation/status/' + jobId)
+          .then(function (s) {
+            if (s.status === 'done') return resolve(s);
+            if (s.status === 'error') return reject(new Error(s.error || 'Valuation failed. Please try again.'));
+            if (Date.now() - started > maxMs) return reject(new Error('This is taking longer than expected — please try again, or with fewer house types.'));
+            setTimeout(tick, 3000);
+          })
+          .catch(reject);
+      }
+      setTimeout(tick, 3000);
+    });
   }
 
   function renderResults(val) {

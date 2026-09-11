@@ -6,6 +6,7 @@ const { requireAuth } = require('../auth');
 const { validate, runValuation } = require('../valuation');
 const { quotaStatus, recordUsage } = require('../usage');
 const { streamReport } = require('../pdf');
+const jobs = require('../jobs');
 
 const router = express.Router();
 router.use(requireAuth);
@@ -109,8 +110,11 @@ router.delete('/:id', (req, res) => {
   res.json({ ok: true });
 });
 
-// POST /api/projects/:id/valuation  — run a live valuation (quota-gated)
-router.post('/:id/valuation', async (req, res) => {
+// POST /api/projects/:id/valuation  — start a live valuation (quota-gated).
+// A run takes minutes of web research, longer than the platform's HTTP request
+// limit, so we start a background job and return a jobId immediately; the client
+// polls the status route below. Usage is recorded only when a run succeeds.
+router.post('/:id/valuation', (req, res) => {
   const p = getOwnedProject(req.company.id, req.params.id);
   if (!p) return res.status(404).json({ error: 'Project not found.' });
 
@@ -126,46 +130,52 @@ router.post('/:id/valuation', async (req, res) => {
   const input = validate({ location: body.location || p.location, houseTypes: body.houseTypes });
   if (input.error) return res.status(400).json({ error: input.error });
 
-  req.setTimeout(130000);
-  res.setTimeout(130000);
-
-  let out;
-  try {
-    out = await runValuation(input);
-  } catch (err) {
-    const status = err.code === 'no_key' ? 500 : err.code === 'refused' || err.code === 'bad_response' ? 502 : 502;
-    return res.status(status).json({ error: err.message || 'Failed to generate valuations.' });
-  }
-
-  // Persist inputs on the project + save the valuation, and record usage.
-  const vid = uuid();
-  const t = now();
-  db.prepare(
-    'INSERT INTO valuations (id, project_id, company_id, created_by, created_at, model, location, input_json, market_overview, results_json) VALUES (?,?,?,?,?,?,?,?,?,?)'
-  ).run(
-    vid,
-    p.id,
-    req.company.id,
-    req.user.id,
-    t,
-    out.model,
-    out.location,
-    JSON.stringify(input.houseTypes),
-    out.marketOverview,
-    JSON.stringify(out.results)
-  );
+  // Persist the inputs now so they're saved even while the run is in flight.
   db.prepare('UPDATE projects SET house_types_json = ?, location = ?, updated_at = ? WHERE id = ?').run(
     JSON.stringify(input.houseTypes),
     input.location,
-    t,
+    now(),
     p.id
   );
-  recordUsage(req.company.id, req.user.id);
 
-  res.json({
-    valuation: { id: vid, createdAt: t, model: out.model, location: out.location, marketOverview: out.marketOverview, results: out.results },
-    quota: quotaStatus(req.company),
-  });
+  const companyId = req.company.id;
+  const userId = req.user.id;
+  const jobId = jobs.create(companyId, p.id);
+  res.status(202).json({ jobId });
+
+  // Run in the background; the client polls the status route.
+  runValuation(input)
+    .then((out) => {
+      const vid = uuid();
+      const t = now();
+      db.prepare(
+        'INSERT INTO valuations (id, project_id, company_id, created_by, created_at, model, location, input_json, market_overview, results_json) VALUES (?,?,?,?,?,?,?,?,?,?)'
+      ).run(vid, p.id, companyId, userId, t, out.model, out.location, JSON.stringify(input.houseTypes), out.marketOverview, JSON.stringify(out.results));
+      recordUsage(companyId, userId);
+      const company = db.prepare('SELECT * FROM companies WHERE id = ?').get(companyId);
+      jobs.finish(jobId, {
+        status: 'done',
+        valuation: { id: vid, createdAt: t, model: out.model, location: out.location, marketOverview: out.marketOverview, results: out.results },
+        quota: quotaStatus(company),
+      });
+    })
+    .catch((err) => {
+      console.error('Valuation job failed:', err && (err.message || err));
+      jobs.finish(jobId, { status: 'error', error: (err && err.message) || 'Failed to generate valuations.' });
+    });
+});
+
+// GET /api/projects/:id/valuation/status/:jobId  — poll a running valuation.
+router.get('/:id/valuation/status/:jobId', (req, res) => {
+  const p = getOwnedProject(req.company.id, req.params.id);
+  if (!p) return res.status(404).json({ error: 'Project not found.' });
+  const job = jobs.get(req.params.jobId);
+  if (!job || job.companyId !== req.company.id || job.projectId !== p.id) {
+    return res.status(404).json({ error: 'That valuation job was not found — it may have expired. Please run it again.' });
+  }
+  if (job.status === 'done') return res.json({ status: 'done', valuation: job.valuation, quota: job.quota });
+  if (job.status === 'error') return res.json({ status: 'error', error: job.error });
+  res.json({ status: 'pending' });
 });
 
 // GET /api/projects/:id/valuations/:vid/pdf
