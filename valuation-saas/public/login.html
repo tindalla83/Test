@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sign in — House Type Valuer</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%2316202E'/%3E%3Cpath d='M9 27V16l11-7 11 7v11' fill='none' stroke='%234FA8A6' stroke-width='2.4' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+<div class="auth-shell">
+  <div class="auth-card panel">
+    <a class="brand" href="/" style="margin-bottom:8px;">
+      <svg class="brand__mark" viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="9" fill="#16202E"></rect><path d="M9 27V16l11-7 11 7v11" fill="none" stroke="#4FA8A6" stroke-width="2.4" stroke-linejoin="round"></path></svg>
+      <span class="brand__name">House Type Valuer</span>
+    </a>
+    <h1>Sign in</h1>
+    <p class="muted" style="font-size:14px; margin:0;">Welcome back.</p>
+    <form id="form">
+      <div class="field"><label class="lbl" for="email">Email</label><input id="email" type="email" autocomplete="email" required></div>
+      <div class="field"><label class="lbl" for="password">Password</label><input id="password" type="password" autocomplete="current-password" required></div>
+      <p class="err" id="err" hidden></p>
+      <button class="btn btn--primary" id="submit" type="submit">Sign in</button>
+    </form>
+    <p class="auth-alt">No account? <a href="/signup.html">Create one</a></p>
+  </div>
+</div>
+<script src="/js/common.js"></script>
+<script>
+  const form = document.getElementById('form');
+  const err = document.getElementById('err');
+  const btn = document.getElementById('submit');
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault(); err.hidden = true; btn.disabled = true;
+    try {
+      await App.api('POST', '/api/auth/login', {
+        email: document.getElementById('email').value,
+        password: document.getElementById('password').value,
+      });
+      location.href = '/app.html';
+    } catch (ex) {
+      err.textContent = ex.message; err.hidden = false; btn.disabled = false;
+    }
+  });
+</script>
+</body>
+</html>

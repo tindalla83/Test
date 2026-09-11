@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>House Type Valuation Tool — Meridian Viability</title>
+<meta name="description" content="AI-assisted indicative valuations for residential development house types, using live market research.">
+<meta name="theme-color" content="#10233c">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2310233c'/%3E%3Cpath d='M7 22V10l9 7 9-7v12' fill='none' stroke='%231f6f5c' stroke-width='2.5' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="/assets/css/styles.css">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body class="tool-body">
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header no-print">
+  <div class="wrap site-header__inner">
+    <a class="brand" href="../index.html">
+      <svg class="brand__mark" width="34" height="34" viewBox="0 0 32 32" aria-hidden="true">
+        <rect width="32" height="32" rx="6" fill="#10233c"></rect>
+        <path d="M7 22V10l9 7 9-7v12" fill="none" stroke="#1f6f5c" stroke-width="2.5" stroke-linejoin="round"></path>
+      </svg>
+      <span class="brand__name">
+        Meridian Viability
+        <span class="brand__tag">House Type Valuation Tool</span>
+      </span>
+    </a>
+    <nav class="nav" aria-label="Primary">
+      <a href="../index.html">Back to site</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="section tool-intro">
+    <div class="wrap">
+      <p class="eyebrow">Valuation tool</p>
+      <h1>House type valuations, grounded in live market data</h1>
+      <p class="lede">
+        Enter a development location and the house types you are proposing. Claude researches
+        current new-build asking prices and recent second-hand sold prices nearby, then returns
+        a predicted selling price, range and confidence level for each house type.
+      </p>
+      <p class="tool-disclaimer">
+        <strong>Indicative only.</strong> These figures are AI-generated estimates based on
+        live web research at the time of the request — they are not a formal RICS valuation
+        and should be treated as a starting point for further due diligence, not a substitute
+        for professional advice.
+      </p>
+    </div>
+  </section>
+
+  <section class="section section--alt tool-form-section no-print">
+    <div class="wrap">
+      <form id="valuation-form" novalidate>
+        <div class="field">
+          <label for="location">Development location</label>
+          <input type="text" id="location" name="location" placeholder="e.g. Guildford, Surrey or GU1 4RA" required>
+          <p class="field__hint">A town/area name or a UK postcode.</p>
+        </div>
+
+        <div class="house-types">
+          <div class="house-types__head">
+            <h2>House types</h2>
+            <button type="button" class="btn btn--outline btn--small" id="add-house-type">+ Add house type</button>
+          </div>
+          <div id="house-type-rows"></div>
+        </div>
+
+        <div id="form-error" class="form-error" hidden role="alert"></div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn--primary" id="submit-btn">Generate valuations</button>
+        </div>
+      </form>
+
+      <div id="loading" class="loading" hidden>
+        <div class="loading__spinner" aria-hidden="true"></div>
+        <p><strong>Researching live market data</strong> — this can take up to a minute for a few house types…</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section results-section" id="results-section" hidden>
+    <div class="wrap">
+      <div class="results-header">
+        <div>
+          <p class="eyebrow">Results</p>
+          <h2 id="results-location">Valuation results</h2>
+          <p class="results-meta" id="results-meta"></p>
+        </div>
+        <button type="button" class="btn btn--outline no-print" id="print-btn">Print / Save as PDF</button>
+      </div>
+
+      <div class="market-overview">
+        <h3>Area market overview</h3>
+        <p id="market-overview-text"></p>
+      </div>
+
+      <div class="grid results-grid" id="results-grid"></div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer no-print">
+  <div class="wrap">
+    <p>&copy; <span id="year"></span> Meridian Viability. Valuations are AI-generated indicative
+      estimates, not a formal RICS valuation.</p>
+  </div>
+</footer>
+
+<template id="house-type-row-template">
+  <div class="house-type-row" data-row>
+    <div class="house-type-row__grid">
+      <div class="field">
+        <label>Name / reference</label>
+        <input type="text" data-field="name" placeholder="e.g. The Aspen — 3-bed detached" required>
+      </div>
+      <div class="field field--narrow">
+        <label>Size (sqft)</label>
+        <input type="number" data-field="sqft" min="1" step="1" placeholder="950" required>
+      </div>
+      <div class="field field--narrow">
+        <label>Bedrooms</label>
+        <input type="number" data-field="bedrooms" min="1" step="1" placeholder="3" required>
+      </div>
+      <div class="field">
+        <label>Parking</label>
+        <select data-field="parking" required>
+          <option value="none">None</option>
+          <option value="allocated space">Allocated space</option>
+          <option value="single garage">Single garage</option>
+          <option value="double garage">Double garage</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Typology</label>
+        <select data-field="typology" required>
+          <option value="detached">Detached</option>
+          <option value="semi-detached">Semi-detached</option>
+          <option value="terraced">Terraced</option>
+          <option value="end-terrace">End-terrace</option>
+          <option value="bungalow">Bungalow</option>
+          <option value="apartment">Apartment</option>
+        </select>
+      </div>
+      <div class="field field--action">
+        <button type="button" class="btn-remove" data-remove aria-label="Remove this house type">Remove</button>
+      </div>
+    </div>
+  </div>
+</template>
+
+<template id="result-card-template">
+  <article class="card result-card">
+    <div class="result-card__head">
+      <h3 data-name></h3>
+      <span class="confidence-badge" data-confidence></span>
+    </div>
+    <p class="result-card__price" data-price></p>
+    <p class="result-card__range" data-range></p>
+    <p class="result-card__sqft" data-sqft></p>
+    <p class="result-card__summary" data-summary></p>
+    <details class="comparables">
+      <summary>Comparables used</summary>
+      <ul data-comparables></ul>
+    </details>
+  </article>
+</template>
+
+<script src="/assets/js/main.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

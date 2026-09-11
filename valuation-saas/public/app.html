@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Valuations — House Type Valuer</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%2316202E'/%3E%3Cpath d='M9 27V16l11-7 11 7v11' fill='none' stroke='%234FA8A6' stroke-width='2.4' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+<header class="top">
+  <div class="top__inner">
+    <a class="brand" href="/app.html">
+      <svg class="brand__mark" viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="9" fill="#16202E"></rect><path d="M9 27V16l11-7 11 7v11" fill="none" stroke="#4FA8A6" stroke-width="2.4" stroke-linejoin="round"></path><path d="M14 27v-6h5v6" fill="none" stroke="#4FA8A6" stroke-width="2.1" stroke-linejoin="round"></path></svg>
+      <span class="brand__name">House Type Valuer</span>
+    </a>
+    <div class="topnav" id="topnav"></div>
+  </div>
+</header>
+
+<div class="shell">
+  <aside class="side">
+    <button class="btn btn--primary btn--sm" id="new-project" style="width:100%; justify-content:center; margin-bottom:14px;">+ New project</button>
+    <h3>Projects</h3>
+    <div class="proj-list" id="proj-list"></div>
+  </aside>
+
+  <main class="main" id="main">
+    <div id="empty" class="panel" style="text-align:center;">
+      <h2 class="serif" style="margin:0 0 6px;">No project selected</h2>
+      <p class="muted">Create a project to price its house types.</p>
+    </div>
+
+    <!-- New project form -->
+    <div id="new-form" class="panel" hidden>
+      <h2 class="serif" style="margin:0 0 14px;">New project</h2>
+      <div class="field" style="margin-bottom:12px;"><label class="lbl" for="np-name">Project / scheme name</label><input id="np-name" placeholder="e.g. Meadow View, Phase 1"></div>
+      <div class="field" style="margin-bottom:12px; max-width:460px;"><label class="lbl" for="np-loc">Development location</label><input id="np-loc" placeholder="e.g. Guildford, Surrey or GU1 4RA"></div>
+      <p class="err" id="np-err" hidden></p>
+      <div style="display:flex; gap:10px;"><button class="btn btn--primary" id="np-create">Create project</button><button class="btn btn--ghost" id="np-cancel">Cancel</button></div>
+    </div>
+
+    <!-- Project detail -->
+    <div id="detail" hidden>
+      <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:16px; flex-wrap:wrap;">
+        <div>
+          <p class="eyebrow">Project</p>
+          <h1 class="serif" id="d-name" style="font-size:26px; margin:4px 0 2px;"></h1>
+          <p class="muted" id="d-loc" style="margin:0; font-size:14px;"></p>
+        </div>
+        <button class="btn btn--danger btn--sm" id="d-delete">Delete project</button>
+      </div>
+
+      <div class="panel" style="margin-top:18px;">
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px; flex-wrap:wrap;">
+          <h2 style="font-size:15px; margin:0;">House types</h2>
+          <button class="btn btn--ghost btn--sm" id="add-row">+ Add house type</button>
+        </div>
+        <div id="rows"></div>
+        <p class="err" id="run-err" hidden></p>
+        <div style="display:flex; gap:12px; align-items:center; margin-top:16px; flex-wrap:wrap;">
+          <button class="btn btn--primary" id="run">Generate valuation</button>
+          <button class="btn btn--ghost btn--sm" id="save">Save details</button>
+          <span id="run-status" class="muted" style="font-size:13.5px;"></span>
+        </div>
+      </div>
+
+      <div id="results" hidden style="margin-top:22px;">
+        <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+          <div><p class="eyebrow">Latest valuation</p><h2 class="serif" id="res-title" style="font-size:22px; margin:4px 0 0;"></h2><p class="muted" id="res-meta" style="font-size:12.5px; margin:2px 0 0;"></p></div>
+          <a class="btn btn--ghost btn--sm" id="res-pdf" href="#">Download PDF</a>
+        </div>
+        <div class="overview" id="res-overview" hidden><h4>Area market overview</h4><p id="res-overview-text"></p></div>
+        <div class="results-grid" id="res-grid"></div>
+      </div>
+
+      <div id="history" hidden style="margin-top:26px;">
+        <p class="eyebrow">History</p>
+        <div class="panel" style="margin-top:8px; padding:0; overflow:hidden;">
+          <table class="tbl"><thead><tr><th>Date</th><th>Units</th><th>Model</th><th></th></tr></thead><tbody id="hist-body"></tbody></table>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<template id="row-tpl">
+  <div class="htrow" data-row>
+    <div class="htrow__grid">
+      <div class="field"><label class="lbl">Name / reference</label><input data-f="name" placeholder="e.g. The Aspen — 3-bed detached"></div>
+      <div class="field"><label class="lbl">Size (sqft)</label><input data-f="sqft" type="number" min="1" step="1" placeholder="950"></div>
+      <div class="field"><label class="lbl">Bedrooms</label><input data-f="bedrooms" type="number" min="1" step="1" placeholder="3"></div>
+      <div class="field"><label class="lbl">Parking</label><select data-f="parking"><option value="none">None</option><option value="allocated space">Allocated space</option><option value="single garage">Single garage</option><option value="double garage">Double garage</option></select></div>
+      <div class="field"><label class="lbl">Typology</label><select data-f="typology"><option value="detached">Detached</option><option value="semi-detached">Semi-detached</option><option value="terraced">Terraced</option><option value="end-terrace">End-terrace</option><option value="bungalow">Bungalow</option><option value="apartment">Apartment</option></select></div>
+      <div class="field"><button type="button" class="btn-remove" data-remove>Remove</button></div>
+    </div>
+  </div>
+</template>
+
+<template id="card-tpl">
+  <article class="card">
+    <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:10px;">
+      <h3 data-name style="font-size:15px; margin:0;"></h3>
+      <span class="chip" data-conf></span>
+    </div>
+    <p class="r-price mono" data-price></p>
+    <p class="r-persqft mono" data-persqft></p>
+    <div class="range__track"><div class="range__fill"></div><div class="range__dot" data-dot></div></div>
+    <div class="range__labels"><span class="mono" data-low></span><span class="mono" data-high></span></div>
+    <p style="font-size:13.5px; color:var(--ink-soft); margin:14px 0 0;" data-summary></p>
+    <details style="margin-top:12px; border-top:1px solid var(--line); padding-top:10px;"><summary style="cursor:pointer; font-size:12.5px; font-weight:600; color:var(--accent-ink);">Comparables</summary><ul data-comps style="margin:10px 0 0; padding:0; list-style:none; display:flex; flex-direction:column; gap:7px; font-size:12.5px; color:var(--ink-soft);"></ul></details>
+  </article>
+</template>
+
+<script src="/js/common.js"></script>
+<script src="/js/app.js"></script>
+</body>
+</html>

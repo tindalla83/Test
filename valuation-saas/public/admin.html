@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin — House Type Valuer</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%2316202E'/%3E%3Cpath d='M9 27V16l11-7 11 7v11' fill='none' stroke='%234FA8A6' stroke-width='2.4' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+<header class="top"><div class="top__inner">
+  <a class="brand" href="/app.html"><svg class="brand__mark" viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="9" fill="#16202E"></rect><path d="M9 27V16l11-7 11 7v11" fill="none" stroke="#4FA8A6" stroke-width="2.4" stroke-linejoin="round"></path></svg><span class="brand__name">House Type Valuer</span></a>
+  <div class="topnav" id="topnav"></div>
+</div></header>
+
+<main class="wrap" style="padding-top:28px; padding-bottom:40px;">
+  <p class="eyebrow">Platform admin</p>
+  <h1 class="serif" style="font-size:26px; margin:6px 0 14px;">Business overview</h1>
+  <div class="stat-row" id="stats"></div>
+  <h2 style="font-size:15px; margin:22px 0 8px;">Customers</h2>
+  <div class="panel" style="padding:0; overflow-x:auto;">
+    <table class="tbl"><thead><tr><th>Company</th><th>Plan</th><th>Status</th><th>Users</th><th>Projects</th><th>Valuations (mo)</th><th>Since</th></tr></thead><tbody id="rows"></tbody></table>
+  </div>
+  <p class="err" id="err" hidden></p>
+</main>
+
+<script src="/js/common.js"></script>
+<script>
+  const { api, requireSession, renderTopnav, el, fmtDate } = App;
+  async function init() {
+    const me = await requireSession(); if (!me) return;
+    renderTopnav(me, 'admin');
+    if (!me.user.isPlatformAdmin) { document.getElementById('err').textContent = 'Platform administrators only.'; document.getElementById('err').hidden = false; return; }
+    try {
+      const d = await api('GET', '/api/admin/overview');
+      const s = document.getElementById('stats');
+      const stat = (n, k) => { const c = el('div','stat'); c.appendChild(el('div','n mono', String(n))); c.appendChild(el('div','k', k)); return c; };
+      s.appendChild(stat(d.totals.companies, 'Companies'));
+      s.appendChild(stat(d.totals.activePaying, 'Paying'));
+      s.appendChild(stat('£' + Number(d.totals.estimatedMrr).toLocaleString('en-GB'), 'Est. MRR'));
+      s.appendChild(stat(d.totals.users, 'Users'));
+      s.appendChild(stat(d.totals.valuationsThisMonth, 'Valuations (mo)'));
+      s.appendChild(stat(d.totals.valuationsAllTime, 'Valuations (all)'));
+      const body = document.getElementById('rows'); body.innerHTML='';
+      d.companies.forEach((c) => {
+        const tr = document.createElement('tr');
+        tr.appendChild(el('td', null, c.name));
+        const pt = el('td'); pt.appendChild(el('span','badge', c.plan)); tr.appendChild(pt);
+        tr.appendChild(el('td','muted', c.status));
+        tr.appendChild(el('td','mono', String(c.users)));
+        tr.appendChild(el('td','mono', String(c.projects)));
+        tr.appendChild(el('td','mono', String(c.usageThisMonth)));
+        tr.appendChild(el('td','muted', fmtDate(c.createdAt)));
+        body.appendChild(tr);
+      });
+    } catch (e) { document.getElementById('err').textContent = e.message; document.getElementById('err').hidden = false; }
+  }
+  init();
+</script>
+</body>
+</html>

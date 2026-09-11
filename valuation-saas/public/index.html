@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>House Type Valuer — AI valuations for development viability</title>
+<meta name="description" content="AI-assisted house-type selling-price valuations for residential development viability, grounded in live market research.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%2316202E'/%3E%3Cpath d='M9 27V16l11-7 11 7v11' fill='none' stroke='%234FA8A6' stroke-width='2.4' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/app.css">
+<style>
+  .hero { padding:56px 0 30px; }
+  .hero h1 { font-family:"Fraunces",Georgia,serif; font-weight:600; font-size:clamp(32px,5.5vw,52px); line-height:1.03; max-width:15ch; text-wrap:balance; margin:14px 0 0; }
+  .hero p.lede { max-width:60ch; font-size:17px; color:var(--ink-soft); margin:16px 0 0; }
+  .hero .cta { display:flex; gap:12px; margin-top:26px; flex-wrap:wrap; }
+  .section { padding:34px 0; }
+  .steps { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:16px; }
+  .pricing { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:16px; align-items:stretch; }
+  .plan { display:flex; flex-direction:column; }
+  .plan .price { font-size:22px; font-weight:600; margin:6px 0 12px; }
+  .plan ul { margin:0 0 18px; padding-left:18px; color:var(--ink-soft); font-size:14px; display:flex; flex-direction:column; gap:6px; }
+  .plan .btn { margin-top:auto; justify-content:center; }
+  .disc { font-size:12.5px; color:var(--muted); max-width:70ch; margin-top:26px; }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top__inner">
+    <a class="brand" href="/">
+      <svg class="brand__mark" viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="9" fill="#16202E"></rect><path d="M9 27V16l11-7 11 7v11" fill="none" stroke="#4FA8A6" stroke-width="2.4" stroke-linejoin="round"></path><path d="M14 27v-6h5v6" fill="none" stroke="#4FA8A6" stroke-width="2.1" stroke-linejoin="round"></path></svg>
+      <span class="brand__name">House Type Valuer<span class="brand__tag">Development pricing intelligence</span></span>
+    </a>
+    <div class="topnav">
+      <a href="/login.html">Sign in</a>
+      <a class="btn btn--primary btn--sm" href="/signup.html">Get started</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <p class="eyebrow">For housing developers &amp; land teams</p>
+    <h1>Price every house type before you commit to the scheme.</h1>
+    <p class="lede">Enter a development location and your proposed house types. Our AI researches current
+      new-build asking prices and recent second-hand sold prices nearby, and returns a predicted selling
+      price, range and confidence for each unit — the per-unit values that drive your GDV and viability appraisal.</p>
+    <div class="cta">
+      <a class="btn btn--primary" href="/signup.html">Start free — 3 valuations</a>
+      <a class="btn btn--ghost" href="/login.html">Sign in</a>
+    </div>
+  </section>
+
+  <section class="section">
+    <p class="eyebrow">How it works</p>
+    <div class="steps" style="margin-top:14px;">
+      <div class="card"><h3>1 · Describe the scheme</h3><p class="muted" style="font-size:14px;">Location plus each house type — size, beds, parking, typology.</p></div>
+      <div class="card"><h3>2 · AI researches the market</h3><p class="muted" style="font-size:14px;">Live web research across new-build and resale evidence near the site.</p></div>
+      <div class="card"><h3>3 · Get priced units + report</h3><p class="muted" style="font-size:14px;">Predicted price, range, £/sqft, confidence and a branded PDF.</p></div>
+    </div>
+  </section>
+
+  <section class="section" id="pricing">
+    <p class="eyebrow">Pricing</p>
+    <h2 class="serif" style="font-size:26px; margin:8px 0 16px;">Simple monthly plans</h2>
+    <div class="pricing">
+      <div class="card plan">
+        <h3>Trial</h3><div class="price">Free</div>
+        <ul><li>3 valuations to try it</li><li>Single user</li><li>Saved projects &amp; history</li></ul>
+        <a class="btn btn--ghost" href="/signup.html">Get started</a>
+      </div>
+      <div class="card plan">
+        <h3>Starter</h3><div class="price">£49 <span class="muted" style="font-size:13px;">/ month</span></div>
+        <ul><li>40 valuations / month</li><li>Up to 3 users</li><li>Branded PDF export</li></ul>
+        <a class="btn btn--primary" href="/signup.html">Choose Starter</a>
+      </div>
+      <div class="card plan">
+        <h3>Pro</h3><div class="price">£149 <span class="muted" style="font-size:13px;">/ month</span></div>
+        <ul><li>200 valuations / month</li><li>Up to 10 users</li><li>Branded PDF export</li><li>Priority support</li></ul>
+        <a class="btn btn--primary" href="/signup.html">Choose Pro</a>
+      </div>
+    </div>
+    <p class="disc">Valuations are AI-generated indicative estimates grounded in live web research at the time of the request.
+      They are not a formal RICS valuation and should be verified against current market evidence before use in a viability
+      appraisal or transaction.</p>
+  </section>
+</main>
+</body>
+</html>

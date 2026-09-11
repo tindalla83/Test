@@ -1,0 +1,18 @@
+{
+  "name": "meridian-house-valuation-tool",
+  "version": "1.0.0",
+  "description": "AI-assisted house-type valuation tool for residential development schemes (Meridian Viability).",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.123.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2"
+  }
+}

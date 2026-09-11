@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Billing — House Type Valuer</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%2316202E'/%3E%3Cpath d='M9 27V16l11-7 11 7v11' fill='none' stroke='%234FA8A6' stroke-width='2.4' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/app.css">
+<style>.pricing{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;align-items:stretch;margin-top:16px;}.plan{display:flex;flex-direction:column;}.plan .price{font-size:22px;font-weight:600;margin:6px 0 12px;}.plan ul{margin:0 0 18px;padding-left:18px;color:var(--ink-soft);font-size:14px;display:flex;flex-direction:column;gap:6px;}.plan .btn{margin-top:auto;justify-content:center;}</style>
+</head>
+<body>
+<header class="top"><div class="top__inner">
+  <a class="brand" href="/app.html"><svg class="brand__mark" viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="9" fill="#16202E"></rect><path d="M9 27V16l11-7 11 7v11" fill="none" stroke="#4FA8A6" stroke-width="2.4" stroke-linejoin="round"></path></svg><span class="brand__name">House Type Valuer</span></a>
+  <div class="topnav" id="topnav"></div>
+</div></header>
+
+<main class="wrap" style="padding-top:28px; padding-bottom:40px;">
+  <p class="eyebrow">Billing</p>
+  <h1 class="serif" style="font-size:26px; margin:6px 0 4px;">Plan &amp; usage</h1>
+  <div id="current" class="panel" style="margin-top:14px;"></div>
+  <p class="err" id="err" hidden></p>
+  <div class="pricing" id="plans"></div>
+  <p class="muted" id="stripe-note" style="font-size:12.5px; margin-top:18px;"></p>
+</main>
+
+<script src="/js/common.js"></script>
+<script>
+  const { api, requireSession, renderTopnav, gbp, el } = App;
+  let me;
+  async function init() {
+    me = await requireSession(); if (!me) return;
+    renderTopnav(me, 'billing');
+    await load();
+    const p = new URLSearchParams(location.search).get('billing');
+    if (p === 'success') { document.getElementById('err').className='ok'; document.getElementById('err').textContent='Subscription active — thank you!'; document.getElementById('err').hidden=false; }
+  }
+  async function load() {
+    const b = await api('GET', '/api/billing');
+    const cur = document.getElementById('current');
+    const q = b.quota;
+    cur.innerHTML = '';
+    cur.appendChild(el('div','', '')).innerHTML =
+      '<div style="display:flex;flex-wrap:wrap;gap:24px;align-items:center;justify-content:space-between;">'
+      + '<div><div class="eyebrow">Current plan</div><div style="font-size:20px;font-weight:600;margin-top:4px;">'+b.current.planName+'</div>'
+      + '<div class="muted" style="font-size:13px;">'+(b.current.status?('Status: '+b.current.status):'Free trial')+'</div></div>'
+      + '<div><div class="eyebrow">This month</div><div style="font-size:20px;font-weight:600;margin-top:4px;" class="mono">'+q.used+' / '+q.quota+'</div><div class="muted" style="font-size:13px;">valuations used</div></div>'
+      + (b.current.plan!=='trial' ? '<div><button class="btn btn--ghost" id="portal">Manage billing</button></div>' : '')
+      + '</div>';
+    if (document.getElementById('portal')) document.getElementById('portal').onclick = openPortal;
+
+    const plans = document.getElementById('plans');
+    plans.innerHTML = '';
+    b.plans.forEach((p) => {
+      const card = el('div','card plan');
+      card.innerHTML = '<h3>'+p.name+'</h3><div class="price">'+p.priceLabel+'</div><ul>'+p.features.map(f=>'<li>'+f+'</li>').join('')+'</ul>';
+      const btn = el('button','btn '+(p.current?'btn--ghost':'btn--primary'), p.current ? 'Current plan' : (p.purchasable ? 'Upgrade to '+p.name : 'Contact us'));
+      if (p.current || !p.purchasable) btn.disabled = p.current;
+      if (!p.current && p.purchasable) btn.onclick = () => checkout(p.id, btn);
+      card.appendChild(btn);
+      plans.appendChild(card);
+    });
+    document.getElementById('stripe-note').textContent = b.stripeEnabled
+      ? 'Payments are processed securely by Stripe. You can change or cancel your plan any time via Manage billing.'
+      : 'Billing is not configured on this deployment yet (Stripe keys missing) — everyone is on the free trial plan.';
+  }
+  async function checkout(plan, btn) {
+    document.getElementById('err').hidden = true;
+    if (me.user.role !== 'owner') { showErr('Only the account owner can change the plan.'); return; }
+    btn.disabled = true;
+    try { const { url } = await api('POST', '/api/billing/checkout', { plan }); location.href = url; }
+    catch (e) { showErr(e.message); btn.disabled = false; }
+  }
+  async function openPortal() {
+    try { const { url } = await api('POST', '/api/billing/portal'); location.href = url; }
+    catch (e) { showErr(e.message); }
+  }
+  function showErr(m){ const e=document.getElementById('err'); e.className='err'; e.textContent=m; e.hidden=false; }
+  init();
+</script>
+</body>
+</html>
