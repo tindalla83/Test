@@ -170,9 +170,19 @@ async function runValuation({ location, houseTypes }) {
   try {
     response = await callClaude(location, houseTypes);
   } catch (err) {
-    if (err instanceof Anthropic.RateLimitError) throw { code: 'upstream', message: 'The valuation service is busy. Please try again shortly.' };
-    if (err instanceof Anthropic.APIError) throw { code: 'upstream', message: 'The valuation service returned an error. Please try again.' };
-    throw { code: 'upstream', message: 'Something went wrong generating valuations. Please try again.' };
+    // Log the real Anthropic error so the cause is visible in server logs.
+    console.error('Anthropic call failed:', {
+      name: err && err.name,
+      status: err && err.status,
+      message: err && err.message,
+    });
+    if (err instanceof Anthropic.RateLimitError) throw { code: 'upstream', message: 'The valuation service is busy right now. Please try again shortly.' };
+    if (err instanceof Anthropic.AuthenticationError) throw { code: 'upstream', message: 'The valuation service rejected the API key. Check ANTHROPIC_API_KEY.' };
+    if (err instanceof Anthropic.APIError) {
+      const detail = (err && err.message) ? String(err.message).slice(0, 200) : '';
+      throw { code: 'upstream', message: `The valuation service returned an error (HTTP ${err.status || '?'}). ${detail}` };
+    }
+    throw { code: 'upstream', message: `Something went wrong generating valuations: ${(err && err.message) || 'unknown error'}` };
   }
 
   if (response.stop_reason === 'refusal') {
