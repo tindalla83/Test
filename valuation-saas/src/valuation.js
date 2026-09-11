@@ -139,25 +139,19 @@ async function callClaude(location, houseTypes) {
   // more than a handful per house type to reach a well-evidenced answer).
   const tool = { type: 'web_search_20260209', name: 'web_search', max_uses: 5 * houseTypes.length + 3 };
   const messages = [{ role: 'user', content: buildUserPrompt(location, houseTypes) }];
+  const baseParams = { model: config.model, max_tokens: 8000, system: SYSTEM_PROMPT, tools: [tool] };
 
-  let response = await c.messages.create({
-    model: config.model,
-    max_tokens: 8000,
-    system: SYSTEM_PROMPT,
-    tools: [tool],
-    messages,
-  });
+  // Stream the request: bytes keep flowing during the (minutes-long) web-search
+  // research, so no idle timeout or proxy cutoff. finalMessage() resolves once
+  // the whole turn is assembled.
+  let response = await c.messages.stream({ ...baseParams, messages }).finalMessage();
 
+  // A long run of server-side searches can pause the turn; resume by feeding the
+  // paused assistant turn straight back.
   let attempts = 0;
-  while (response.stop_reason === 'pause_turn' && attempts < 5) {
+  while (response.stop_reason === 'pause_turn' && attempts < 8) {
     messages.push({ role: 'assistant', content: response.content });
-    response = await c.messages.create({
-      model: config.model,
-      max_tokens: 8000,
-      system: SYSTEM_PROMPT,
-      tools: [tool],
-      messages,
-    });
+    response = await c.messages.stream({ ...baseParams, messages }).finalMessage();
     attempts += 1;
   }
   return response;
