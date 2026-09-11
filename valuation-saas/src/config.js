@@ -22,8 +22,9 @@ const config = {
 
   anthropicApiKey: process.env.ANTHROPIC_API_KEY || '',
   model: process.env.MODEL || 'claude-sonnet-5',
-  // Web search research can legitimately take 30–90s.
-  valuationTimeoutMs: 120_000,
+  // Live web-search research runs for minutes; the valuation runs as a background
+  // job (client polls), so give the Anthropic SDK a generous per-request timeout.
+  valuationTimeoutMs: Number(process.env.VALUATION_TIMEOUT_MS) || 600_000, // 10 min
   maxHouseTypes: 20,
 
   platformAdminEmails: (process.env.PLATFORM_ADMIN_EMAILS || '')

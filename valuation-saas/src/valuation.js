@@ -7,7 +7,8 @@ let client = null;
 function getClient() {
   if (!config.hasAnthropic) return null;
   if (!client) {
-    client = new Anthropic({ apiKey: config.anthropicApiKey, timeout: config.valuationTimeoutMs });
+    // maxRetries low: a timeout should surface, not silently triple the wait.
+    client = new Anthropic({ apiKey: config.anthropicApiKey, timeout: config.valuationTimeoutMs, maxRetries: 1 });
   }
   return client;
 }
@@ -134,7 +135,9 @@ function extractJson(text) {
 
 async function callClaude(location, houseTypes) {
   const c = getClient();
-  const tool = { type: 'web_search_20260209', name: 'web_search', max_uses: 10 * houseTypes.length + 6 };
+  // Cap searches so a run stays fast and cost-bounded (the model rarely needs
+  // more than a handful per house type to reach a well-evidenced answer).
+  const tool = { type: 'web_search_20260209', name: 'web_search', max_uses: 5 * houseTypes.length + 3 };
   const messages = [{ role: 'user', content: buildUserPrompt(location, houseTypes) }];
 
   let response = await c.messages.create({
