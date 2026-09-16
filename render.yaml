@@ -1,0 +1,27 @@
+# Render Blueprint — deploys Mallory as a static site.
+# In Render: New + > Blueprint, point it at this repo, and it reads this file.
+# Or: New + > Static Site, connect the repo, leave the build command blank and
+# set the publish directory to "." (the repo root).
+services:
+  - type: web
+    name: mallory
+    runtime: static
+    # Nothing to build — plain HTML/CSS/JS.
+    buildCommand: ""
+    # The site lives at the repository root.
+    staticPublishPath: .
+    pullRequestPreviewsEnabled: true
+    headers:
+      - path: /*
+        name: X-Frame-Options
+        value: SAMEORIGIN
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
+      - path: /*
+        name: Referrer-Policy
+        value: strict-origin-when-cross-origin
+      # Long-cache the fingerprint-free static assets; HTML stays uncached.
+      - path: /assets/*
+        name: Cache-Control
+        value: "public, max-age=86400"
