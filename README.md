@@ -82,10 +82,16 @@ want to get out there and lead, with gift buyers a welcome second audience.
 
 The site ships with **no stock photography**. Product, collection and journal
 images are drawn as on-brand SVG (line-mark motifs on natural textures) by the
-`MALLORY.art.*` helpers in `data.js`, using the design-system palette. When you
-have real photography, replace those helper calls (or swap the returned SVG for
-`<img>` tags) — the layout is built to take real images at the same aspect
-ratios. The logos are the genuine brand SVGs exported from the design system.
+`MALLORY.art.*` helpers in `data.js`, using the design-system palette. The logos
+are the genuine brand SVGs exported from the design system.
+
+**To use real product photos:** drop image files into `assets/img/products/` and
+add an `images` array to that product in `assets/js/data.js` — one path per
+colour, in the same order as its `colorNames`. Products with an `images` array
+show the photo everywhere (cards, gallery, thumbnails, basket); products without
+one keep the generated art, so you can switch over one at a time. Full
+instructions and the recommended 4:5 / wool-white format are in
+[`assets/img/products/README.md`](assets/img/products/README.md).
 
 ## Going live as a real shop
 

@@ -201,7 +201,7 @@
     host.innerHTML =
       '<p class="search-label">' + (q ? (res.length + ' result' + (res.length === 1 ? '' : 's')) : 'Most wanted') + '</p>' +
       (res.length ? '<div class="search-grid">' + res.map(function (p) {
-        return '<a class="search-hit" href="product.html?id=' + p.id + '"><span class="search-hit__img">' + M.art.product(p, 0) + '</span>' +
+        return '<a class="search-hit" href="product.html?id=' + p.id + '"><span class="search-hit__img">' + M.art.media(p, 0) + '</span>' +
           '<span><b>' + esc(p.name) + '</b><i>' + esc(p.maker) + ' · ' + money(p.price) + '</i></span></a>';
       }).join("") + '</div>' : '<p class="search-empty">No matches. Try the <a href="gift-finder.html">gift finder</a>.</p>');
   }
@@ -257,7 +257,7 @@
     return '<article class="card">' +
       '<div class="card__media">' + badgeHtml(p) +
       '<button class="card__wish' + on + '" data-wish="' + p.id + '" aria-label="Save to wishlist">' + (Wish.has(p.id) ? I.heartFill : I.heart) + '</button>' +
-      '<a href="product.html?id=' + p.id + '" aria-label="' + esc(p.name) + '">' + M.art.product(p, 0) + '</a>' +
+      '<a href="product.html?id=' + p.id + '" aria-label="' + esc(p.name) + '">' + M.art.media(p, 0) + '</a>' +
       '<div class="card__quick"><button class="btn btn--light btn--sm btn--block" data-add="' + p.id + '">Add to basket</button></div>' +
       '</div>' +
       '<span class="card__maker">' + esc(p.maker) + '</span>' +
@@ -533,7 +533,7 @@
     var main = $("#main");
     if (!p) { main.innerHTML = notFound("We couldn’t find that product."); return; }
     document.title = p.name + " — Mallory";
-    var variants = Math.max(p.colors.length, 3);
+    var variants = p.images && p.images.length ? p.images.length : Math.max(p.colors.length, 3);
     var sel = { size: null, color: p.colors[0] && p.colors[0].name, qty: 1, img: 0 };
     var stars = "★★★★★";
 
@@ -541,9 +541,9 @@
       '<section class="section"><div class="container">' +
       '<div class="breadcrumb breadcrumb--dark"><a href="index.html">Home</a> / <a href="collection.html?c=' + p.collection + '">' + esc(M.collection(p.collection).name) + '</a> / <span>' + esc(p.name) + '</span></div>' +
       '<div class="pdp" style="margin-top:20px">' +
-      '<div class="pdp__gallery"><div class="pdp__main" id="pdp-main">' + M.art.product(p, 0) + '</div>' +
+      '<div class="pdp__gallery"><div class="pdp__main" id="pdp-main">' + M.art.media(p, 0) + '</div>' +
       '<div class="pdp__thumbs" id="pdp-thumbs">' +
-      Array.apply(null, { length: variants }).map(function (_, i) { return '<button class="pdp__thumb' + (i === 0 ? " is-active" : "") + '" data-img="' + i + '">' + M.art.product(p, i) + '</button>'; }).join("") +
+      Array.apply(null, { length: variants }).map(function (_, i) { return '<button class="pdp__thumb' + (i === 0 ? " is-active" : "") + '" data-img="' + i + '">' + M.art.media(p, i) + '</button>'; }).join("") +
       '</div></div>' +
       '<div class="pdp__info">' +
       '<span class="pdp__maker">' + esc(p.maker) + '</span>' +
@@ -587,7 +587,7 @@
       b.addEventListener("click", function () {
         $$("#pdp-thumbs .pdp__thumb").forEach(function (x) { x.classList.remove("is-active"); });
         b.classList.add("is-active");
-        $("#pdp-main").innerHTML = M.art.product(p, +b.getAttribute("data-img"));
+        $("#pdp-main").innerHTML = M.art.media(p, +b.getAttribute("data-img"));
       });
     });
     // colour
@@ -598,7 +598,7 @@
         $("#sel-color").textContent = sel.color;
         // reflect colour on main image (find variant index)
         var idx = p.colors.map(function (c) { return c.name; }).indexOf(sel.color);
-        if (idx > -1) { $("#pdp-main").innerHTML = M.art.product(p, idx); $$("#pdp-thumbs .pdp__thumb").forEach(function (x, i) { x.classList.toggle("is-active", i === idx); }); }
+        if (idx > -1) { $("#pdp-main").innerHTML = M.art.media(p, idx); $$("#pdp-thumbs .pdp__thumb").forEach(function (x, i) { x.classList.toggle("is-active", i === idx); }); }
       });
     });
     // size
@@ -844,7 +844,7 @@
       items.map(function (x) {
         var p = x.p, l = x.line;
         var opts = [l.color, l.size].filter(function (v) { return v && v !== "One size"; }).join(" · ");
-        return '<div class="cart-line"><a class="cart-line__media" href="product.html?id=' + p.id + '">' + M.art.product(p, Math.max(0, p.colors.map(function (c) { return c.name; }).indexOf(l.color))) + '</a>' +
+        return '<div class="cart-line"><a class="cart-line__media" href="product.html?id=' + p.id + '">' + M.art.media(p, Math.max(0, p.colors.map(function (c) { return c.name; }).indexOf(l.color))) + '</a>' +
           '<div><div class="cart-line__name">' + esc(p.name) + '</div><div class="cart-line__opts">' + esc(p.maker) + (opts ? " · " + esc(opts) : "") + '</div>' +
           '<div class="qty" style="width:fit-content"><button data-cq="-1" data-lid="' + l.lid + '">−</button><input type="number" value="' + l.qty + '" min="1" data-lidq="' + l.lid + '" aria-label="Quantity"><button data-cq="1" data-lid="' + l.lid + '">+</button></div>' +
           '<button class="cart-line__remove" data-remove="' + l.lid + '" style="margin-top:10px">Remove</button></div>' +

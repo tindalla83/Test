@@ -114,6 +114,19 @@
       '</svg>';
   }
 
+  /* Product media: a real photo when the product has one, else generated art.
+     Give a product an `images: [...]` array (one path per colour/variant, in the
+     same order as its colours) and those photos take over everywhere. */
+  function productMedia(product, variant) {
+    variant = variant || 0;
+    var imgs = product.images;
+    if (imgs && imgs.length) {
+      var src = imgs[Math.min(variant, imgs.length - 1)];
+      return '<img src="' + esc(src) + '" alt="' + esc(product.name) + '" loading="lazy">';
+    }
+    return productArt(product, variant);
+  }
+
   /* Landscape scene for tiles / heroes — layered fells + sky wash. */
   function scene(opts) {
     opts = opts || {};
@@ -191,6 +204,11 @@
     return o;
   }
 
+  // To use a real photo instead of the generated artwork, add an `images` array
+  // to a product: one path per colour, in the same order as `colorNames`.
+  // e.g. images: ["assets/img/products/ridgeway-jacket-green.jpg", ...]
+  // See assets/img/products/README.md. Any product without `images` keeps the
+  // generated SVG art, so you can switch products over one at a time.
   var products = [
     /* ---------------- GRAFT ---------------- */
     P({ name: "Ridgeway Waxed Work Jacket", maker: "Fenwick & Sons", collection: "graft", category: "Clothing", icon: "jacket", price: 129, badges: ["bestseller"], colorNames: ["Fell Green", "Peat", "Slate"], sizes: ["S", "M", "L", "XL", "XXL"],
@@ -330,7 +348,7 @@
     products: products,
     articles: articles,
     icons: ICONS,
-    art: { product: productArt, scene: scene, editorial: editorial, tint: tint },
+    art: { product: productArt, media: productMedia, scene: scene, editorial: editorial, tint: tint },
     byCollection: byCollection,
     get: get,
     getArticle: getArticle,
