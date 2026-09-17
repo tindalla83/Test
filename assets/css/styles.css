@@ -1,45 +1,63 @@
 /* ==========================================================================
    Mallory — storefront styles
-   Palette, type and components drawn from the Mallory brand guidelines.
-   Colour rhythm: ~60% Bothy Cream, ~30% Fell Green / Slate, ~10% Bracken / Bilberry.
+   Palette, type and components drawn from the Mallory design system (v3).
+   Colour rhythm: ~60% oatmeal + sand, ~25% ink + charcoal, ~15% accents.
+   One CTA colour (campfire); no more than two accents per screen.
    ========================================================================== */
 
 :root {
-  /* Brand palette */
-  --fell-green: #2F3E34;
-  --fell-green-2: #263229;
-  --bothy-cream: #F2EBDD;
-  --bothy-cream-2: #E8DEC9;
-  --bracken: #A5652B;
-  --bracken-2: #8F5623;
-  --slate: #4A5157;
-  --slate-2: #363B40;
-  --bilberry: #4B3A5A;
-  --wool-white: #FFFFFF;
+  /* ---- Mallory brand tokens (design system v3) ---- */
+  --ink: #232220;          /* primary brand: logo, headlines, nav, primary buttons */
+  --ink-2: #1A1917;
+  --charcoal: #4A4640;     /* body text */
+  --bark: #6B5E52;         /* muted text: captions, metadata, helper */
+  --oatmeal: #F5EFE3;      /* default page background (~60%) */
+  --sand: #E8DAC0;         /* cards, panels, dividers, secondary surfaces */
+  --wool-white: #FFFFFF;   /* product photography backgrounds, form fields */
+  --campfire: #A8461F;     /* the one CTA colour: add-to-basket, sale, links */
+  --campfire-2: #8C3A18;
+  --ember: #D9774A;        /* decoration only — never text */
+  --ochre: #D9A33B;        /* badges (New, Staff Pick), stars, underlines — ink text on it */
+  --moss: #5C6B3C;         /* outdoor / community accent */
+  --lake: #35586A;         /* knowledge / Journal / newsletter accent */
+  --signal-error: #9E2B25;
 
   /* Semantic tokens */
-  --bg: var(--bothy-cream);
+  --bg: var(--oatmeal);
   --surface: var(--wool-white);
-  --ink: #22271F;          /* near-black warm */
-  --ink-soft: var(--slate);
-  --line: #DBD2BE;         /* hairline on cream */
-  --line-strong: #C9BEA4;
-  --accent: var(--bracken);
-  --accent-ink: var(--bracken-2);
+  --ink-soft: var(--bark);
+  --line: #E1D6BF;         /* hairline on oatmeal */
+  --line-strong: #D3C3A2;
+  --accent: var(--campfire);
+  --accent-ink: var(--campfire-2);
 
-  /* Type */
-  --serif: "Playfair Display", Georgia, "Times New Roman", serif;
-  --sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --mono: "Space Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  /* ---- Legacy aliases (older component rules resolve to new palette) ---- */
+  --fell-green: var(--ink);
+  --fell-green-2: var(--ink-2);
+  --bothy-cream: var(--oatmeal);
+  --bothy-cream-2: var(--sand);
+  --bracken: var(--campfire);
+  --bracken-2: var(--campfire-2);
+  --slate: var(--charcoal);
+  --slate-2: #35322D;
+  --bilberry: var(--lake);
 
-  /* Metrics */
+  /* Type — Fraunces (headlines), Figtree (body/UI), IBM Plex Mono (labels) */
+  --serif: "Fraunces", "Cooper Black", Georgia, serif;
+  --sans: "Figtree", "Helvetica Neue", Arial, system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "Courier New", monospace;
+  --fraunces: "SOFT" 100, "WONK" 0;
+
+  /* Metrics — square-edged brand */
   --container: 1280px;
   --gutter: clamp(16px, 4vw, 40px);
-  --radius: 4px;
-  --radius-lg: 8px;
-  --shadow-sm: 0 1px 2px rgba(34, 39, 31, 0.06);
-  --shadow-md: 0 10px 30px rgba(34, 39, 31, 0.10);
-  --header-h: 68px;
+  --radius: 2px;           /* buttons, inputs, cards */
+  --radius-lg: 0px;        /* photography & packaging: square */
+  --radius-panel: 2px;     /* content panels */
+  --radius-pill: 999px;    /* collection tags & filter chips only */
+  --shadow-sm: 0 1px 2px rgba(35, 34, 32, 0.06);
+  --shadow-md: 0 12px 34px rgba(35, 34, 32, 0.12);
+  --header-h: 72px;
   --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
@@ -60,8 +78,11 @@ img, svg { display: block; max-width: 100%; }
 a { color: inherit; text-decoration: none; }
 button { font-family: inherit; cursor: pointer; }
 ul { margin: 0; padding: 0; list-style: none; }
-h1, h2, h3, h4 { margin: 0; font-family: var(--serif); font-weight: 600; line-height: 1.12; letter-spacing: -0.01em; }
+h1, h2, h3, h4 { margin: 0; font-family: var(--serif); font-weight: 600; font-variation-settings: var(--fraunces); line-height: 1.12; letter-spacing: -0.005em; }
 p { margin: 0 0 1em; }
+.brand__word, .card__name, .tile__title, .pdp__pitch, blockquote, .gf-option b,
+.cart-line__name, .search-hit b, .gf-mini-card b, .search-input-wrap input,
+.article-card h3, .value-card h3 { font-variation-settings: var(--fraunces); }
 :focus-visible { outline: 2px solid var(--bracken); outline-offset: 2px; border-radius: 2px; }
 
 /* ---------- Layout helpers ---------- */
@@ -149,6 +170,8 @@ p { margin: 0 0 1em; }
 }
 .nav-primary a:hover::after, .nav-primary a[aria-current="page"]::after { right: 0; }
 
+.brand__logo { height: 34px; width: auto; display: block; }
+.brand--footer .brand__logo { height: 64px; }
 .brand { justify-self: center; text-align: center; line-height: 1; }
 .brand__mark { display: block; margin: 0 auto 4px; }
 .brand__word { font-family: var(--serif); font-weight: 600; font-size: 24px; letter-spacing: 0.34em; text-indent: 0.34em; color: var(--fell-green); }
@@ -236,12 +259,12 @@ p { margin: 0 0 1em; }
 .card:hover .card__media svg, .card:hover .card__media img { transform: scale(1.03); }
 .card__badges { position: absolute; top: 10px; left: 10px; display: flex; flex-direction: column; gap: 6px; z-index: 2; }
 .badge {
-  font-family: var(--mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase;
-  padding: 5px 8px; border-radius: 3px; background: var(--fell-green); color: var(--bothy-cream);
+  font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase;
+  padding: 5px 8px; border-radius: var(--radius); background: var(--ink); color: var(--oatmeal);
 }
-.badge--gift { background: var(--bilberry); }
-.badge--sale { background: var(--bracken); color: #fff; }
-.badge--new { background: var(--bothy-cream); color: var(--fell-green); border: 1px solid var(--line-strong); }
+.badge--gift { background: var(--sand); color: var(--ink); }
+.badge--sale { background: var(--campfire); color: var(--wool-white); }
+.badge--new { background: var(--ochre); color: var(--ink); }
 .card__wish {
   position: absolute; top: 8px; right: 8px; z-index: 2; width: 34px; height: 34px; border-radius: 50%;
   background: rgba(255,255,255,.86); border: 0; display: grid; place-items: center; color: var(--slate);
@@ -272,10 +295,10 @@ p { margin: 0 0 1em; }
 .split h2 { font-size: clamp(28px, 4vw, 46px); }
 
 /* ---------- Gift finder promo ---------- */
-.giftband { background: var(--bilberry); color: var(--bothy-cream); border-radius: var(--radius-lg); overflow: hidden; }
+.giftband { background: var(--ink); color: var(--oatmeal); border-radius: var(--radius-panel); overflow: hidden; }
 .giftband__inner { display: grid; grid-template-columns: 1.1fr 1fr; align-items: center; gap: 40px; padding: clamp(28px, 4vw, 56px); }
 .giftband h2 { font-size: clamp(28px, 4vw, 44px); }
-.giftband p { color: #E9E1F0; max-width: 46ch; }
+.giftband p { color: var(--sand); max-width: 46ch; }
 .giftfinder-mini { display: grid; gap: 12px; }
 
 /* ---------- Journal cards ---------- */
@@ -369,7 +392,7 @@ p { margin: 0 0 1em; }
 .pdp__price { display: flex; align-items: baseline; gap: 12px; margin-bottom: 8px; }
 .pdp__price .price { font-size: 22px; }
 .rating { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--ink-soft); }
-.stars { color: var(--bracken); letter-spacing: 2px; font-size: 15px; }
+.stars { color: var(--ochre); letter-spacing: 2px; font-size: 15px; }
 .pdp__pitch { font-size: 18px; color: var(--ink); font-family: var(--serif); line-height: 1.4; margin: 18px 0; }
 .opt-row { margin: 18px 0; }
 .opt-row__label { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 10px; }
@@ -412,7 +435,7 @@ p { margin: 0 0 1em; }
 .cart-line__remove { font-family: var(--mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-soft); background: none; border: 0; padding: 0; border-bottom: 1px solid var(--line-strong); }
 .cart-line__remove:hover { color: var(--bracken); border-color: var(--bracken); }
 .cart-line__price { text-align: right; font-family: var(--mono); }
-.summary { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 24px; position: sticky; top: calc(var(--header-h) + 16px); }
+.summary { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-panel); padding: 24px; position: sticky; top: calc(var(--header-h) + 16px); }
 .summary h2 { font-family: var(--mono); font-size: 13px; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 18px; }
 .summary__row { display: flex; justify-content: space-between; padding: 8px 0; font-size: 15px; color: var(--slate); }
 .summary__row--total { border-top: 1px solid var(--line); margin-top: 8px; padding-top: 16px; font-size: 20px; color: var(--ink); font-family: var(--serif); }
@@ -462,7 +485,7 @@ p { margin: 0 0 1em; }
 /* ---------- Utility ---------- */
 .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: clamp(20px, 3vw, 40px); }
 .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(20px, 3vw, 40px); }
-.value-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 28px; }
+.value-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-panel); padding: 28px; }
 .value-card svg { width: 30px; color: var(--bracken); margin-bottom: 14px; }
 .value-card h3 { font-size: 22px; margin-bottom: 8px; }
 .value-card p { color: var(--ink-soft); margin: 0; font-size: 15px; }
@@ -493,7 +516,7 @@ p { margin: 0 0 1em; }
 .gf-mini-card { background: rgba(242,235,221,.08); border: 1px solid rgba(242,235,221,.18); border-radius: var(--radius); padding: 16px 18px; }
 .gf-mini-card svg { width: 24px; color: var(--bracken); margin-bottom: 8px; }
 .gf-mini-card b { display: block; font-family: var(--serif); font-size: 18px; }
-.gf-mini-card span { font-size: 13px; color: #E9E1F0; }
+.gf-mini-card span { font-size: 13px; color: var(--sand); }
 
 /* ---------- Form field ---------- */
 .field { display: block; }

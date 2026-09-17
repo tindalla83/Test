@@ -138,8 +138,7 @@
       '<header class="site-header"><div class="container site-header__inner">' +
       '<nav class="nav-primary" aria-label="Primary">' + navLinks + '</nav>' +
       '<button class="icon-btn nav-toggle" aria-label="Open menu" data-drawer-open>' + I.menu + '</button>' +
-      '<a class="brand" href="index.html" aria-label="Mallory home">' + brandMark(22) +
-      '<span class="brand__word">MALLORY</span><span class="brand__tag">Est. 2026 · Carlisle</span></a>' +
+      '<a class="brand" href="index.html" aria-label="Mallory home"><img class="brand__logo" src="assets/img/mallory-horizontal.svg" alt="Mallory" width="166" height="34"></a>' +
       '<div class="header-actions">' +
       '<button class="icon-btn" data-search-open aria-label="Search">' + I.search + '</button>' +
       '<a class="icon-btn hide-sm" href="wishlist.html" aria-label="Wishlist">' + I.heart + '</a>' +
@@ -211,9 +210,8 @@
     var footer = h(
       '<footer class="site-footer"><div class="container">' +
       '<div class="footer-grid">' +
-      '<div class="footer-brand"><a class="brand" href="index.html" style="text-align:left">' +
-      '<span class="brand__word">MALLORY</span></a>' +
-      '<p>The UK’s one-stop shop for men who like the outdoors, good kit and things made to last — and the easiest place to buy a gift they’ll actually use.</p>' +
+      '<div class="footer-brand"><a class="brand brand--footer" href="index.html" style="text-align:left"><img class="brand__logo" src="assets/img/mallory-stacked-reversed.svg" alt="Mallory" width="118" height="64"></a>' +
+      '<p>The UK’s one-stop men’s shop and community: kit, knowledge and good company for men who want to get out there and lead.</p>' +
       '<div class="footer-social">' +
       '<a href="#" aria-label="Instagram">' + I.insta + '</a>' +
       '<a href="#" aria-label="Pinterest">' + I.pin + '</a>' +
@@ -223,14 +221,14 @@
       '<div class="footer-col"><h4>Shop</h4>' +
       M.collections.map(function (c) { return '<a href="collection.html?c=' + c.slug + '">' + c.name + '</a>'; }).join("") +
       '<a href="shop.html">All products</a></div>' +
-      '<div class="footer-col"><h4>Gifting</h4>' +
-      '<a href="gift-finder.html">Gift finder</a><a href="collection.html?c=the-crate">Gift crates</a>' +
-      '<a href="shop.html?gift=1">Under £50</a><a href="shop.html">Gift wrap &amp; cards</a><a href="#">Gift receipts</a></div>' +
+      '<div class="footer-col"><h4>Community</h4>' +
+      '<a href="journal.html">The Journal</a><a href="gift-finder.html">Gift finder</a>' +
+      '<a href="collection.html?c=the-crate">Gift crates</a><a href="#">Route guides</a><a href="#">Events &amp; meet-ups</a></div>' +
       '<div class="footer-col"><h4>Help</h4>' +
       '<a href="#">Delivery &amp; returns</a><a href="#">Size &amp; fit</a><a href="#">Free size swaps</a>' +
-      '<a href="journal.html">Journal</a><a href="about.html">Our story</a></div>' +
+      '<a href="#">Gift wrap &amp; cards</a><a href="about.html">Our story</a></div>' +
       '</div>' +
-      '<div class="footer-bottom"><span>© ' + new Date().getFullYear() + ' Mallory. Made in Carlisle. Because it’s there.</span>' +
+      '<div class="footer-bottom"><span>© ' + new Date().getFullYear() + ' Mallory. Kit, knowledge and good company.</span>' +
       '<span><a href="#">Privacy</a> · <a href="#">Terms</a> · <a href="#">Cookies</a></span></div>' +
       '</div></footer>'
     );
@@ -302,8 +300,8 @@
       '<span class="article-card__meta">' + esc(a.date) + ' · ' + esc(a.read) + ' read</span></a>';
   }
   function pickBase(cat) {
-    var map = { "Kit Tests": "#4A5157", "Gift Guides": "#4B3A5A", "Field Notes": "#2F3E34", "Maker Stories": "#A5652B", "Adventures": "#3E5568" };
-    return map[cat] || "#2F3E34";
+    var map = { "Kit Tests": "#4A4640", "Gift Guides": "#6B5E52", "Field Notes": "#232220", "Maker Stories": "#35586A", "Adventures": "#5C6B3C" };
+    return map[cat] || "#232220";
   }
 
   /* =========================================================================
@@ -317,10 +315,10 @@
 
     main.innerHTML =
       // HERO
-      '<section class="hero"><div class="hero__media">' + M.art.scene({ sky: "#2F3E34", mid: "#4A5157", fore: "#263229", accent: "#A5652B", id: "hero" }) + '</div><div class="hero__scrim"></div>' +
-      '<div class="container hero__inner"><p class="eyebrow eyebrow--light">Everyday adventure · Est. 2026</p>' +
-      '<h1>Good kit, made to last.</h1>' +
-      '<p>The one-stop shop for the men in your life — and the easiest place to buy a gift they’ll actually use. Chosen by people who’ve used it, wrapped ready to give.</p>' +
+      '<section class="hero"><div class="hero__media">' + M.art.scene({ sky: "#232220", mid: "#4A4640", fore: "#1A1917", accent: "#D9774A", id: "hero" }) + '</div><div class="hero__scrim"></div>' +
+      '<div class="container hero__inner"><p class="eyebrow eyebrow--light">Kit · Knowledge · Good company</p>' +
+      '<h1>Good kit, good company.</h1>' +
+      '<p>The UK’s one-stop men’s shop and community — the kit, the know-how and the good company to get you out there and leading. Chosen by people who’ve actually used it.</p>' +
       '<div class="hero__cta"><a class="btn btn--accent" href="shop.html">Shop the range ' + I.arrow + '</a>' +
       '<a class="btn btn--light" href="gift-finder.html">Find a gift</a></div></div></section>' +
 
@@ -373,12 +371,13 @@
       '<a class="link-more" href="shop.html?sort=new">See what’s new ' + I.arrow + '</a></div>' +
       grid(newest) + '</div></section>' : "") +
 
-      // STORY SPLIT
-      '<section class="section"><div class="container"><div class="split">' +
-      '<div class="split__media">' + M.art.scene({ sky: "#3E5568", mid: "#4A5157", fore: "#2F3E34", accent: "#F2EBDD", id: "story" }) + '</div>' +
-      '<div><p class="eyebrow">Because it’s there</p><h2>A shop about everyday adventure</h2>' +
-      '<p class="lede">Named in the spirit of the Cheshire-born mountaineer George Mallory, we celebrate the small adventures — a Sunday fell walk, a first wild swim, a new trail out the back door.</p>' +
-      '<p>Everything is chosen by people who’ve actually used it, explained in plain English, and — because so much of it is bought as a gift — wrapped ready to give.</p>' +
+      // COMMUNITY (more than a shop)
+      '<section class="section" style="background:var(--sand)"><div class="container"><div class="split">' +
+      '<div class="split__media" style="background:var(--oatmeal);display:grid;place-items:center;box-shadow:none;border:1px solid var(--line);padding:8%">' +
+      '<img src="assets/img/mallory-rider.svg" alt="A Mallory rider on a vintage scrambler, looking back over their shoulder" style="width:auto;height:82%"></div>' +
+      '<div><p class="eyebrow">Kit, knowledge &amp; good company</p><h2>More than a shop</h2>' +
+      '<p class="lede">Mallory is a community as much as a shop — route guides, honest kit tests, meet-ups and good company for men who want to get out there and lead.</p>' +
+      '<p>We give you the know-how first: how to re-wax a jacket, plan a first wild swim, or pack for a night on the fells. Everything is chosen and explained by people who’ve actually used it.</p>' +
       '<a class="btn btn--ghost" href="about.html">Our story ' + I.arrow + '</a></div>' +
       '</div></div></section>' +
 
@@ -411,7 +410,7 @@
       { k: "120+", label: "£120 and up", t: function (p) { return p.price >= 120; } }];
 
     main.innerHTML =
-      '<section class="page-hero"><div class="page-hero__media">' + M.art.scene({ id: "shop", sky: "#2F3E34", mid: "#4A5157", fore: "#263229" }) + '</div>' +
+      '<section class="page-hero"><div class="page-hero__media">' + M.art.scene({ id: "shop", sky: "#232220", mid: "#4A4640", fore: "#1A1917" }) + '</div>' +
       '<div class="container page-hero__inner"><div class="breadcrumb"><a href="index.html">Home</a> / <span>Shop</span></div>' +
       '<h1>' + (state.search ? "Search “" + esc(state.search) + "”" : "The whole shop") + '</h1>' +
       '<p>Curated kit across clothing, gear, gifts and grooming — every piece chosen by people who’ve used it.</p></div></section>' +
@@ -647,7 +646,7 @@
     ];
 
     main.innerHTML =
-      '<section class="page-hero" style="padding-block:clamp(40px,6vw,72px)"><div class="page-hero__media">' + M.art.scene({ id: "gf", sky: "#4B3A5A", mid: "#4A5157", fore: "#263229", accent: "#A5652B" }) + '</div>' +
+      '<section class="page-hero" style="padding-block:clamp(40px,6vw,72px)"><div class="page-hero__media">' + M.art.scene({ id: "gf", sky: "#232220", mid: "#4A4640", fore: "#1A1917", accent: "#D9774A" }) + '</div>' +
       '<div class="container page-hero__inner center mx-auto"><p class="eyebrow eyebrow--light">The gift finder</p>' +
       '<h1>His gift, in three taps</h1><p class="mx-auto" style="margin-inline:auto">He says he doesn’t want anything. He does. Answer three quick questions and we’ll find it — then wrap it with a card.</p></div></section>' +
       '<section class="section"><div class="container">' +
@@ -730,7 +729,7 @@
     var main = $("#main");
     var feature = M.articles[0];
     main.innerHTML =
-      '<section class="page-hero"><div class="page-hero__media">' + M.art.scene({ id: "journal", sky: "#2F3E34", mid: "#4A5157", fore: "#263229" }) + '</div>' +
+      '<section class="page-hero"><div class="page-hero__media">' + M.art.scene({ id: "journal", sky: "#232220", mid: "#4A4640", fore: "#1A1917" }) + '</div>' +
       '<div class="container page-hero__inner"><div class="breadcrumb"><a href="index.html">Home</a> / <span>Journal</span></div>' +
       '<h1>The Journal</h1><p>Trail guides, honest kit tests and the makers behind the shop — the stories that help you choose well.</p></div></section>' +
       // feature
@@ -778,30 +777,38 @@
   function renderAbout() {
     var main = $("#main");
     main.innerHTML =
-      '<section class="page-hero"><div class="page-hero__media">' + M.art.scene({ id: "about", sky: "#2F3E34", mid: "#4A5157", fore: "#263229", accent: "#A5652B" }) + '</div>' +
+      '<section class="page-hero"><div class="page-hero__media">' + M.art.scene({ id: "about", sky: "#232220", mid: "#4A4640", fore: "#1A1917", accent: "#D9774A" }) + '</div>' +
       '<div class="container page-hero__inner"><div class="breadcrumb"><a href="index.html">Home</a> / <span>Our Story</span></div>' +
-      '<p class="eyebrow eyebrow--light">Because it’s there</p><h1>A shop about everyday adventure</h1>' +
-      '<p>We help you choose well for the men in your life — and help those men get outside more.</p></div></section>' +
+      '<p class="eyebrow eyebrow--light">Kit, knowledge &amp; good company</p><h1>More than a shop</h1>' +
+      '<p>We give men the kit, the know-how and the good company to get out there and lead.</p></div></section>' +
       '<section class="section"><div class="container"><div class="prose">' +
-      '<p>Mallory is the UK’s one-stop shop for men who like the outdoors, good kit and things made to last — and the easiest place to buy a gift they’ll actually use.</p>' +
-      '<blockquote>Named in the spirit of the Cheshire-born mountaineer George Mallory, we celebrate the small adventures: a Sunday fell walk, a first wild swim, a new trail.</blockquote>' +
-      '<p>Most of what we sell is bought by someone for someone else — a partner, a mum, a daughter, a mate — so we’ve built the whole shop around making that easy. Every product is chosen by people who’ve used it, explained in plain English, and wrapped ready to give.</p>' +
+      '<p>Mallory is the UK’s one-stop men’s shop and community: kit, knowledge and good company for men who want to get out there and lead. It should feel like a well-worn map and a lively bothy — earthy, warm and a little playful.</p>' +
+      '<blockquote>Kit is only half of it. The know-how and the good company are what actually get you out the door.</blockquote>' +
+      '<p>So we lead with knowledge: honest kit tests, route guides and plain-English advice from people who’ve actually used the gear. Gift buyers are a welcome second audience, and everything can be wrapped with a handwritten card — but the man, and getting him out there, comes first.</p>' +
       '</div></div></section>' +
-      '<section class="section section--tight" style="background:var(--bothy-cream-2)"><div class="container">' +
-      '<div class="section-head center" style="justify-content:center"><div><p class="eyebrow">What we stand for</p><h2>Five things we believe</h2></div></div>' +
+      '<section class="section" style="background:var(--sand)"><div class="container"><div class="split">' +
+      '<div class="split__media" style="background:var(--oatmeal);display:grid;place-items:center;box-shadow:none;border:1px solid var(--line);padding:7%">' +
+      '<img src="assets/img/mallory-rider.svg" alt="A Mallory rider on a vintage scrambler, looking back over their shoulder" style="width:auto;height:80%"></div>' +
+      '<div><p class="eyebrow">The community</p><h2>Good company, out there</h2>' +
+      '<p class="lede">Route guides, meet-ups, kit tests and a Journal worth reading — Mallory is the people as much as the products.</p>' +
+      '<p>The rider, looking back over his shoulder, is our nod to that: come along, there’s room. Everything points back to getting out there together.</p>' +
+      '<a class="btn btn--ghost" href="journal.html">Into the Journal ' + I.arrow + '</a></div>' +
+      '</div></div></section>' +
+      '<section class="section section--tight"><div class="container">' +
+      '<div class="section-head center" style="justify-content:center"><div><p class="eyebrow">How we talk</p><h2>What we stand for</h2></div></div>' +
       '<div class="grid-3">' +
-      valueCard(I.leaf, "Made to last", "Quality over quantity. We’d rather sell one great jacket than three average ones.") +
-      valueCard(I.check, "Honest", "Real reviews, clear sizing and no fake urgency. Ever.") +
-      valueCard(I.heart, "Warm", "Friendly, never macho, never snobbish — we talk to her as warmly as to him.") +
-      valueCard(I.mountain, "Northern grit", "Grounded, practical and with a sense of humour.") +
-      valueCard(I.gift, "Get outside", "Everything we do points back to adventure, however small.") +
-      valueCard(I.swap, "No fuss", "Free wrap, free swaps and calm, human help when you need it.") +
+      valueCard(I.heart, "Warm, not macho", "We talk like a well-travelled friend, never like a kit-list bore.") +
+      valueCard(I.mountain, "Knowledgeable, not technical", "Why it’s good, in one plain sentence. No jargon, no stacked adjectives.") +
+      valueCard(I.gift, "Wry, not silly", "Dry northern humour, used lightly. No “LAST CHANCE!!!”.") +
+      valueCard(I.check, "Honest, not salesy", "Real reviews, clear sizing, no fake countdowns. Ever.") +
+      valueCard(I.leaf, "Made to last", "Quality over quantity. One great jacket beats three average ones.") +
+      valueCard(I.user, "Good company", "A community, not a mailing list — get out there, and bring someone.") +
       '</div></div></section>' +
-      '<section class="section"><div class="container"><div class="split split--reverse">' +
-      '<div class="split__media">' + M.art.scene({ id: "carlisle", sky: "#4A5157", mid: "#5A6B4B", fore: "#263229", accent: "#A5652B" }) + '</div>' +
+      '<section class="section" style="background:var(--sand)"><div class="container"><div class="split split--reverse">' +
+      '<div class="split__media">' + M.art.scene({ id: "curation", sky: "#4A4640", mid: "#5C6B3C", fore: "#1A1917", accent: "#D9A33B" }) + '</div>' +
       '<div><p class="eyebrow">Curation, not clutter</p><h2>If we wouldn’t use it, it doesn’t go in</h2>' +
       '<p class="lede">We favour British and independent makers wherever the quality allows, from Borders knitwear to Cumbrian bootmakers.</p>' +
-      '<p>Every product page answers the same four questions: why it’s good, who it’s for, how it fits, and why it makes a great gift. No jargon, no stacked adjectives — just plain, useful English.</p>' +
+      '<p>Every product page answers the same four questions: why it’s good, who it’s for, how it fits, and — for the gift buyer — why it makes a great gift. Plain, useful English throughout.</p>' +
       '<a class="btn btn--ghost" href="shop.html">Shop the range ' + I.arrow + '</a></div>' +
       '</div></div></section>' + newsletterSection();
     mountNewsletter();
@@ -873,7 +880,7 @@
     var main = $("#main");
     var items = Wish.ids.map(M.get).filter(Boolean);
     main.innerHTML =
-      '<section class="page-hero" style="padding-block:clamp(40px,6vw,72px)"><div class="page-hero__media">' + M.art.scene({ id: "wish", sky: "#4B3A5A", mid: "#4A5157", fore: "#263229" }) + '</div>' +
+      '<section class="page-hero" style="padding-block:clamp(40px,6vw,72px)"><div class="page-hero__media">' + M.art.scene({ id: "wish", sky: "#232220", mid: "#4A4640", fore: "#1A1917" }) + '</div>' +
       '<div class="container page-hero__inner"><div class="breadcrumb"><a href="index.html">Home</a> / <span>Wishlist</span></div>' +
       '<h1>Your wishlist</h1><p>Save the things he’d love. Share the list, or send it to whoever’s asking what to get you.</p></div></section>' +
       '<section class="section"><div class="container">' +
@@ -884,7 +891,7 @@
   function renderAccount() {
     var main = $("#main");
     main.innerHTML =
-      '<section class="page-hero" style="padding-block:clamp(40px,6vw,72px)"><div class="page-hero__media">' + M.art.scene({ id: "acct", sky: "#2F3E34", mid: "#4A5157", fore: "#263229" }) + '</div>' +
+      '<section class="page-hero" style="padding-block:clamp(40px,6vw,72px)"><div class="page-hero__media">' + M.art.scene({ id: "acct", sky: "#232220", mid: "#4A4640", fore: "#1A1917" }) + '</div>' +
       '<div class="container page-hero__inner"><div class="breadcrumb"><a href="index.html">Home</a> / <span>Account</span></div>' +
       '<h1>Your account</h1><p>Sign in to track orders, save wishlists and set gift reminders for the dates that matter.</p></div></section>' +
       '<section class="section"><div class="container" style="max-width:440px">' +

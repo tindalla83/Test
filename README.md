@@ -55,25 +55,37 @@ there to change what the shop sells.
 
 ## <a name="brand"></a>Brand
 
-Everything on screen follows the Mallory brand guidelines:
+Everything on screen follows the current Mallory **design system (v3)** — a
+one-stop men's shop *and community*: kit, knowledge and good company for men who
+want to get out there and lead, with gift buyers a welcome second audience.
 
-- **Palette** — Fell Green `#2F3E34`, Bothy Cream `#F2EBDD`, Bracken `#A5652B`,
-  Slate `#4A5157`, Bilberry `#4B3A5A`, Wool White. Roughly 60% cream, 30% green
-  and slate, 10% bracken and bilberry. Defined as custom properties at the top of
-  `styles.css`.
-- **Type** — Playfair Display (headlines), Inter (body/UI), Space Mono (labels
-  and product codes).
-- **Voice** — warm not macho, honest not salesy, British spelling throughout.
-- **Logo** — spaced serif "MALLORY" wordmark with a mountain-ridge line mark,
-  locked up as "MALLORY · Est. 2026 · Carlisle".
+- **Palette** — `ink #232220` (structure, logo, primary buttons), `charcoal
+  #4A4640` (body), `bark #6B5E52` (muted), `oatmeal #F5EFE3` (ground) and `sand
+  #E8DAC0` (panels) carry ~85% of every screen. Accents: `campfire #A8461F` (the
+  one CTA colour — add-to-basket, sale, links), `ember #D9774A` (decoration
+  only), `ochre #D9A33B` (New badges, stars), `moss #5C6B3C` (Fellside / outdoors)
+  and `lake #35586A` (Journal / knowledge). No more than two accents per screen.
+  Tokens are custom properties at the top of `styles.css`.
+- **Type** — Fraunces for headlines (SemiBold, sentence case, axes
+  `"SOFT" 100, "WONK" 0`), Figtree for body and UI, IBM Plex Mono for small
+  uppercase labels and product codes.
+- **Shape** — square-edged: 2px radius on buttons, inputs and cards; square
+  photography and packaging; pill radius reserved for collection tags.
+- **Voice** — warm not macho, knowledgeable not technical, wry not silly, honest
+  not salesy. British spelling throughout.
+- **Logo** — the real design-system SVGs in `assets/img/`: `mallory-horizontal.svg`
+  (header), `mallory-stacked-reversed.svg` (footer, oatmeal on ink),
+  `mallory-mark.svg` (the Lakeland ridge mark, favicon) and `mallory-rider.svg`
+  (the vintage-scrambler rider, used for the community sections).
 
 ### Imagery
 
 The site ships with **no stock photography**. Product, collection and journal
 images are drawn as on-brand SVG (line-mark motifs on natural textures) by the
-`MALLORY.art.*` helpers in `data.js`. When you have real photography, replace
-those helper calls (or swap the returned SVG for `<img>` tags) — the layout is
-built to take real images at the same aspect ratios.
+`MALLORY.art.*` helpers in `data.js`, using the design-system palette. When you
+have real photography, replace those helper calls (or swap the returned SVG for
+`<img>` tags) — the layout is built to take real images at the same aspect
+ratios. The logos are the genuine brand SVGs exported from the design system.
 
 ## Going live as a real shop
 
@@ -100,10 +112,10 @@ ready to point at your provider (e.g. Mailchimp/Klaviyo for the newsletter).
 3. Add your custom domain in the Render dashboard, then update the `og:url` and
    `canonical` tags in `index.html`.
 
-## Before launch (from the brand guidelines)
+## Before launch
 
-- Run UKIPO/EUIPO searches for "Mallory" in classes 25, 35 and 18 and get IP
-  clearance. Don't describe Mallory as "the UK Huckberry" in marketing.
-- Use the George Mallory quote as a theme only — no image, signature or implied
-  family endorsement (subject to a legal check).
+- Run UKIPO/EUIPO searches for "Mallory" in the relevant classes and get IP
+  clearance before trading.
+- Swap the generative SVG artwork for real photography (real people in British
+  landscapes; product shots on wool-white or natural textures).
 - Replace placeholder contact details, legal/footer links and the demo checkout.

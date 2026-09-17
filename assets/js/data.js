@@ -8,15 +8,29 @@
 (function () {
   "use strict";
 
+  // Mallory design-system palette. Legacy keys (fellGreen, bothyCream, …) are
+  // kept pointing at the new tokens so the SVG art helpers keep working.
   var PALETTE = {
-    fellGreen: "#2F3E34",
-    fellGreen2: "#263229",
-    bothyCream: "#F2EBDD",
-    bothyCream2: "#E8DEC9",
-    bracken: "#A5652B",
-    slate: "#4A5157",
-    bilberry: "#4B3A5A",
-    woolWhite: "#FFFFFF"
+    ink: "#232220",
+    ink2: "#1A1917",
+    charcoal: "#4A4640",
+    bark: "#6B5E52",
+    oatmeal: "#F5EFE3",
+    sand: "#E8DAC0",
+    woolWhite: "#FFFFFF",
+    campfire: "#A8461F",
+    ember: "#D9774A",
+    ochre: "#D9A33B",
+    moss: "#5C6B3C",
+    lake: "#35586A",
+    // legacy aliases
+    fellGreen: "#232220",
+    fellGreen2: "#1A1917",
+    bothyCream: "#F5EFE3",
+    bothyCream2: "#E8DAC0",
+    bracken: "#A8461F",
+    slate: "#4A4640",
+    bilberry: "#35586A"
   };
 
   /* ---- Colourway swatches (natural, British earthy tones) ---- */
@@ -76,8 +90,8 @@
       '<circle cx="4" cy="4" r="0.5" fill="' + ink + '" opacity="0.05"/></pattern></defs>';
   }
 
-  /* Product artwork: a "studio" placeholder — motif on a natural ground with a
-     Space Mono product code stamp and a ridge mark. `variant` shifts framing. */
+  /* Product artwork: a "studio" placeholder — motif on a natural ground with an
+     IBM Plex Mono product code stamp and a ridge mark. `variant` shifts framing. */
   function productArt(product, variant) {
     variant = variant || 0;
     var c = product.colors && product.colors.length ? product.colors[Math.min(variant, product.colors.length - 1)] : colour("Fell Green");
@@ -88,15 +102,15 @@
     // choose ink tone with contrast against ground
     var ink = c.hex;
     return '<svg viewBox="0 0 100 125" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="' + esc(product.name) + '">' +
-      bgTexture(id, ground, "#2F3E34") +
+      bgTexture(id, ground, "#232220") +
       '<rect width="100" height="125" fill="url(#grain' + id + ')"/>' +
       // soft vignette circle behind motif
       '<circle cx="50" cy="54" r="34" fill="' + tint(c.hex, 0.10) + '"/>' +
       '<g transform="translate(0 6)" fill="none" stroke="' + ink + '" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">' + motif + '</g>' +
-      // ridge mark bottom-left
-      '<path d="M10 112l7-8 5 4 6-7 5 5 6-6" fill="none" stroke="' + PALETTE.bracken + '" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" opacity="0.8"/>' +
-      // product code stamp
-      '<text x="90" y="116" text-anchor="end" font-family="Space Mono, monospace" font-size="5.4" letter-spacing="1" fill="' + PALETTE.slate + '">' + esc(code) + '</text>' +
+      // ridge mark bottom-left (decorative → ember)
+      '<path d="M10 112l7-8 5 4 6-7 5 5 6-6" fill="none" stroke="' + PALETTE.ember + '" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" opacity="0.9"/>' +
+      // product code stamp (mono label → bark)
+      '<text x="90" y="116" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="5.2" letter-spacing="1" fill="' + PALETTE.bark + '">' + esc(code) + '</text>' +
       '</svg>';
   }
 
@@ -106,7 +120,7 @@
     var sky = opts.sky || PALETTE.fellGreen;
     var mid = opts.mid || PALETTE.slate;
     var fore = opts.fore || PALETTE.fellGreen2;
-    var accent = opts.accent || PALETTE.bracken;
+    var accent = opts.accent || PALETTE.ember;
     var id = opts.id || Math.floor(Math.random() * 9999);
     var sun = opts.sun !== false;
     return '<svg viewBox="0 0 160 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" role="img" aria-hidden="true">' +
@@ -129,7 +143,7 @@
   function editorial(opts) {
     opts = opts || {};
     var base = opts.base || PALETTE.slate;
-    var accent = opts.accent || PALETTE.bracken;
+    var accent = opts.accent || PALETTE.ember;
     var motif = opts.motif ? (ICONS[opts.motif] || "") : "";
     var id = opts.id || Math.floor(Math.random() * 9999);
     return '<svg viewBox="0 0 160 107" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" role="img" aria-hidden="true">' +
@@ -155,11 +169,11 @@
 
   /* ======================= COLLECTIONS ======================= */
   var collections = [
-    { slug: "graft", name: "Graft", tagline: "The working man", desc: "Kit that earns its keep — workwear, boots and tools built to take a beating.", scene: { sky: "#4A5157", mid: "#5A6B4B", fore: "#263229", accent: "#A5652B" } },
-    { slug: "fellside", name: "Fellside", tagline: "The outdoor man", desc: "For the walker, fell runner and wild swimmer. Waterproofs, packs and trail kit.", scene: { sky: "#3E5568", mid: "#4A5157", fore: "#2F3E34", accent: "#F2EBDD" } },
-    { slug: "sunday-best", name: "Sunday Best", tagline: "The gentleman", desc: "Smart-casual things made well — knitwear, leather and a watch to keep.", scene: { sky: "#4B3A5A", mid: "#5E3A4E", fore: "#263229", accent: "#B98A5E" } },
-    { slug: "off-shift", name: "Off Shift", tagline: "The weekend man", desc: "Pub, football and the barbecue. Easy kit for time off.", scene: { sky: "#A5652B", mid: "#8F5623", fore: "#2F3E34", accent: "#F2EBDD" } },
-    { slug: "the-crate", name: "The Crate", tagline: "Gifting, sorted", desc: "Curated gift boxes for her to give — wrapped, carded and ready.", scene: { sky: "#4B3A5A", mid: "#4A5157", fore: "#263229", accent: "#A5652B" } }
+    { slug: "graft", name: "Graft", tagline: "The working man", desc: "Kit that earns its keep — workwear, boots and tools built to take a beating.", scene: { sky: "#4A4640", mid: "#6B5E52", fore: "#1A1917", accent: "#D9774A" } },
+    { slug: "fellside", name: "Fellside", tagline: "The outdoor man", desc: "For the walker, fell runner and wild swimmer. Waterproofs, packs and trail kit.", scene: { sky: "#35586A", mid: "#5C6B3C", fore: "#1A1917", accent: "#F5EFE3" } },
+    { slug: "sunday-best", name: "Sunday Best", tagline: "The gentleman", desc: "Smart-casual things made well — knitwear, leather and a watch to keep.", scene: { sky: "#232220", mid: "#4A4640", fore: "#1A1917", accent: "#D9A33B" } },
+    { slug: "off-shift", name: "Off Shift", tagline: "The weekend man", desc: "Pub, football and the barbecue. Easy kit for time off.", scene: { sky: "#4A4640", mid: "#6B5E52", fore: "#1A1917", accent: "#D9A33B" } },
+    { slug: "the-crate", name: "The Crate", tagline: "Gifting, sorted", desc: "Curated gift boxes, wrapped, carded and ready to give.", scene: { sky: "#232220", mid: "#4A4640", fore: "#1A1917", accent: "#D9774A" } }
   ];
 
   /* ======================= PRODUCTS ======================= */
@@ -294,12 +308,12 @@
         { q: "Get in slowly, stay near the edge, get out before you stop enjoying it." },
         "That's it. Do that a few times through the summer and you'll understand why people won't stop banging on about it. We've a Wild Swimmer's Crate if you want it all in one box."
       ] },
-    { id: "why-because-its-there", cat: "Field Notes", title: "“Because it's there” — the idea behind Mallory", excerpt: "Named in the spirit of a Cheshire-born mountaineer, we're a shop about everyday adventure. Here's what that means.", read: "3 min", date: "1 Aug 2026", motif: "waterproof",
+    { id: "more-than-a-shop", cat: "Field Notes", title: "More than a shop: the idea behind Mallory", excerpt: "Kit, knowledge and good company. A short note on why we're a community as much as a shop — and what that means for you.", read: "3 min", date: "1 Aug 2026", motif: "waterproof",
       body: [
-        "When George Mallory was asked why he wanted to climb Everest, he's said to have replied, 'Because it's there.' We took the spirit of that line — not the tragedy — as our name.",
-        "Because adventure doesn't have to mean a summit. It can be a Sunday fell walk, a first wild swim, a new trail out the back door. Small adventures, good kit, the odd flask of tea.",
-        { q: "Everything we do points back to getting outside — however small the outside is." },
-        "That's the whole idea. Everything in the shop is chosen by people who've actually used it, explained in plain English, and — because most of it is bought as a gift — wrapped ready to give."
+        "Most shops sell you a thing and wave goodbye. We wanted to do the harder, better bit: give men the know-how and the good company to actually get out there and lead.",
+        "So kit is only half of what we do. The other half is knowledge — honest tests, plain-English advice, route guides — and company: meet-ups, a Journal worth reading, and the sense that there's a group of you at it, not just a parcel on the doormat.",
+        { q: "Kit is only half of it. The know-how and the good company are what get you out the door." },
+        "That's why the rider in our logo is looking back over his shoulder: come along, there's room. Everything in the shop is chosen and explained by people who've actually used it — and if you're buying it as a gift, we'll wrap it with a card."
       ] }
   ];
 
