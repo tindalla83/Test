@@ -255,7 +255,7 @@
       : '<span class="price">' + money(p.price) + '</span>';
     var on = Wish.has(p.id) ? " is-on" : "";
     return '<article class="card">' +
-      '<div class="card__media' + (p.images && p.images.length ? ' card__media--photo' : '') + '">' + badgeHtml(p) +
+      '<div class="card__media">' + badgeHtml(p) +
       '<button class="card__wish' + on + '" data-wish="' + p.id + '" aria-label="Save to wishlist">' + (Wish.has(p.id) ? I.heartFill : I.heart) + '</button>' +
       '<a href="product.html?id=' + p.id + '" aria-label="' + esc(p.name) + '">' + M.art.media(p, 0) + '</a>' +
       '<div class="card__quick"><button class="btn btn--light btn--sm btn--block" data-add="' + p.id + '">Add to basket</button></div>' +
