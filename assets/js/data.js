@@ -211,7 +211,7 @@
   // generated SVG art, so you can switch products over one at a time.
   var products = [
     /* ---------------- GRAFT ---------------- */
-    P({ name: "Ridgeway Waxed Work Jacket", maker: "Fenwick & Sons", collection: "graft", category: "Clothing", icon: "jacket", price: 129, badges: ["bestseller"], colorNames: ["Fell Green", "Peat", "Slate"], images: ["sassets/img/products/91842_Flint_and_Tinder_Waxed_Harrington_Jacket_Olive_01_PXLZ], sizes: ["S", "M", "L", "XL", "XXL"],
+    P({ name: "Ridgeway Waxed Work Jacket", maker: "Fenwick & Sons", collection: "graft", category: "Clothing", icon: "jacket", price: 129, badges: ["bestseller"], colorNames: ["Fell Green", "Peat", "Slate"], images: ["assets/img/products/91842_Flint_and_Tinder_Waxed_Harrington_Jacket_Olive_01_PXLZ], sizes: ["S", "M", "L", "XL", "XXL"],
       why: "Waxed cotton that shrugs off Lakeland drizzle and only looks better with age.", whoFor: "The man who's always outside fixing something.", sizing: "Runs true to size; size up for layers underneath.", giftBecause: "He'll wear it every weekend for the next ten years." }),
     P({ name: "Grafter Leather Work Boots", maker: "Cumbria Bootworks", collection: "graft", category: "Footwear", icon: "boot", price: 165, badges: ["most-gifted"], colorNames: ["Tan", "Peat", "Charcoal"], sizes: ["7", "8", "9", "10", "11", "12"],
       why: "Goodyear-welted and resoleable, so a scuff is never the end.", whoFor: "Anyone on their feet all day.", sizing: "Standard fit; take your usual size.", giftBecause: "A proper pair of boots he'd never buy himself." }),
