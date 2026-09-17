@@ -387,6 +387,11 @@ p { margin: 0 0 1em; }
 .pdp__thumb { aspect-ratio: 1; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); background: var(--wool-white); padding: 0; }
 .pdp__thumb.is-active { border-color: var(--fell-green); box-shadow: 0 0 0 1px var(--fell-green); }
 .pdp__thumb svg { width: 100%; height: 100%; object-fit: cover; }
+/* Real product photos: keep the uploaded proportions, never crop.
+   The main image sizes itself to the photo; thumbnails/cards letterbox on white. */
+.pdp__main--photo { aspect-ratio: auto; }
+.pdp__main--photo img { width: 100%; height: auto; display: block; object-fit: contain; }
+.card__media img, .pdp__thumb img, .cart-line__media img, .search-hit__img img { width: 100%; height: 100%; object-fit: contain; }
 .pdp__maker { font-family: var(--mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--bracken); }
 .pdp h1 { font-size: clamp(28px, 4vw, 42px); margin: 8px 0 12px; }
 .pdp__price { display: flex; align-items: baseline; gap: 12px; margin-bottom: 8px; }

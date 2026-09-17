@@ -541,7 +541,7 @@
       '<section class="section"><div class="container">' +
       '<div class="breadcrumb breadcrumb--dark"><a href="index.html">Home</a> / <a href="collection.html?c=' + p.collection + '">' + esc(M.collection(p.collection).name) + '</a> / <span>' + esc(p.name) + '</span></div>' +
       '<div class="pdp" style="margin-top:20px">' +
-      '<div class="pdp__gallery"><div class="pdp__main" id="pdp-main">' + M.art.media(p, 0) + '</div>' +
+      '<div class="pdp__gallery"><div class="pdp__main' + (p.images && p.images.length ? ' pdp__main--photo' : '') + '" id="pdp-main">' + M.art.media(p, 0) + '</div>' +
       '<div class="pdp__thumbs" id="pdp-thumbs">' +
       Array.apply(null, { length: variants }).map(function (_, i) { return '<button class="pdp__thumb' + (i === 0 ? " is-active" : "") + '" data-img="' + i + '">' + M.art.media(p, i) + '</button>'; }).join("") +
       '</div></div>' +
