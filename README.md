@@ -1,10 +1,12 @@
-# Mallory
+# Holbeck
 
-A storefront for **Mallory** — the UK's one-stop shop for men who like the
-outdoors, good kit and things made to last, and the easiest place to buy a gift
-they'll actually use. Built to the [Mallory brand guidelines](#brand): a curated
-men's lifestyle store with gifting at its heart, in the format of a modern
-content-led shop like Huckberry — but entirely its own look, copy and imagery.
+A storefront for **Holbeck** — a one-stop men's shop and community: kit,
+knowledge and good company for men who want to get out there and lead, with
+gift buyers a welcome second audience. Built to the
+[Holbeck design system](#brand): earthy, muted and quietly confident, in the
+format of a modern content-led shop — but entirely its own look, copy and
+imagery. (The name is northern: a *beck* is a stream, and a *holbeck* is the
+beck that runs through a hollow.)
 
 Plain **HTML, CSS and vanilla JavaScript**. No build step, no dependencies, no
 framework. Designed to be hosted on [Render](https://render.com) as a static
@@ -55,7 +57,7 @@ there to change what the shop sells.
 
 ## <a name="brand"></a>Brand
 
-Everything on screen follows the current Mallory **design system (v3)** — a
+Everything on screen follows the current Holbeck **design system (v3)** — a
 one-stop men's shop *and community*: kit, knowledge and good company for men who
 want to get out there and lead, with gift buyers a welcome second audience.
 
@@ -64,27 +66,28 @@ want to get out there and lead, with gift buyers a welcome second audience.
   (ground) and `linen #E7E3DB` (panels) carry ~85% of every screen. Accents:
   `clay #8E5140` (the one CTA colour — add-to-basket, prices, links),
   `clay-tint #C2907C` (decoration only), `sandstone #B09A6B` (New badges),
-  `sage #5F6E5C` (Fellside / outdoors) and `slate-blue #4C6472` (Journal /
+  `sage #5F6E5C` (outdoors / community) and `beck-blue #4C6472` (Journal /
   knowledge). Low saturation throughout; no more than two accents per screen.
   Tokens are custom properties at the top of `styles.css` (internal names kept,
   brand names noted in comments).
 - **Type** — Fraunces for headlines (SemiBold, sentence case, axes
   `"SOFT" 100, "WONK" 0`), Figtree for body and UI, IBM Plex Mono for small
   uppercase labels and product codes.
-- **Shape** — square-edged: 2px radius on buttons, inputs and cards; square
-  photography and packaging; pill radius reserved for collection tags.
+- **Shape** — square-edged with softened corners: 3px radius on buttons, inputs
+  and cards; square photography and packaging; pill radius reserved for
+  collection tags.
 - **Voice** — warm not macho, knowledgeable not technical, wry not silly, honest
   not salesy. British spelling throughout.
-- **Logo** — the real design-system SVGs in `assets/img/`: `mallory-horizontal.svg`
-  (header), `mallory-stacked-reversed.svg` (footer, oatmeal on ink),
-  `mallory-mark.svg` (the Lakeland ridge mark, favicon) and `mallory-rider.svg`
-  (the vintage-scrambler rider, used for the community sections).
+- **Logo** — the real design-system SVGs in `assets/img/`: `holbeck-horizontal.svg`
+  (header), `holbeck-stacked-reversed.svg` (footer, chalk on ink) and
+  `holbeck-mark.svg` (the H-and-beck mark — a solid H whose crossbar is a beck —
+  used for the favicon and the community sections).
 
 ### Imagery
 
 The site ships with **no stock photography**. Product, collection and journal
 images are drawn as on-brand SVG (line-mark motifs on natural textures) by the
-`MALLORY.art.*` helpers in `data.js`, using the design-system palette. The logos
+`HOLBECK.art.*` helpers in `data.js`, using the design-system palette. The logos
 are the genuine brand SVGs exported from the design system.
 
 **To use real product photos:** drop image files into `assets/img/products/` and
@@ -122,8 +125,9 @@ ready to point at your provider (e.g. Mailchimp/Klaviyo for the newsletter).
 
 ## Before launch
 
-- Run UKIPO/EUIPO searches for "Mallory" in the relevant classes and get IP
-  clearance before trading.
+- Run UKIPO/EUIPO searches for "Holbeck" in classes 25, 35 and 18 and get IP
+  clearance before trading. Note Holbeck is also a district of Leeds and a
+  village in Nottinghamshire, so expect existing businesses using the name.
 - Swap the generative SVG artwork for real photography (real people in British
   landscapes; product shots on wool-white or natural textures).
 - Replace placeholder contact details, legal/footer links and the demo checkout.
