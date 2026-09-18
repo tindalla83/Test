@@ -12,25 +12,25 @@
   // kept pointing at the new tokens so the SVG art helpers keep working.
   var PALETTE = {
     ink: "#232220",
-    ink2: "#1A1917",
-    charcoal: "#4A4640",
-    bark: "#6B5E52",
-    oatmeal: "#F5EFE3",
-    sand: "#E8DAC0",
+    ink2: "#191815",
+    charcoal: "#4C4E4C",
+    bark: "#686A66",       // stone
+    oatmeal: "#F5F5F3",    // chalk
+    sand: "#E7E3DB",       // linen
     woolWhite: "#FFFFFF",
-    campfire: "#A8461F",
-    ember: "#D9774A",
-    ochre: "#D9A33B",
-    moss: "#5C6B3C",
-    lake: "#35586A",
+    campfire: "#8E5140",   // clay (CTA)
+    ember: "#C2907C",      // clay-tint (decoration)
+    ochre: "#B09A6B",      // sandstone (badges)
+    moss: "#5F6E5C",       // sage (outdoor/community)
+    lake: "#4C6472",       // slate-blue (Journal/knowledge)
     // legacy aliases
     fellGreen: "#232220",
-    fellGreen2: "#1A1917",
-    bothyCream: "#F5EFE3",
-    bothyCream2: "#E8DAC0",
-    bracken: "#A8461F",
-    slate: "#4A4640",
-    bilberry: "#35586A"
+    fellGreen2: "#191815",
+    bothyCream: "#F5F5F3",
+    bothyCream2: "#E7E3DB",
+    bracken: "#8E5140",
+    slate: "#4C4E4C",
+    bilberry: "#4C6472"
   };
 
   /* ---- Colourway swatches (natural, British earthy tones) ---- */
@@ -182,11 +182,11 @@
 
   /* ======================= COLLECTIONS ======================= */
   var collections = [
-    { slug: "graft", name: "Graft", tagline: "The working man", desc: "Kit that earns its keep — workwear, boots and tools built to take a beating.", scene: { sky: "#4A4640", mid: "#6B5E52", fore: "#1A1917", accent: "#D9774A" } },
-    { slug: "fellside", name: "Fellside", tagline: "The outdoor man", desc: "For the walker, fell runner and wild swimmer. Waterproofs, packs and trail kit.", scene: { sky: "#35586A", mid: "#5C6B3C", fore: "#1A1917", accent: "#F5EFE3" } },
-    { slug: "sunday-best", name: "Sunday Best", tagline: "The gentleman", desc: "Smart-casual things made well — knitwear, leather and a watch to keep.", scene: { sky: "#232220", mid: "#4A4640", fore: "#1A1917", accent: "#D9A33B" } },
-    { slug: "off-shift", name: "Off Shift", tagline: "The weekend man", desc: "Pub, football and the barbecue. Easy kit for time off.", scene: { sky: "#4A4640", mid: "#6B5E52", fore: "#1A1917", accent: "#D9A33B" } },
-    { slug: "the-crate", name: "The Crate", tagline: "Gifting, sorted", desc: "Curated gift boxes, wrapped, carded and ready to give.", scene: { sky: "#232220", mid: "#4A4640", fore: "#1A1917", accent: "#D9774A" } }
+    { slug: "graft", name: "Graft", tagline: "The working man", desc: "Kit that earns its keep — workwear, boots and tools built to take a beating.", scene: { sky: "#4C4E4C", mid: "#686A66", fore: "#191815", accent: "#C2907C" } },
+    { slug: "fellside", name: "Fellside", tagline: "The outdoor man", desc: "For the walker, fell runner and wild swimmer. Waterproofs, packs and trail kit.", scene: { sky: "#4C6472", mid: "#5F6E5C", fore: "#191815", accent: "#F5F5F3" } },
+    { slug: "sunday-best", name: "Sunday Best", tagline: "The gentleman", desc: "Smart-casual things made well — knitwear, leather and a watch to keep.", scene: { sky: "#232220", mid: "#4C4E4C", fore: "#191815", accent: "#B09A6B" } },
+    { slug: "off-shift", name: "Off Shift", tagline: "The weekend man", desc: "Pub, football and the barbecue. Easy kit for time off.", scene: { sky: "#4C4E4C", mid: "#686A66", fore: "#191815", accent: "#B09A6B" } },
+    { slug: "the-crate", name: "The Crate", tagline: "Gifting, sorted", desc: "Curated gift boxes, wrapped, carded and ready to give.", scene: { sky: "#232220", mid: "#4C4E4C", fore: "#191815", accent: "#C2907C" } }
   ];
 
   /* ======================= PRODUCTS ======================= */

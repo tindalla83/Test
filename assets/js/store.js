@@ -300,7 +300,7 @@
       '<span class="article-card__meta">' + esc(a.date) + ' · ' + esc(a.read) + ' read</span></a>';
   }
   function pickBase(cat) {
-    var map = { "Kit Tests": "#4A4640", "Gift Guides": "#6B5E52", "Field Notes": "#232220", "Maker Stories": "#35586A", "Adventures": "#5C6B3C" };
+    var map = { "Kit Tests": "#4C4E4C", "Gift Guides": "#686A66", "Field Notes": "#232220", "Maker Stories": "#4C6472", "Adventures": "#5F6E5C" };
     return map[cat] || "#232220";
   }
 
@@ -315,7 +315,7 @@
 
     main.innerHTML =
       // HERO
-      '<section class="hero"><div class="hero__media">' + M.art.scene({ sky: "#232220", mid: "#4A4640", fore: "#1A1917", accent: "#D9774A", id: "hero" }) + '</div><div class="hero__scrim"></div>' +
+      '<section class="hero"><div class="hero__media">' + M.art.scene({ sky: "#232220", mid: "#4C4E4C", fore: "#191815", accent: "#C2907C", id: "hero" }) + '</div><div class="hero__scrim"></div>' +
       '<div class="container hero__inner"><p class="eyebrow eyebrow--light">Kit · Knowledge · Good company</p>' +
       '<h1>Good kit, good company.</h1>' +
       '<p>The UK’s one-stop men’s shop and community — the kit, the know-how and the good company to get you out there and leading. Chosen by people who’ve actually used it.</p>' +
@@ -410,7 +410,7 @@
       { k: "120+", label: "£120 and up", t: function (p) { return p.price >= 120; } }];
 
     main.innerHTML =
-      '<section class="page-hero"><div class="page-hero__media">' + M.art.scene({ id: "shop", sky: "#232220", mid: "#4A4640", fore: "#1A1917" }) + '</div>' +
+      '<section class="page-hero"><div class="page-hero__media">' + M.art.scene({ id: "shop", sky: "#232220", mid: "#4C4E4C", fore: "#191815" }) + '</div>' +
       '<div class="container page-hero__inner"><div class="breadcrumb"><a href="index.html">Home</a> / <span>Shop</span></div>' +
       '<h1>' + (state.search ? "Search “" + esc(state.search) + "”" : "The whole shop") + '</h1>' +
       '<p>Curated kit across clothing, gear, gifts and grooming — every piece chosen by people who’ve used it.</p></div></section>' +
@@ -646,7 +646,7 @@
     ];
 
     main.innerHTML =
-      '<section class="page-hero" style="padding-block:clamp(40px,6vw,72px)"><div class="page-hero__media">' + M.art.scene({ id: "gf", sky: "#232220", mid: "#4A4640", fore: "#1A1917", accent: "#D9774A" }) + '</div>' +
+      '<section class="page-hero" style="padding-block:clamp(40px,6vw,72px)"><div class="page-hero__media">' + M.art.scene({ id: "gf", sky: "#232220", mid: "#4C4E4C", fore: "#191815", accent: "#C2907C" }) + '</div>' +
       '<div class="container page-hero__inner center mx-auto"><p class="eyebrow eyebrow--light">The gift finder</p>' +
       '<h1>His gift, in three taps</h1><p class="mx-auto" style="margin-inline:auto">He says he doesn’t want anything. He does. Answer three quick questions and we’ll find it — then wrap it with a card.</p></div></section>' +
       '<section class="section"><div class="container">' +
@@ -729,7 +729,7 @@
     var main = $("#main");
     var feature = M.articles[0];
     main.innerHTML =
-      '<section class="page-hero"><div class="page-hero__media">' + M.art.scene({ id: "journal", sky: "#232220", mid: "#4A4640", fore: "#1A1917" }) + '</div>' +
+      '<section class="page-hero"><div class="page-hero__media">' + M.art.scene({ id: "journal", sky: "#232220", mid: "#4C4E4C", fore: "#191815" }) + '</div>' +
       '<div class="container page-hero__inner"><div class="breadcrumb"><a href="index.html">Home</a> / <span>Journal</span></div>' +
       '<h1>The Journal</h1><p>Trail guides, honest kit tests and the makers behind the shop — the stories that help you choose well.</p></div></section>' +
       // feature
@@ -777,7 +777,7 @@
   function renderAbout() {
     var main = $("#main");
     main.innerHTML =
-      '<section class="page-hero"><div class="page-hero__media">' + M.art.scene({ id: "about", sky: "#232220", mid: "#4A4640", fore: "#1A1917", accent: "#D9774A" }) + '</div>' +
+      '<section class="page-hero"><div class="page-hero__media">' + M.art.scene({ id: "about", sky: "#232220", mid: "#4C4E4C", fore: "#191815", accent: "#C2907C" }) + '</div>' +
       '<div class="container page-hero__inner"><div class="breadcrumb"><a href="index.html">Home</a> / <span>Our Story</span></div>' +
       '<p class="eyebrow eyebrow--light">Kit, knowledge &amp; good company</p><h1>More than a shop</h1>' +
       '<p>We give men the kit, the know-how and the good company to get out there and lead.</p></div></section>' +
@@ -805,7 +805,7 @@
       valueCard(I.user, "Good company", "A community, not a mailing list — get out there, and bring someone.") +
       '</div></div></section>' +
       '<section class="section" style="background:var(--sand)"><div class="container"><div class="split split--reverse">' +
-      '<div class="split__media">' + M.art.scene({ id: "curation", sky: "#4A4640", mid: "#5C6B3C", fore: "#1A1917", accent: "#D9A33B" }) + '</div>' +
+      '<div class="split__media">' + M.art.scene({ id: "curation", sky: "#4C4E4C", mid: "#5F6E5C", fore: "#191815", accent: "#B09A6B" }) + '</div>' +
       '<div><p class="eyebrow">Curation, not clutter</p><h2>If we wouldn’t use it, it doesn’t go in</h2>' +
       '<p class="lede">We favour British and independent makers wherever the quality allows, from Borders knitwear to Cumbrian bootmakers.</p>' +
       '<p>Every product page answers the same four questions: why it’s good, who it’s for, how it fits, and — for the gift buyer — why it makes a great gift. Plain, useful English throughout.</p>' +
@@ -880,7 +880,7 @@
     var main = $("#main");
     var items = Wish.ids.map(M.get).filter(Boolean);
     main.innerHTML =
-      '<section class="page-hero" style="padding-block:clamp(40px,6vw,72px)"><div class="page-hero__media">' + M.art.scene({ id: "wish", sky: "#232220", mid: "#4A4640", fore: "#1A1917" }) + '</div>' +
+      '<section class="page-hero" style="padding-block:clamp(40px,6vw,72px)"><div class="page-hero__media">' + M.art.scene({ id: "wish", sky: "#232220", mid: "#4C4E4C", fore: "#191815" }) + '</div>' +
       '<div class="container page-hero__inner"><div class="breadcrumb"><a href="index.html">Home</a> / <span>Wishlist</span></div>' +
       '<h1>Your wishlist</h1><p>Save the things he’d love. Share the list, or send it to whoever’s asking what to get you.</p></div></section>' +
       '<section class="section"><div class="container">' +
@@ -891,7 +891,7 @@
   function renderAccount() {
     var main = $("#main");
     main.innerHTML =
-      '<section class="page-hero" style="padding-block:clamp(40px,6vw,72px)"><div class="page-hero__media">' + M.art.scene({ id: "acct", sky: "#232220", mid: "#4A4640", fore: "#1A1917" }) + '</div>' +
+      '<section class="page-hero" style="padding-block:clamp(40px,6vw,72px)"><div class="page-hero__media">' + M.art.scene({ id: "acct", sky: "#232220", mid: "#4C4E4C", fore: "#191815" }) + '</div>' +
       '<div class="container page-hero__inner"><div class="breadcrumb"><a href="index.html">Home</a> / <span>Account</span></div>' +
       '<h1>Your account</h1><p>Sign in to track orders, save wishlists and set gift reminders for the dates that matter.</p></div></section>' +
       '<section class="section"><div class="container" style="max-width:440px">' +

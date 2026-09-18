@@ -59,13 +59,15 @@ Everything on screen follows the current Mallory **design system (v3)** — a
 one-stop men's shop *and community*: kit, knowledge and good company for men who
 want to get out there and lead, with gift buyers a welcome second audience.
 
-- **Palette** — `ink #232220` (structure, logo, primary buttons), `charcoal
-  #4A4640` (body), `bark #6B5E52` (muted), `oatmeal #F5EFE3` (ground) and `sand
-  #E8DAC0` (panels) carry ~85% of every screen. Accents: `campfire #A8461F` (the
-  one CTA colour — add-to-basket, sale, links), `ember #D9774A` (decoration
-  only), `ochre #D9A33B` (New badges, stars), `moss #5C6B3C` (Fellside / outdoors)
-  and `lake #35586A` (Journal / knowledge). No more than two accents per screen.
-  Tokens are custom properties at the top of `styles.css`.
+- **Palette** (muted "chalk" release) — `ink #232220` (structure, logo, dark
+  buttons), `charcoal #4C4E4C` (body), `stone #686A66` (muted), `chalk #F5F5F3`
+  (ground) and `linen #E7E3DB` (panels) carry ~85% of every screen. Accents:
+  `clay #8E5140` (the one CTA colour — add-to-basket, prices, links),
+  `clay-tint #C2907C` (decoration only), `sandstone #B09A6B` (New badges),
+  `sage #5F6E5C` (Fellside / outdoors) and `slate-blue #4C6472` (Journal /
+  knowledge). Low saturation throughout; no more than two accents per screen.
+  Tokens are custom properties at the top of `styles.css` (internal names kept,
+  brand names noted in comments).
 - **Type** — Fraunces for headlines (SemiBold, sentence case, axes
   `"SOFT" 100, "WONK" 0`), Figtree for body and UI, IBM Plex Mono for small
   uppercase labels and product codes.
