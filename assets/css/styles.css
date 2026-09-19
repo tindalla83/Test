@@ -1,12 +1,12 @@
 /* ==========================================================================
-   Holbeck — storefront styles
-   Palette, type and components drawn from the Holbeck design system (v3).
+   Bield — storefront styles
+   Palette, type and components drawn from the Bield design system (v3).
    Colour rhythm: ~60% chalk + linen, ~25% ink + charcoal, ~15% accents.
    One CTA colour (clay); no more than two accents per screen. Muted throughout.
    ========================================================================== */
 
 :root {
-  /* ---- Holbeck brand tokens (design system v3 — muted "chalk" palette) ----
+  /* ---- Bield brand tokens (design system v3 — muted "chalk" palette) ----
      Internal names kept; values are the latest release. Brand name in comments. */
   --ink: #232220;          /* primary brand: logo, headlines, nav, dark buttons */
   --ink-2: #191815;
@@ -20,7 +20,7 @@
   --ember: #C2907C;        /* "clay-tint" — decoration only, never text */
   --ochre: #B09A6B;        /* "sandstone" — badges, underlines — ink text on it */
   --moss: #5F6E5C;         /* "sage" — outdoor / community accent */
-  --lake: #4C6472;         /* "beck-blue" — knowledge / Journal / newsletter accent */
+  --lake: #4C6472;         /* "slate-blue" — knowledge / Journal / newsletter accent */
   --signal-error: #8F4038;
 
   /* Semantic tokens */

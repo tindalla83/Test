@@ -1,14 +1,14 @@
 /* ==========================================================================
-   Holbeck — data + generative artwork
+   Bield — data + generative artwork
    All catalogue data lives here. Product/collection imagery is drawn as
    on-brand SVG (line-mark motifs on natural textures) so the site ships with
-   no stock photography. Swap HOLBECK.art.* for real photography when ready.
+   no stock photography. Swap BIELD.art.* for real photography when ready.
    ========================================================================== */
 
 (function () {
   "use strict";
 
-  // Holbeck design-system palette. Legacy keys (fellGreen, bothyCream, …) are
+  // Bield design-system palette. Legacy keys (fellGreen, bothyCream, …) are
   // kept pointing at the new tokens so the SVG art helpers keep working.
   var PALETTE = {
     ink: "#232220",
@@ -22,7 +22,7 @@
     ember: "#C2907C",      // clay-tint (decoration)
     ochre: "#B09A6B",      // sandstone (badges)
     moss: "#5F6E5C",       // sage (outdoor/community)
-    lake: "#4C6472",       // beck-blue (Journal/knowledge)
+    lake: "#4C6472",       // slate-blue (Journal/knowledge)
     // legacy aliases
     fellGreen: "#232220",
     fellGreen2: "#191815",
@@ -265,15 +265,15 @@
       why: "A soft, unstructured cap that's better after a few washes.", whoFor: "Bad-hair-day walkers.", sizing: "Adjustable.", giftBecause: "Easy, safe and always worn." }),
 
     /* ---------------- THE CRATE ---------------- */
-    P({ name: "The Fellside Crate", maker: "Holbeck", collection: "the-crate", category: "Gifts", icon: "crate", price: 95, badges: ["gift", "most-gifted"], colorNames: ["Fell Green"],
+    P({ name: "The Fellside Crate", maker: "Bield", collection: "the-crate", category: "Gifts", icon: "crate", price: 95, badges: ["gift", "most-gifted"], colorNames: ["Fell Green"],
       why: "Merino socks, a hip flask, trail bars and an OS map, boxed and ribboned.", whoFor: "The walker who's hard to buy for.", sizing: "5-piece crate.", giftBecause: "A whole gift, wrapped and carded, in one click." }),
-    P({ name: "The Gentleman's Crate", maker: "Holbeck", collection: "the-crate", category: "Gifts", icon: "crate", price: 110, badges: ["gift"], colorNames: ["Bilberry"],
+    P({ name: "The Gentleman's Crate", maker: "Bield", collection: "the-crate", category: "Gifts", icon: "crate", price: 110, badges: ["gift"], colorNames: ["Bilberry"],
       why: "Grooming trio, a card wallet and a dram, for the man who likes nice things.", whoFor: "Dads, husbands, best men.", sizing: "4-piece crate.", giftBecause: "Looks and feels expensive; you barely lifted a finger." }),
-    P({ name: "The Working Man's Crate", maker: "Holbeck", collection: "the-crate", category: "Gifts", icon: "crate", price: 85, badges: ["gift"], colorNames: ["Bracken"],
+    P({ name: "The Working Man's Crate", maker: "Bield", collection: "the-crate", category: "Gifts", icon: "crate", price: 85, badges: ["gift"], colorNames: ["Bracken"],
       why: "A flask, work gloves, a multi-tool and a tin of hand balm.", whoFor: "The one who's always grafting.", sizing: "4-piece crate.", giftBecause: "Practical to the core, and properly presented." }),
-    P({ name: "Build-Your-Own Crate", maker: "Holbeck", collection: "the-crate", category: "Gifts", icon: "crate", price: 45, badges: ["gift", "new"], colorNames: ["Oat"],
+    P({ name: "Build-Your-Own Crate", maker: "Bield", collection: "the-crate", category: "Gifts", icon: "crate", price: 45, badges: ["gift", "new"], colorNames: ["Oat"],
       why: "Pick the box, choose three to five bits, add a handwritten card.", whoFor: "When you know him best.", sizing: "From £45.", giftBecause: "As thoughtful as you make it — and we wrap it." }),
-    P({ name: "The Wild Swimmer's Crate", maker: "Holbeck", collection: "the-crate", category: "Gifts", icon: "crate", price: 120, badges: ["gift", "new"], colorNames: ["Storm Blue"],
+    P({ name: "The Wild Swimmer's Crate", maker: "Bield", collection: "the-crate", category: "Gifts", icon: "crate", price: 120, badges: ["gift", "new"], colorNames: ["Storm Blue"],
       why: "A changing robe, neoprene gloves, a flask and a tide almanac.", whoFor: "The cold-water convert.", sizing: "4-piece crate.", giftBecause: "Everything for the hobby he's obsessed with, in one box." })
   ];
 
@@ -316,7 +316,7 @@
         { h: "Made to be mended" },
         "The welt is the whole point. Because the sole is stitched, not glued, it can be replaced — again and again. A pair of these boots, resoled every few years, will outlast almost everything else in the wardrobe.",
         { q: "We'd rather sell you one pair for twenty years than four pairs for five." },
-        "It's exactly the sort of quiet, stubborn quality Holbeck was built to sell. Their Grafter boot is one of our most-gifted things, and we're not surprised."
+        "It's exactly the sort of quiet, stubborn quality Bield was built to sell. Their Grafter boot is one of our most-gifted things, and we're not surprised."
       ] },
     { id: "first-wild-swim", cat: "Adventures", title: "Your first wild swim, without the drama", excerpt: "You don't need to be brave, or cold-adapted, or anything really. You need a friend, a flask and somewhere shallow to start.", read: "5 min", date: "14 Aug 2026", motif: "robe",
       body: [
@@ -326,12 +326,12 @@
         { q: "Get in slowly, stay near the edge, get out before you stop enjoying it." },
         "That's it. Do that a few times through the summer and you'll understand why people won't stop banging on about it. We've a Wild Swimmer's Crate if you want it all in one box."
       ] },
-    { id: "more-than-a-shop", cat: "Field Notes", title: "More than a shop: the idea behind Holbeck", excerpt: "Kit, knowledge and good company. A short note on why we're a community as much as a shop — and what that means for you.", read: "3 min", date: "1 Aug 2026", motif: "waterproof",
+    { id: "more-than-a-shop", cat: "Field Notes", title: "More than a shop: the idea behind Bield", excerpt: "Kit, knowledge and good company. A short note on why we're a community as much as a shop — and what that means for you.", read: "3 min", date: "1 Aug 2026", motif: "waterproof",
       body: [
         "Most shops sell you a thing and wave goodbye. We wanted to do the harder, better bit: give men the know-how and the good company to actually get out there and lead.",
         "So kit is only half of what we do. The other half is knowledge — honest tests, plain-English advice, route guides — and company: meet-ups, a Journal worth reading, and the sense that there's a group of you at it, not just a parcel on the doormat.",
         { q: "Kit is only half of it. The know-how and the good company are what get you out the door." },
-        "That's the idea in our mark, too: an H whose crossbar is a beck, a stream finding its way through a hollow. Everything in the shop is chosen and explained by people who've actually used it — and if you're buying it as a gift, we'll wrap it with a card."
+        "That's the idea in our mark, too: nine stones set in a shelter arc. A bield is a Cumbrian word for shelter — the drystone wall on a fellside where you stop, take stock and set off better equipped. Everything in the shop is chosen and explained by people who've actually used it — and if you're buying it as a gift, we'll wrap it with a card."
       ] }
   ];
 
@@ -341,7 +341,7 @@
   function getArticle(id) { return articles.filter(function (a) { return a.id === id; })[0]; }
   function collection(slug) { return collections.filter(function (c) { return c.slug === slug; })[0]; }
 
-  window.HOLBECK = {
+  window.BIELD = {
     palette: PALETTE,
     colours: COLOURS,
     collections: collections,

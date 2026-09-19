@@ -1,12 +1,12 @@
 /* ==========================================================================
-   Holbeck — storefront behaviour
+   Bield — storefront behaviour
    Header/footer injection, cart (localStorage), and per-page rendering.
    Pages declare their role with <body data-page="…">.
    ========================================================================== */
 
 (function () {
   "use strict";
-  var M = window.HOLBECK;
+  var M = window.BIELD;
   var money = M.money;
 
   /* ---------------- tiny helpers ---------------- */
@@ -53,7 +53,7 @@
      CART
      ========================================================================= */
   var Cart = {
-    key: "holbeck.cart.v1",
+    key: "bield.cart.v1",
     items: [],
     load: function () { try { this.items = JSON.parse(localStorage.getItem(this.key)) || []; } catch (e) { this.items = []; } },
     save: function () { try { localStorage.setItem(this.key, JSON.stringify(this.items)); } catch (e) {} this.sync(); },
@@ -85,7 +85,7 @@
      WISHLIST (lightweight)
      ========================================================================= */
   var Wish = {
-    key: "holbeck.wish.v1", ids: [],
+    key: "bield.wish.v1", ids: [],
     load: function () { try { this.ids = JSON.parse(localStorage.getItem(this.key)) || []; } catch (e) { this.ids = []; } },
     save: function () { try { localStorage.setItem(this.key, JSON.stringify(this.ids)); } catch (e) {} },
     has: function (id) { return this.ids.indexOf(id) > -1; },
@@ -138,7 +138,7 @@
       '<header class="site-header"><div class="container site-header__inner">' +
       '<nav class="nav-primary" aria-label="Primary">' + navLinks + '</nav>' +
       '<button class="icon-btn nav-toggle" aria-label="Open menu" data-drawer-open>' + I.menu + '</button>' +
-      '<a class="brand" href="index.html" aria-label="Holbeck home"><img class="brand__logo" src="assets/img/holbeck-horizontal.svg" alt="Holbeck" width="127" height="34"></a>' +
+      '<a class="brand" href="index.html" aria-label="Bield home"><img class="brand__logo" src="assets/img/bield-horizontal.svg" alt="Bield" width="104" height="34"></a>' +
       '<div class="header-actions">' +
       '<button class="icon-btn" data-search-open aria-label="Search">' + I.search + '</button>' +
       '<a class="icon-btn hide-sm" href="wishlist.html" aria-label="Wishlist">' + I.heart + '</a>' +
@@ -210,7 +210,7 @@
     var footer = h(
       '<footer class="site-footer"><div class="container">' +
       '<div class="footer-grid">' +
-      '<div class="footer-brand"><a class="brand brand--footer" href="index.html" style="text-align:left"><img class="brand__logo" src="assets/img/holbeck-stacked-reversed.svg" alt="Holbeck" width="101" height="64"></a>' +
+      '<div class="footer-brand"><a class="brand brand--footer" href="index.html" style="text-align:left"><img class="brand__logo" src="assets/img/bield-stacked-reversed.svg" alt="Bield" width="88" height="64"></a>' +
       '<p>The UK’s one-stop men’s shop and community: kit, knowledge and good company for men who want to get out there and lead.</p>' +
       '<div class="footer-social">' +
       '<a href="#" aria-label="Instagram">' + I.insta + '</a>' +
@@ -228,7 +228,7 @@
       '<a href="#">Delivery &amp; returns</a><a href="#">Size &amp; fit</a><a href="#">Free size swaps</a>' +
       '<a href="#">Gift wrap &amp; cards</a><a href="about.html">Our story</a></div>' +
       '</div>' +
-      '<div class="footer-bottom"><span>© ' + new Date().getFullYear() + ' Holbeck. Kit, knowledge and good company.</span>' +
+      '<div class="footer-bottom"><span>© ' + new Date().getFullYear() + ' Bield. Kit, knowledge and good company.</span>' +
       '<span><a href="#">Privacy</a> · <a href="#">Terms</a> · <a href="#">Cookies</a></span></div>' +
       '</div></footer>'
     );
@@ -374,9 +374,9 @@
       // COMMUNITY (more than a shop)
       '<section class="section" style="background:var(--sand)"><div class="container"><div class="split">' +
       '<div class="split__media" style="background:var(--oatmeal);display:grid;place-items:center;box-shadow:none;border:1px solid var(--line);padding:12%">' +
-      '<img src="assets/img/holbeck-mark.svg" alt="The Holbeck mark — an H whose crossbar is a beck" style="width:auto;height:70%"></div>' +
+      '<img src="assets/img/bield-mark.svg" alt="The Bield mark — nine stones set in a shelter arc" style="width:74%;height:auto"></div>' +
       '<div><p class="eyebrow">Kit, knowledge &amp; good company</p><h2>More than a shop</h2>' +
-      '<p class="lede">Holbeck is a community as much as a shop — route guides, honest kit tests, meet-ups and good company for men who want to get out there and lead.</p>' +
+      '<p class="lede">Bield is a community as much as a shop — route guides, honest kit tests, meet-ups and good company for men who want to get out there and lead.</p>' +
       '<p>We give you the know-how first: how to re-wax a jacket, plan a first wild swim, or pack for a night on the fells. Everything is chosen and explained by people who’ve actually used it.</p>' +
       '<a class="btn btn--ghost" href="about.html">Our story ' + I.arrow + '</a></div>' +
       '</div></div></section>' +
@@ -532,7 +532,7 @@
     var p = M.get(param("id"));
     var main = $("#main");
     if (!p) { main.innerHTML = notFound("We couldn’t find that product."); return; }
-    document.title = p.name + " — Holbeck";
+    document.title = p.name + " — Bield";
     var variants = p.images && p.images.length ? p.images.length : Math.max(p.colors.length, 3);
     var sel = { size: null, color: p.colors[0] && p.colors[0].name, qty: 1, img: 0 };
     var stars = "★★★★★";
@@ -748,7 +748,7 @@
     var a = M.getArticle(param("id"));
     var main = $("#main");
     if (!a) { main.innerHTML = notFound("We couldn’t find that article."); return; }
-    document.title = a.title + " — Holbeck Journal";
+    document.title = a.title + " — Bield Journal";
     var body = a.body.map(function (b) {
       if (typeof b === "string") return "<p>" + esc(b) + "</p>";
       if (b.h) return "<h2>" + esc(b.h) + "</h2>";
@@ -782,16 +782,16 @@
       '<p class="eyebrow eyebrow--light">Kit, knowledge &amp; good company</p><h1>More than a shop</h1>' +
       '<p>We give men the kit, the know-how and the good company to get out there and lead.</p></div></section>' +
       '<section class="section"><div class="container"><div class="prose">' +
-      '<p>Holbeck is the UK’s one-stop men’s shop and community: kit, knowledge and good company for men who want to get out there and lead. The name is northern and old — a beck is a stream, and a holbeck is the beck that runs through a hollow. It suits a brand about finding your way, and the small everyday adventures that start on your doorstep.</p>' +
+      '<p>Bield is the UK’s one-stop men’s shop and community: kit, knowledge and good company for men who want to get out there and lead. A bield is a Cumbrian word for shelter — the drystone wall or hollow on a fellside where you get out of the weather. It names exactly what we are: somewhere to stop, take stock and set off better equipped.</p>' +
       '<blockquote>Kit is only half of it. The know-how and the good company are what actually get you out the door.</blockquote>' +
       '<p>So we lead with knowledge: honest kit tests, route guides and plain-English advice from people who’ve actually used the gear. Gift buyers are a welcome second audience, and everything can be wrapped with a handwritten card — but the man, and getting him out there, comes first.</p>' +
       '</div></div></section>' +
       '<section class="section" style="background:var(--sand)"><div class="container"><div class="split">' +
       '<div class="split__media" style="background:var(--oatmeal);display:grid;place-items:center;box-shadow:none;border:1px solid var(--line);padding:12%">' +
-      '<img src="assets/img/holbeck-mark.svg" alt="The Holbeck mark — an H whose crossbar is a beck" style="width:auto;height:66%"></div>' +
+      '<img src="assets/img/bield-mark.svg" alt="The Bield mark — nine stones set in a shelter arc" style="width:74%;height:auto"></div>' +
       '<div><p class="eyebrow">The community</p><h2>Good company, out there</h2>' +
-      '<p class="lede">Route guides, meet-ups, kit tests and a Journal worth reading — Holbeck is the people as much as the products.</p>' +
-      '<p>It’s there in the mark, too: an H whose crossbar is a beck — a stream finding its way through a hollow, same as us. Everything points back to getting out there together.</p>' +
+      '<p class="lede">Route guides, meet-ups, kit tests and a Journal worth reading — Bield is the people as much as the products.</p>' +
+      '<p>It’s there in the mark, too: nine stones set in a shelter arc — a bield, the drystone wall on a fellside where you get out of the weather. Everything points back to getting out there together.</p>' +
       '<a class="btn btn--ghost" href="journal.html">Into the Journal ' + I.arrow + '</a></div>' +
       '</div></div></section>' +
       '<section class="section section--tight"><div class="container">' +
@@ -924,7 +924,7 @@
     form.addEventListener("submit", function (e) {
       e.preventDefault();
       var note = $("#newsletter-note");
-      note.textContent = "You’re on the list — welcome to Holbeck. Check your inbox to confirm.";
+      note.textContent = "You’re on the list — welcome to Bield. Check your inbox to confirm.";
       note.className = "form-note form-note--ok";
       form.reset();
     });

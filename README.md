@@ -1,12 +1,13 @@
-# Holbeck
+# Bield
 
-A storefront for **Holbeck** — a one-stop men's shop and community: kit,
+A storefront for **Bield** — a one-stop men's shop and community: kit,
 knowledge and good company for men who want to get out there and lead, with
 gift buyers a welcome second audience. Built to the
-[Holbeck design system](#brand): earthy, muted and quietly confident, in the
+[Bield design system](#brand): earthy, muted and quietly confident, in the
 format of a modern content-led shop — but entirely its own look, copy and
-imagery. (The name is northern: a *beck* is a stream, and a *holbeck* is the
-beck that runs through a hollow.)
+imagery. (A *bield* is a Cumbrian word for shelter — the drystone wall or
+hollow on a fellside where you get out of the weather, take stock and set off
+better equipped.)
 
 Plain **HTML, CSS and vanilla JavaScript**. No build step, no dependencies, no
 framework. Designed to be hosted on [Render](https://render.com) as a static
@@ -46,7 +47,7 @@ index.html, shop.html, …     Page shells (each sets <body data-page="…">)
 assets/css/styles.css        Design system — palette tokens at the top
 assets/js/data.js            Catalogue data + on-brand generative SVG artwork
 assets/js/store.js           Header/footer, cart, wishlist and page rendering
-assets/img/favicon.svg       Ridge-line mark
+assets/img/favicon.svg       Stone-arc mark
 render.yaml                  Render static-site blueprint
 ```
 
@@ -57,7 +58,7 @@ there to change what the shop sells.
 
 ## <a name="brand"></a>Brand
 
-Everything on screen follows the current Holbeck **design system (v3)** — a
+Everything on screen follows the current Bield **design system (v3)** — a
 one-stop men's shop *and community*: kit, knowledge and good company for men who
 want to get out there and lead, with gift buyers a welcome second audience.
 
@@ -66,7 +67,7 @@ want to get out there and lead, with gift buyers a welcome second audience.
   (ground) and `linen #E7E3DB` (panels) carry ~85% of every screen. Accents:
   `clay #8E5140` (the one CTA colour — add-to-basket, prices, links),
   `clay-tint #C2907C` (decoration only), `sandstone #B09A6B` (New badges),
-  `sage #5F6E5C` (outdoors / community) and `beck-blue #4C6472` (Journal /
+  `sage #5F6E5C` (outdoors / community) and `slate-blue #4C6472` (Journal /
   knowledge). Low saturation throughout; no more than two accents per screen.
   Tokens are custom properties at the top of `styles.css` (internal names kept,
   brand names noted in comments).
@@ -78,16 +79,16 @@ want to get out there and lead, with gift buyers a welcome second audience.
   collection tags.
 - **Voice** — warm not macho, knowledgeable not technical, wry not silly, honest
   not salesy. British spelling throughout.
-- **Logo** — the real design-system SVGs in `assets/img/`: `holbeck-horizontal.svg`
-  (header), `holbeck-stacked-reversed.svg` (footer, chalk on ink) and
-  `holbeck-mark.svg` (the H-and-beck mark — a solid H whose crossbar is a beck —
-  used for the favicon and the community sections).
+- **Logo** — the real design-system SVGs in `assets/img/`: `bield-horizontal.svg`
+  (header), `bield-stacked-reversed.svg` (footer, chalk on ink) and
+  `bield-mark.svg` (the stone-arc mark — nine dressed stones set in a shelter
+  arc — used for the favicon and the community sections).
 
 ### Imagery
 
 The site ships with **no stock photography**. Product, collection and journal
 images are drawn as on-brand SVG (line-mark motifs on natural textures) by the
-`HOLBECK.art.*` helpers in `data.js`, using the design-system palette. The logos
+`BIELD.art.*` helpers in `data.js`, using the design-system palette. The logos
 are the genuine brand SVGs exported from the design system.
 
 **To use real product photos:** drop image files into `assets/img/products/` and
@@ -125,9 +126,10 @@ ready to point at your provider (e.g. Mailchimp/Klaviyo for the newsletter).
 
 ## Before launch
 
-- Run UKIPO/EUIPO searches for "Holbeck" in classes 25, 35 and 18 and get IP
-  clearance before trading. Note Holbeck is also a district of Leeds and a
-  village in Nottinghamshire, so expect existing businesses using the name.
+- Run UKIPO/EUIPO searches for "Bield" in classes 25, 35 and 18 and get IP
+  clearance before trading. "Bield" is a dialect word used in Scotland as well
+  as Cumbria, and at least one large Scottish organisation trades under it, so
+  check carefully across classes and sectors.
 - Swap the generative SVG artwork for real photography (real people in British
   landscapes; product shots on wool-white or natural textures).
 - Replace placeholder contact details, legal/footer links and the demo checkout.
