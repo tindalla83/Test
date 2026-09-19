@@ -1,11 +1,13 @@
 # Bield
 
-A storefront for **Bield** — properly made things, for weather that doesn't let
-up. Waxed cotton, wool and leather, made in Britain and built to be reproofed,
-resoled and kept. Not adventure gear; what you need because it is going to rain
-for four days. Built to the [Bield brand assets](#brand) and art direction
-brief. (A *bield* is a Scots and Northern English word for shelter — the
-drystone windbreak on open fell where sheep stand out of the weather.)
+A storefront for **Bield** — a one-stop men's shop and community: kit,
+knowledge and good company for men who want to get out there and lead, with
+gift buyers a welcome second audience. Built to the
+[Bield design system](#brand): earthy, muted and quietly confident, in the
+format of a modern content-led shop — but entirely its own look, copy and
+imagery. (A *bield* is a Cumbrian word for shelter — the drystone wall or
+hollow on a fellside where you get out of the weather, take stock and set off
+better equipped.)
 
 Plain **HTML, CSS and vanilla JavaScript**. No build step, no dependencies, no
 framework. Designed to be hosted on [Render](https://render.com) as a static
@@ -25,15 +27,15 @@ Then visit <http://localhost:8000>.
 
 | Page | File | Notes |
 | --- | --- | --- |
-| Home | `index.html` | Hero, categories, outerwear, makers band, new in, goods, the idea, journal |
-| Shop | `shop.html` | Filter by category, price and on-offer; sort; search (`?q=`) |
-| Collection | `collection.html?c=outerwear` | Outerwear · Knitwear · Boots · Goods |
-| Product | `product.html?id=…` | Gallery, colour/size options, spec + etymology, add to basket |
-| Kit finder | `gift-finder.html` | Three-tap flow: where you're headed → what you're after → budget |
-| Journal | `journal.html` | Kit tests, care guides and maker stories |
+| Home | `index.html` | Hero, collections, most-gifted, gift finder promo, bestsellers, journal |
+| Shop | `shop.html` | Filter by collection, category, price and gift-ready; sort; search (`?q=`) |
+| Collection | `collection.html?c=graft` | One of the five collections |
+| Product | `product.html?id=…` | Gallery, colour/size options, gift note, add to basket |
+| Gift finder | `gift-finder.html` | Three-tap flow: who → what he's like → budget |
+| Journal | `journal.html` | Editorial index |
 | Article | `article.html?id=…` | Journal story |
-| Our story | `about.html` | The shelter premise, the mark, the makers |
-| Basket | `cart.html` | Line items, quantities, free-delivery progress |
+| Our story | `about.html` | Brand story and values |
+| Basket | `cart.html` | Line items, quantities, free-delivery progress, gift wrap |
 | Wishlist | `wishlist.html` | Saved products (per browser) |
 | Account | `account.html` | Sign-in shell (needs a backend to go live) |
 | Not found | `404.html` | Served by Render for unknown routes |
@@ -56,12 +58,9 @@ there to change what the shop sells.
 
 ## <a name="brand"></a>Brand
 
-Everything on screen follows the **Bield brand assets v1 (Sep 2026)** and the
-art direction brief: outerwear, knitwear, boots and goods, made in Britain, for
-weather that doesn't let up. Voice is dry, understated and fact-first, with no
-exclamation marks and none of the banned words (journey, adventure, curated,
-crafted, iconic, essential…). Product lines are named after northern landscape
-words — Bield, Ghyll, Rigg, Scar, Force, Howe — each with a one-line etymology.
+Everything on screen follows the **Bield brand assets v1 (Sep 2026)** — a
+one-stop men's shop *and community*: kit, knowledge and good company for men who
+want to get out there and lead, with gift buyers a welcome second audience.
 
 - **Palette** — `slate #3E4548` (structure, body text, nav, primary buttons),
   `limestone #E8E4DC` (page ground) and `limestone-96 #DEDAD1` (cards, panels,
