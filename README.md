@@ -47,7 +47,7 @@ index.html, shop.html, …     Page shells (each sets <body data-page="…">)
 assets/css/styles.css        Design system — palette tokens at the top
 assets/js/data.js            Catalogue data + on-brand generative SVG artwork
 assets/js/store.js           Header/footer, cart, wishlist and page rendering
-assets/img/favicon.svg       Stone-arc mark
+assets/img/favicon.svg       Bield mark (bield-in-plan)
 render.yaml                  Render static-site blueprint
 ```
 
@@ -58,31 +58,32 @@ there to change what the shop sells.
 
 ## <a name="brand"></a>Brand
 
-Everything on screen follows the current Bield **design system (v3)** — a
+Everything on screen follows the **Bield brand assets v1 (Sep 2026)** — a
 one-stop men's shop *and community*: kit, knowledge and good company for men who
 want to get out there and lead, with gift buyers a welcome second audience.
 
-- **Palette** (muted "chalk" release) — `ink #232220` (structure, logo, dark
-  buttons), `charcoal #4C4E4C` (body), `stone #686A66` (muted), `chalk #F5F5F3`
-  (ground) and `linen #E7E3DB` (panels) carry ~85% of every screen. Accents:
-  `clay #8E5140` (the one CTA colour — add-to-basket, prices, links),
-  `clay-tint #C2907C` (decoration only), `sandstone #B09A6B` (New badges),
-  `sage #5F6E5C` (outdoors / community) and `slate-blue #4C6472` (Journal /
-  knowledge). Low saturation throughout; no more than two accents per screen.
-  Tokens are custom properties at the top of `styles.css` (internal names kept,
-  brand names noted in comments).
-- **Type** — Fraunces for headlines (SemiBold, sentence case, axes
-  `"SOFT" 100, "WONK" 0`), Figtree for body and UI, IBM Plex Mono for small
+- **Palette** — `slate #3E4548` (structure, body text, nav, primary buttons),
+  `limestone #E8E4DC` (page ground) and `limestone-96 #DEDAD1` (cards, panels,
+  fields) carry ~85% of every screen. Accents: `bracken #9A5B2E` (the signature
+  colour — CTAs, hover, prices, stars), `peat #4A3B2E` (footers / deep panels),
+  `lichen #8D9478` (secondary, dividers, "new" badges, decoration),
+  `gorse #D9A317` (the one saturated hit — sale tags only, under 5%),
+  `bottle #2C3B33` (deep sections) and `oxblood #6B2F2A` (rare editorial). Never
+  pure white or black; no more than two accents per screen. Tokens are custom
+  properties at the top of `styles.css` (internal names kept, brand names in
+  comments).
+- **Type** — Newsreader for display headlines (serif, weight 400, sentence
+  case), Archivo for body/UI and component titles, Archivo Narrow for small
   uppercase labels and product codes.
-- **Shape** — square-edged with softened corners: 3px radius on buttons, inputs
-  and cards; square photography and packaging; pill radius reserved for
-  collection tags.
+- **Shape** — square-edged: 2px radius throughout; square photography and
+  packaging; pill radius reserved for collection tags. No drop shadows —
+  separation comes from a hairline border or a change of background.
 - **Voice** — warm not macho, knowledgeable not technical, wry not silly, honest
   not salesy. British spelling throughout.
-- **Logo** — the real design-system SVGs in `assets/img/`: `bield-horizontal.svg`
-  (header), `bield-stacked-reversed.svg` (footer, chalk on ink) and
-  `bield-mark.svg` (the stone-arc mark — nine dressed stones set in a shelter
-  arc — used for the favicon and the community sections).
+- **Logo** — the Bield mark is a *sheep bield drawn in plan*: a plus of five
+  squares (four wall-arms from a centre), square ends, no outline. It's rendered
+  inline from `currentColor` in `store.js` (so it inherits the section's colour)
+  and saved as `assets/img/bield-mark.svg` / `favicon.svg`.
 
 ### Imagery
 

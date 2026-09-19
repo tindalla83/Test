@@ -8,29 +8,31 @@
 (function () {
   "use strict";
 
-  // Bield design-system palette. Legacy keys (fellGreen, bothyCream, …) are
+  // Bield brand assets v1 palette. Legacy keys (fellGreen, bothyCream, …) are
   // kept pointing at the new tokens so the SVG art helpers keep working.
   var PALETTE = {
-    ink: "#232220",
-    ink2: "#191815",
-    charcoal: "#4C4E4C",
-    bark: "#686A66",       // stone
-    oatmeal: "#F5F5F3",    // chalk
-    sand: "#E7E3DB",       // linen
-    woolWhite: "#FFFFFF",
-    campfire: "#8E5140",   // clay (CTA)
-    ember: "#C2907C",      // clay-tint (decoration)
-    ochre: "#B09A6B",      // sandstone (badges)
-    moss: "#5F6E5C",       // sage (outdoor/community)
-    lake: "#4C6472",       // slate-blue (Journal/knowledge)
+    ink: "#3E4548",        // slate
+    ink2: "#2C3B33",       // bottle (deep)
+    charcoal: "#3E4548",   // slate
+    bark: "#6A7073",       // muted text
+    oatmeal: "#E8E4DC",    // limestone
+    sand: "#DEDAD1",       // limestone-96
+    woolWhite: "#F6F4EF",  // off-white (never pure white)
+    campfire: "#9A5B2E",   // bracken (accent/CTA)
+    ember: "#8D9478",      // lichen (decoration)
+    ochre: "#9A5B2E",      // bracken (stamps/accents)
+    moss: "#2C3B33",       // bottle (outdoor/community)
+    lake: "#3E4548",       // slate (Journal/knowledge)
+    gorse: "#D9A317",
+    peat: "#4A3B2E",
     // legacy aliases
-    fellGreen: "#232220",
-    fellGreen2: "#191815",
-    bothyCream: "#F5F5F3",
-    bothyCream2: "#E7E3DB",
-    bracken: "#8E5140",
-    slate: "#4C4E4C",
-    bilberry: "#4C6472"
+    fellGreen: "#3E4548",
+    fellGreen2: "#2C3B33",
+    bothyCream: "#E8E4DC",
+    bothyCream2: "#DEDAD1",
+    bracken: "#9A5B2E",
+    slate: "#3E4548",
+    bilberry: "#2C3B33"
   };
 
   /* ---- Colourway swatches (natural, British earthy tones) ---- */
@@ -102,7 +104,7 @@
     // choose ink tone with contrast against ground
     var ink = c.hex;
     return '<svg viewBox="0 0 100 125" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="' + esc(product.name) + '">' +
-      bgTexture(id, ground, "#232220") +
+      bgTexture(id, ground, "#3E4548") +
       '<rect width="100" height="125" fill="url(#grain' + id + ')"/>' +
       // soft vignette circle behind motif
       '<circle cx="50" cy="54" r="34" fill="' + tint(c.hex, 0.10) + '"/>' +
@@ -110,7 +112,7 @@
       // ridge mark bottom-left (decorative → ember)
       '<path d="M10 112l7-8 5 4 6-7 5 5 6-6" fill="none" stroke="' + PALETTE.ember + '" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" opacity="0.9"/>' +
       // product code stamp (mono label → bark)
-      '<text x="90" y="116" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="5.2" letter-spacing="1" fill="' + PALETTE.bark + '">' + esc(code) + '</text>' +
+      '<text x="90" y="116" text-anchor="end" font-family="Archivo Narrow, sans-serif" font-size="5.2" letter-spacing="1" fill="' + PALETTE.bark + '">' + esc(code) + '</text>' +
       '</svg>';
   }
 
@@ -182,9 +184,9 @@
 
   /* ======================= COLLECTIONS ======================= */
   var collections = [
-    { slug: "graft", name: "Graft", tagline: "The working man", desc: "Kit that earns its keep — workwear, boots and tools built to take a beating.", scene: { sky: "#4C4E4C", mid: "#686A66", fore: "#191815", accent: "#C2907C" } },
-    { slug: "fellside", name: "Fellside", tagline: "The outdoor man", desc: "For the walker, fell runner and wild swimmer. Waterproofs, packs and trail kit.", scene: { sky: "#4C6472", mid: "#5F6E5C", fore: "#191815", accent: "#F5F5F3" } },
-    { slug: "sunday-best", name: "Sunday Best", tagline: "The gentleman", desc: "Smart-casual things made well — knitwear, leather and a watch to keep.", scene: { sky: "#232220", mid: "#4C4E4C", fore: "#191815", accent: "#B09A6B" } },
+    { slug: "graft", name: "Graft", tagline: "The working man", desc: "Kit that earns its keep — workwear, boots and tools built to take a beating.", scene: { sky: "#4A3B2E", mid: "#8D9478", fore: "#2C3B33", accent: "#9A5B2E" } },
+    { slug: "fellside", name: "Fellside", tagline: "The outdoor man", desc: "For the walker, fell runner and wild swimmer. Waterproofs, packs and trail kit.", scene: { sky: "#2C3B33", mid: "#8D9478", fore: "#2C3B33", accent: "#E8E4DC" } },
+    { slug: "sunday-best", name: "Sunday Best", tagline: "The gentleman", desc: "Smart-casual things made well — knitwear, leather and a watch to keep.", scene: { sky: "#3E4548", mid: "#4A3B2E", fore: "#2C3B33", accent: "#9A5B2E" } },
     { slug: "off-shift", name: "Off Shift", tagline: "The weekend man", desc: "Pub, football and the barbecue. Easy kit for time off.", scene: { sky: "#4C4E4C", mid: "#686A66", fore: "#191815", accent: "#B09A6B" } },
     { slug: "the-crate", name: "The Crate", tagline: "Gifting, sorted", desc: "Curated gift boxes, wrapped, carded and ready to give.", scene: { sky: "#232220", mid: "#4C4E4C", fore: "#191815", accent: "#C2907C" } }
   ];
@@ -331,7 +333,7 @@
         "Most shops sell you a thing and wave goodbye. We wanted to do the harder, better bit: give men the know-how and the good company to actually get out there and lead.",
         "So kit is only half of what we do. The other half is knowledge — honest tests, plain-English advice, route guides — and company: meet-ups, a Journal worth reading, and the sense that there's a group of you at it, not just a parcel on the doormat.",
         { q: "Kit is only half of it. The know-how and the good company are what get you out the door." },
-        "That's the idea in our mark, too: nine stones set in a shelter arc. A bield is a Cumbrian word for shelter — the drystone wall on a fellside where you stop, take stock and set off better equipped. Everything in the shop is chosen and explained by people who've actually used it — and if you're buying it as a gift, we'll wrap it with a card."
+        "That's the idea in our mark, too: a sheep bield drawn in plan. A bield is a Cumbrian word for shelter — the drystone wall on a fellside where you stop, take stock and set off better equipped. Everything in the shop is chosen and explained by people who've actually used it — and if you're buying it as a gift, we'll wrap it with a card."
       ] }
   ];
 

@@ -1,1 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 108 70" width="108" height="70"><g transform="translate(0 0) scale(1)"><g transform="translate(-6 -20)"><rect x="-6.0" y="-6.0" width="12" height="12" rx="3" fill="#232220" transform="translate(16.1 76.9) rotate(274.0)"></rect><rect x="-7.0" y="-6.0" width="14" height="12" rx="3" fill="#232220" transform="translate(20.3 61.1) rotate(295.5)"></rect><rect x="-6.5" y="-6.0" width="13" height="12" rx="3" fill="#232220" transform="translate(30.0 47.8) rotate(317.0)"></rect><rect x="-7.5" y="-6.0" width="15" height="12" rx="3" fill="#232220" transform="translate(43.9 39.1) rotate(338.5)"></rect><rect x="-8.0" y="-6.0" width="16" height="12" rx="3" fill="#232220" transform="translate(60.0 36.0) rotate(360.0)"></rect><rect x="-7.5" y="-6.0" width="15" height="12" rx="3" fill="#232220" transform="translate(76.1 39.1) rotate(381.5)"></rect><rect x="-6.5" y="-6.0" width="13" height="12" rx="3" fill="#232220" transform="translate(90.0 47.8) rotate(403.0)"></rect><rect x="-7.0" y="-6.0" width="14" height="12" rx="3" fill="#232220" transform="translate(99.7 61.1) rotate(424.5)"></rect><rect x="-6.0" y="-6.0" width="12" height="12" rx="3" fill="#232220" transform="translate(103.9 76.9) rotate(446.0)"></rect></g></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Bield mark">
+  <g fill="#3E4548">
+    <rect x="41" y="41" width="18" height="18"/>
+    <rect x="41" y="4" width="18" height="33"/>
+    <rect x="41" y="63" width="18" height="33"/>
+    <rect x="4" y="41" width="33" height="18"/>
+    <rect x="63" y="41" width="33" height="18"/>
+  </g>
+</svg>

@@ -121,6 +121,12 @@
       '<path d="M2 22 L38 22" stroke="var(--fell-green)" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/></svg>';
   }
 
+  // Bield mark — a sheep bield drawn in plan (four wall-arms from a centre).
+  // Inherits colour from currentColor so it works on any ground.
+  var MARK = '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
+    '<g fill="currentColor"><rect x="41" y="41" width="18" height="18"/><rect x="41" y="4" width="18" height="33"/>' +
+    '<rect x="41" y="63" width="18" height="33"/><rect x="4" y="41" width="33" height="18"/><rect x="63" y="41" width="33" height="18"/></g></svg>';
+
   function injectHeader() {
     var current = (location.pathname.split("/").pop() || "index.html");
     var navLinks = NAV.map(function (n) {
@@ -138,7 +144,7 @@
       '<header class="site-header"><div class="container site-header__inner">' +
       '<nav class="nav-primary" aria-label="Primary">' + navLinks + '</nav>' +
       '<button class="icon-btn nav-toggle" aria-label="Open menu" data-drawer-open>' + I.menu + '</button>' +
-      '<a class="brand" href="index.html" aria-label="Bield home"><img class="brand__logo" src="assets/img/bield-horizontal.svg" alt="Bield" width="104" height="34"></a>' +
+      '<a class="brand" href="index.html" aria-label="Bield home"><span class="brand__logo">' + MARK + '</span><span class="brand__word">Bield</span></a>' +
       '<div class="header-actions">' +
       '<button class="icon-btn" data-search-open aria-label="Search">' + I.search + '</button>' +
       '<a class="icon-btn hide-sm" href="wishlist.html" aria-label="Wishlist">' + I.heart + '</a>' +
@@ -210,7 +216,7 @@
     var footer = h(
       '<footer class="site-footer"><div class="container">' +
       '<div class="footer-grid">' +
-      '<div class="footer-brand"><a class="brand brand--footer" href="index.html" style="text-align:left"><img class="brand__logo" src="assets/img/bield-stacked-reversed.svg" alt="Bield" width="88" height="64"></a>' +
+      '<div class="footer-brand"><a class="brand brand--footer" href="index.html"><span class="brand__logo">' + MARK + '</span><span class="brand__word">Bield</span></a>' +
       '<p>The UK’s one-stop men’s shop and community: kit, knowledge and good company for men who want to get out there and lead.</p>' +
       '<div class="footer-social">' +
       '<a href="#" aria-label="Instagram">' + I.insta + '</a>' +
@@ -300,8 +306,8 @@
       '<span class="article-card__meta">' + esc(a.date) + ' · ' + esc(a.read) + ' read</span></a>';
   }
   function pickBase(cat) {
-    var map = { "Kit Tests": "#4C4E4C", "Gift Guides": "#686A66", "Field Notes": "#232220", "Maker Stories": "#4C6472", "Adventures": "#5F6E5C" };
-    return map[cat] || "#232220";
+    var map = { "Kit Tests": "#4A3B2E", "Gift Guides": "#6B2F2A", "Field Notes": "#3E4548", "Maker Stories": "#2C3B33", "Adventures": "#8D9478" };
+    return map[cat] || "#3E4548";
   }
 
   /* =========================================================================
@@ -315,7 +321,7 @@
 
     main.innerHTML =
       // HERO
-      '<section class="hero"><div class="hero__media">' + M.art.scene({ sky: "#232220", mid: "#4C4E4C", fore: "#191815", accent: "#C2907C", id: "hero" }) + '</div><div class="hero__scrim"></div>' +
+      '<section class="hero"><div class="hero__media">' + M.art.scene({ sky: "#3E4548", mid: "#4A3B2E", fore: "#2C3B33", accent: "#9A5B2E", id: "hero" }) + '</div><div class="hero__scrim"></div>' +
       '<div class="container hero__inner"><p class="eyebrow eyebrow--light">Kit · Knowledge · Good company</p>' +
       '<h1>Good kit, good company.</h1>' +
       '<p>The UK’s one-stop men’s shop and community — the kit, the know-how and the good company to get you out there and leading. Chosen by people who’ve actually used it.</p>' +
@@ -374,7 +380,7 @@
       // COMMUNITY (more than a shop)
       '<section class="section" style="background:var(--sand)"><div class="container"><div class="split">' +
       '<div class="split__media" style="background:var(--oatmeal);display:grid;place-items:center;box-shadow:none;border:1px solid var(--line);padding:12%">' +
-      '<img src="assets/img/bield-mark.svg" alt="The Bield mark — nine stones set in a shelter arc" style="width:74%;height:auto"></div>' +
+      '<img src="assets/img/bield-mark.svg" alt="The Bield mark — a sheep bield drawn in plan" style="width:74%;height:auto"></div>' +
       '<div><p class="eyebrow">Kit, knowledge &amp; good company</p><h2>More than a shop</h2>' +
       '<p class="lede">Bield is a community as much as a shop — route guides, honest kit tests, meet-ups and good company for men who want to get out there and lead.</p>' +
       '<p>We give you the know-how first: how to re-wax a jacket, plan a first wild swim, or pack for a night on the fells. Everything is chosen and explained by people who’ve actually used it.</p>' +
@@ -410,7 +416,7 @@
       { k: "120+", label: "£120 and up", t: function (p) { return p.price >= 120; } }];
 
     main.innerHTML =
-      '<section class="page-hero"><div class="page-hero__media">' + M.art.scene({ id: "shop", sky: "#232220", mid: "#4C4E4C", fore: "#191815" }) + '</div>' +
+      '<section class="page-hero"><div class="page-hero__media">' + M.art.scene({ id: "shop", sky: "#3E4548", mid: "#4A3B2E", fore: "#2C3B33" }) + '</div>' +
       '<div class="container page-hero__inner"><div class="breadcrumb"><a href="index.html">Home</a> / <span>Shop</span></div>' +
       '<h1>' + (state.search ? "Search “" + esc(state.search) + "”" : "The whole shop") + '</h1>' +
       '<p>Curated kit across clothing, gear, gifts and grooming — every piece chosen by people who’ve used it.</p></div></section>' +
@@ -646,7 +652,7 @@
     ];
 
     main.innerHTML =
-      '<section class="page-hero" style="padding-block:clamp(40px,6vw,72px)"><div class="page-hero__media">' + M.art.scene({ id: "gf", sky: "#232220", mid: "#4C4E4C", fore: "#191815", accent: "#C2907C" }) + '</div>' +
+      '<section class="page-hero" style="padding-block:clamp(40px,6vw,72px)"><div class="page-hero__media">' + M.art.scene({ id: "gf", sky: "#3E4548", mid: "#4A3B2E", fore: "#2C3B33", accent: "#9A5B2E" }) + '</div>' +
       '<div class="container page-hero__inner center mx-auto"><p class="eyebrow eyebrow--light">The gift finder</p>' +
       '<h1>His gift, in three taps</h1><p class="mx-auto" style="margin-inline:auto">He says he doesn’t want anything. He does. Answer three quick questions and we’ll find it — then wrap it with a card.</p></div></section>' +
       '<section class="section"><div class="container">' +
@@ -729,7 +735,7 @@
     var main = $("#main");
     var feature = M.articles[0];
     main.innerHTML =
-      '<section class="page-hero"><div class="page-hero__media">' + M.art.scene({ id: "journal", sky: "#232220", mid: "#4C4E4C", fore: "#191815" }) + '</div>' +
+      '<section class="page-hero"><div class="page-hero__media">' + M.art.scene({ id: "journal", sky: "#3E4548", mid: "#4A3B2E", fore: "#2C3B33" }) + '</div>' +
       '<div class="container page-hero__inner"><div class="breadcrumb"><a href="index.html">Home</a> / <span>Journal</span></div>' +
       '<h1>The Journal</h1><p>Trail guides, honest kit tests and the makers behind the shop — the stories that help you choose well.</p></div></section>' +
       // feature
@@ -777,7 +783,7 @@
   function renderAbout() {
     var main = $("#main");
     main.innerHTML =
-      '<section class="page-hero"><div class="page-hero__media">' + M.art.scene({ id: "about", sky: "#232220", mid: "#4C4E4C", fore: "#191815", accent: "#C2907C" }) + '</div>' +
+      '<section class="page-hero"><div class="page-hero__media">' + M.art.scene({ id: "about", sky: "#3E4548", mid: "#4A3B2E", fore: "#2C3B33", accent: "#9A5B2E" }) + '</div>' +
       '<div class="container page-hero__inner"><div class="breadcrumb"><a href="index.html">Home</a> / <span>Our Story</span></div>' +
       '<p class="eyebrow eyebrow--light">Kit, knowledge &amp; good company</p><h1>More than a shop</h1>' +
       '<p>We give men the kit, the know-how and the good company to get out there and lead.</p></div></section>' +
@@ -788,10 +794,10 @@
       '</div></div></section>' +
       '<section class="section" style="background:var(--sand)"><div class="container"><div class="split">' +
       '<div class="split__media" style="background:var(--oatmeal);display:grid;place-items:center;box-shadow:none;border:1px solid var(--line);padding:12%">' +
-      '<img src="assets/img/bield-mark.svg" alt="The Bield mark — nine stones set in a shelter arc" style="width:74%;height:auto"></div>' +
+      '<img src="assets/img/bield-mark.svg" alt="The Bield mark — a sheep bield drawn in plan" style="width:74%;height:auto"></div>' +
       '<div><p class="eyebrow">The community</p><h2>Good company, out there</h2>' +
       '<p class="lede">Route guides, meet-ups, kit tests and a Journal worth reading — Bield is the people as much as the products.</p>' +
-      '<p>It’s there in the mark, too: nine stones set in a shelter arc — a bield, the drystone wall on a fellside where you get out of the weather. Everything points back to getting out there together.</p>' +
+      '<p>It’s there in the mark, too: a sheep bield drawn in plan — four short wall arms from a centre, so there’s a lee whatever way the wind comes. Everything points back to getting out there together.</p>' +
       '<a class="btn btn--ghost" href="journal.html">Into the Journal ' + I.arrow + '</a></div>' +
       '</div></div></section>' +
       '<section class="section section--tight"><div class="container">' +
@@ -805,7 +811,7 @@
       valueCard(I.user, "Good company", "A community, not a mailing list — get out there, and bring someone.") +
       '</div></div></section>' +
       '<section class="section" style="background:var(--sand)"><div class="container"><div class="split split--reverse">' +
-      '<div class="split__media">' + M.art.scene({ id: "curation", sky: "#4C4E4C", mid: "#5F6E5C", fore: "#191815", accent: "#B09A6B" }) + '</div>' +
+      '<div class="split__media">' + M.art.scene({ id: "curation", sky: "#4A3B2E", mid: "#8D9478", fore: "#2C3B33", accent: "#9A5B2E" }) + '</div>' +
       '<div><p class="eyebrow">Curation, not clutter</p><h2>If we wouldn’t use it, it doesn’t go in</h2>' +
       '<p class="lede">We favour British and independent makers wherever the quality allows, from Borders knitwear to Cumbrian bootmakers.</p>' +
       '<p>Every product page answers the same four questions: why it’s good, who it’s for, how it fits, and — for the gift buyer — why it makes a great gift. Plain, useful English throughout.</p>' +
@@ -880,7 +886,7 @@
     var main = $("#main");
     var items = Wish.ids.map(M.get).filter(Boolean);
     main.innerHTML =
-      '<section class="page-hero" style="padding-block:clamp(40px,6vw,72px)"><div class="page-hero__media">' + M.art.scene({ id: "wish", sky: "#232220", mid: "#4C4E4C", fore: "#191815" }) + '</div>' +
+      '<section class="page-hero" style="padding-block:clamp(40px,6vw,72px)"><div class="page-hero__media">' + M.art.scene({ id: "wish", sky: "#3E4548", mid: "#4A3B2E", fore: "#2C3B33" }) + '</div>' +
       '<div class="container page-hero__inner"><div class="breadcrumb"><a href="index.html">Home</a> / <span>Wishlist</span></div>' +
       '<h1>Your wishlist</h1><p>Save the things he’d love. Share the list, or send it to whoever’s asking what to get you.</p></div></section>' +
       '<section class="section"><div class="container">' +
@@ -891,7 +897,7 @@
   function renderAccount() {
     var main = $("#main");
     main.innerHTML =
-      '<section class="page-hero" style="padding-block:clamp(40px,6vw,72px)"><div class="page-hero__media">' + M.art.scene({ id: "acct", sky: "#232220", mid: "#4C4E4C", fore: "#191815" }) + '</div>' +
+      '<section class="page-hero" style="padding-block:clamp(40px,6vw,72px)"><div class="page-hero__media">' + M.art.scene({ id: "acct", sky: "#3E4548", mid: "#4A3B2E", fore: "#2C3B33" }) + '</div>' +
       '<div class="container page-hero__inner"><div class="breadcrumb"><a href="index.html">Home</a> / <span>Account</span></div>' +
       '<h1>Your account</h1><p>Sign in to track orders, save wishlists and set gift reminders for the dates that matter.</p></div></section>' +
       '<section class="section"><div class="container" style="max-width:440px">' +

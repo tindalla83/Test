@@ -1,63 +1,71 @@
 /* ==========================================================================
    Bield — storefront styles
-   Palette, type and components drawn from the Bield design system (v3).
-   Colour rhythm: ~60% chalk + linen, ~25% ink + charcoal, ~15% accents.
-   One CTA colour (clay); no more than two accents per screen. Muted throughout.
+   Palette, type and components drawn from the Bield brand assets v1 (Sep 2026).
+   Colour rhythm: ~60% limestone, ~25% slate, ~15% accents.
+   Bracken is the signature CTA; gorse is sale-only (<5%). No drop shadows.
    ========================================================================== */
 
 :root {
-  /* ---- Bield brand tokens (design system v3 — muted "chalk" palette) ----
-     Internal names kept; values are the latest release. Brand name in comments. */
-  --ink: #232220;          /* primary brand: logo, headlines, nav, dark buttons */
-  --ink-2: #191815;
-  --charcoal: #4C4E4C;     /* body text */
-  --bark: #686A66;         /* "stone" — muted text: captions, metadata, helper */
-  --oatmeal: #F5F5F3;      /* "chalk" — default page background (~60%) */
-  --sand: #E7E3DB;         /* "linen" — cards, panels, dividers, secondary surfaces */
-  --wool-white: #FFFFFF;   /* product photography backgrounds, form fields */
-  --campfire: #8E5140;     /* "clay" — the one CTA colour (muted terracotta) */
-  --campfire-2: #7A4638;   /* darker clay for hover/active */
-  --ember: #C2907C;        /* "clay-tint" — decoration only, never text */
-  --ochre: #B09A6B;        /* "sandstone" — badges, underlines — ink text on it */
-  --moss: #5F6E5C;         /* "sage" — outdoor / community accent */
-  --lake: #4C6472;         /* "slate-blue" — knowledge / Journal / newsletter accent */
-  --signal-error: #8F4038;
+  /* ---- Bield brand assets v1 (Sep 2026). Internal names kept; brand names in comments. ---- */
+  --slate: #3E4548;        /* primary dark: body text, nav, primary buttons */
+  --limestone: #E8E4DC;    /* primary light: page background, reversed type */
+  --limestone-96: #DEDAD1; /* cards, panels, fields, secondary ground */
+  --bracken: #9A5B2E;      /* primary accent / signature colour / hover */
+  --bracken-dk: #7E4A26;
+  --peat: #4A3B2E;         /* secondary dark: footers, deep panels */
+  --lichen: #8D9478;       /* secondary: cards, dividers, muted labels, decoration */
+  --gorse: #D9A317;        /* the one saturated hit — sale tags only, under 5% */
+  --bottle: #2C3B33;       /* deep accent: alternate dark sections */
+  --oxblood: #6B2F2A;      /* rare accent: editorial / print */
 
-  /* Semantic tokens */
+  /* Semantic tokens (internal names used throughout the stylesheet) */
+  --ink: var(--slate);       /* structure, headlines, nav, dark buttons */
+  --ink-2: var(--peat);      /* deeper dark: footer / topbar */
+  --charcoal: var(--slate);  /* body text */
+  --bark: #6A7073;           /* muted text: captions, metadata, helper */
+  --oatmeal: var(--limestone);   /* page background (~60%) */
+  --sand: var(--limestone-96);   /* cards, panels, dividers */
+  --wool-white: #F6F4EF;     /* product / form grounds — never pure white */
+  --campfire: var(--bracken);    /* the signature CTA/accent */
+  --campfire-2: var(--bracken-dk);
+  --ember: var(--lichen);        /* decorative graphic shapes */
+  --ochre: var(--bracken);       /* stars, underlines (accent) */
+  --moss: var(--bottle);         /* outdoor / community accent */
+  --lake: var(--slate);          /* Journal / knowledge accent */
+  --signal-error: #6B2F2A;
+
   --bg: var(--oatmeal);
   --surface: var(--wool-white);
   --ink-soft: var(--bark);
-  --line: #E4E0D7;         /* hairline on chalk */
-  --line-strong: #D4CFC4;
-  --accent: var(--campfire);
-  --accent-ink: var(--campfire-2);
+  --line: #D3CEC3;           /* hairline on limestone */
+  --line-strong: #C1BBAF;
+  --accent: var(--bracken);
+  --accent-ink: var(--bracken);
 
-  /* ---- Legacy aliases (older component rules resolve to new palette) ---- */
+  /* Legacy aliases so existing component rules resolve */
   --fell-green: var(--ink);
   --fell-green-2: var(--ink-2);
   --bothy-cream: var(--oatmeal);
   --bothy-cream-2: var(--sand);
-  --bracken: var(--campfire);
-  --bracken-2: var(--campfire-2);
-  --slate: var(--charcoal);
-  --slate-2: #35322D;
-  --bilberry: var(--lake);
+  --bracken-2: var(--bracken-dk);
+  --slate-2: var(--peat);
+  --bilberry: var(--bottle);
 
-  /* Type — Fraunces (headlines), Figtree (body/UI), IBM Plex Mono (labels) */
-  --serif: "Fraunces", "Cooper Black", Georgia, serif;
-  --sans: "Figtree", "Helvetica Neue", Arial, system-ui, sans-serif;
-  --mono: "IBM Plex Mono", ui-monospace, "Courier New", monospace;
-  --fraunces: "SOFT" 100, "WONK" 0;
+  /* Type — Newsreader (display serif), Archivo (body/UI), Archivo Narrow (labels) */
+  --serif: "Newsreader", Georgia, "Times New Roman", serif;
+  --sans: "Archivo", system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+  --mono: "Archivo Narrow", "Archivo", Helvetica, Arial, sans-serif;
+  --fraunces: normal;
 
-  /* Metrics — square-edged brand */
+  /* Metrics — square-edged, 2px radius, no drop shadows */
   --container: 1280px;
   --gutter: clamp(16px, 4vw, 40px);
-  --radius: 3px;           /* buttons, inputs, cards (softened corners) */
+  --radius: 2px;           /* buttons, inputs, cards */
   --radius-lg: 0px;        /* photography & packaging: square */
-  --radius-panel: 3px;     /* content panels */
+  --radius-panel: 2px;     /* content panels */
   --radius-pill: 999px;    /* collection tags & filter chips only */
-  --shadow-sm: 0 1px 2px rgba(35, 34, 32, 0.06);
-  --shadow-md: 0 12px 34px rgba(35, 34, 32, 0.12);
+  --shadow-sm: none;
+  --shadow-md: 0 8px 24px rgba(62, 69, 72, 0.14);
   --header-h: 72px;
   --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
 }
@@ -79,11 +87,13 @@ img, svg { display: block; max-width: 100%; }
 a { color: inherit; text-decoration: none; }
 button { font-family: inherit; cursor: pointer; }
 ul { margin: 0; padding: 0; list-style: none; }
-h1, h2, h3, h4 { margin: 0; font-family: var(--serif); font-weight: 600; font-variation-settings: var(--fraunces); line-height: 1.12; letter-spacing: -0.005em; }
+h1, h2, h3, h4 { margin: 0; font-family: var(--serif); font-weight: 400; line-height: 1.15; letter-spacing: -0.005em; }
 p { margin: 0 0 1em; }
-.brand__word, .card__name, .tile__title, .pdp__pitch, blockquote, .gf-option b,
-.cart-line__name, .search-hit b, .gf-mini-card b, .search-input-wrap input,
-.article-card h3, .value-card h3 { font-variation-settings: var(--fraunces); }
+/* Component titles are set in Archivo (sans), per the brand's card / H3 spec */
+.card__name, .cart-line__name, .article-card h3, .value-card h3,
+.gf-option b, .search-hit b, .gf-mini-card b {
+  font-family: var(--sans); font-weight: 600; letter-spacing: 0;
+}
 :focus-visible { outline: 2px solid var(--bracken); outline-offset: 2px; border-radius: 2px; }
 
 /* ---------- Layout helpers ---------- */
@@ -129,10 +139,10 @@ p { margin: 0 0 1em; }
   transition: background .2s var(--ease), color .2s var(--ease), transform .05s var(--ease), border-color .2s var(--ease);
   white-space: nowrap;
 }
-.btn:hover { background: var(--fell-green-2); }
+.btn:hover { background: var(--bracken); }
 .btn:active { transform: translateY(1px); }
-.btn--accent { background: var(--bracken); color: var(--wool-white); }
-.btn--accent:hover { background: var(--bracken-2); }
+.btn--accent { background: var(--bracken); color: var(--limestone); }
+.btn--accent:hover { background: var(--bracken-dk); }
 .btn--ghost { background: transparent; border-color: currentColor; color: var(--fell-green); }
 .btn--ghost:hover { background: var(--fell-green); color: var(--bothy-cream); border-color: var(--fell-green); }
 .btn--light { background: var(--bothy-cream); color: var(--fell-green); }
@@ -171,12 +181,13 @@ p { margin: 0 0 1em; }
 }
 .nav-primary a:hover::after, .nav-primary a[aria-current="page"]::after { right: 0; }
 
-.brand__logo { height: 34px; width: auto; display: block; }
-.brand--footer .brand__logo { height: 64px; }
-.brand { justify-self: center; text-align: center; line-height: 1; }
-.brand__mark { display: block; margin: 0 auto 4px; }
-.brand__word { font-family: var(--serif); font-weight: 600; font-size: 24px; letter-spacing: 0.34em; text-indent: 0.34em; color: var(--fell-green); }
-.brand__tag { display: block; font-family: var(--mono); font-size: 9px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--ink-soft); margin-top: 3px; }
+.brand { justify-self: center; display: inline-flex; align-items: center; gap: 11px; line-height: 1; color: var(--ink); }
+.brand__logo { width: 26px; height: 26px; display: block; flex: none; }
+.brand__logo svg { width: 100%; height: 100%; fill: currentColor; }
+.brand__word { font-family: var(--serif); font-weight: 400; font-size: 25px; letter-spacing: 0.08em; text-transform: uppercase; color: currentColor; }
+.brand--footer { color: var(--limestone); flex-direction: column; align-items: flex-start; gap: 12px; }
+.brand--footer .brand__logo { width: 40px; height: 40px; }
+.brand--footer .brand__word { font-size: 30px; }
 
 .header-actions { display: flex; align-items: center; justify-content: flex-end; gap: 6px; }
 .icon-btn {
@@ -264,8 +275,8 @@ p { margin: 0 0 1em; }
   padding: 5px 8px; border-radius: var(--radius); background: var(--ink); color: var(--oatmeal);
 }
 .badge--gift { background: var(--sand); color: var(--ink); }
-.badge--sale { background: var(--campfire); color: var(--wool-white); }
-.badge--new { background: var(--ochre); color: var(--ink); }
+.badge--sale { background: var(--gorse); color: var(--slate); }
+.badge--new { background: var(--lichen); color: var(--bottle); }
 .card__wish {
   position: absolute; top: 8px; right: 8px; z-index: 2; width: 34px; height: 34px; border-radius: 50%;
   background: rgba(255,255,255,.86); border: 0; display: grid; place-items: center; color: var(--slate);
