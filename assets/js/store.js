@@ -40,13 +40,12 @@
     tiktok: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4v10a4 4 0 11-3-3.9M14 8a5 5 0 004 2"/></svg>'
   };
 
-  /* ---------------- persona / budget maps for gift finder ---------------- */
+  /* ---------------- kit finder: where you're headed ---------------- */
   var GF_WHO = [
-    { key: "partner", label: "Partner", sub: "Husband or boyfriend", icon: "heart" },
-    { key: "dad", label: "Dad", sub: "Or father-in-law", icon: "mountain" },
-    { key: "son", label: "Son", sub: "Grown-up sons", icon: "user" },
-    { key: "brother", label: "Brother", sub: "Or brother-in-law", icon: "user" },
-    { key: "friend", label: "A mate", sub: "Groomsmen, teammates", icon: "gift" }
+    { key: "fell", label: "The fell", sub: "Walking, working the tops", icon: "mountain" },
+    { key: "coast", label: "The coast", sub: "Wind, haar, wet sand", icon: "mountain" },
+    { key: "work", label: "Outdoor work", sub: "Gates, yards, all day", icon: "leaf" },
+    { key: "town", label: "Town", sub: "Wet commutes, the pub", icon: "user" }
   ];
 
   /* =========================================================================
@@ -107,11 +106,11 @@
      HEADER + FOOTER + DRAWER
      ========================================================================= */
   var NAV = [
-    { label: "Shop", href: "shop.html" },
-    { label: "Collections", href: "shop.html#collections" },
-    { label: "Gifts", href: "gift-finder.html" },
-    { label: "Journal", href: "journal.html" },
-    { label: "Our Story", href: "about.html" }
+    { label: "Outerwear", href: "collection.html?c=outerwear" },
+    { label: "Knitwear", href: "collection.html?c=knitwear" },
+    { label: "Boots", href: "collection.html?c=boots" },
+    { label: "Goods", href: "collection.html?c=goods" },
+    { label: "Makers", href: "journal.html" }
   ];
 
   function brandMark(size) {
@@ -138,8 +137,8 @@
       '<div>' +
       '<a class="skip-link" href="#main">Skip to content</a>' +
       '<div class="topbar"><div class="container topbar__inner">' +
-      '<span class="topbar__msg"><span class="topbar__dot"></span> Free UK delivery over £75 · free gift wrap on everything</span>' +
-      '<a href="gift-finder.html" class="hide-sm">Find his gift in 3 taps →</a>' +
+      '<span class="topbar__msg"><span class="topbar__dot"></span> Free UK delivery over £100 · returns within 60 days, worn or not</span>' +
+      '<a href="journal.html" class="hide-sm">Read the Journal →</a>' +
       '</div></div>' +
       '<header class="site-header"><div class="container site-header__inner">' +
       '<nav class="nav-primary" aria-label="Primary">' + navLinks + '</nav>' +
@@ -159,11 +158,11 @@
       '<span class="drawer__title">Menu</span><button class="icon-btn" data-drawer-close aria-label="Close menu">' + I.close + '</button></div>' +
       '<div class="drawer__body"><nav class="drawer-nav">' +
       NAV.map(function (n) { return '<a href="' + n.href + '">' + n.label + '</a>'; }).join("") +
-      '<div class="sub">Collections</div>' +
+      '<div class="sub">Shop</div>' +
       M.collections.map(function (c) { return '<a href="collection.html?c=' + c.slug + '" style="font-size:17px">' + c.name + '</a>'; }).join("") +
       '<div class="sub" style="margin-top:8px"></div>' +
       '<a href="wishlist.html" style="font-size:17px">Wishlist</a><a href="account.html" style="font-size:17px">Account</a>' +
-      '</nav></div><div class="drawer__foot"><a class="btn btn--accent btn--block" href="gift-finder.html">' + I.gift + ' Find a gift</a></div></aside>' +
+      '</nav></div><div class="drawer__foot"><a class="btn btn--accent btn--block" href="shop.html">Shop everything</a></div></aside>' +
       '</div>'
     );
     document.body.insertBefore(header, document.body.firstChild);
@@ -185,7 +184,7 @@
       panel.hidden = false;
       panel.innerHTML = '<div class="container" style="padding-block:20px 28px">' +
         '<form class="search-form" role="search"><div class="search-input-wrap">' + I.search +
-        '<input type="search" name="q" placeholder="Search jackets, gifts, flasks…" autocomplete="off" aria-label="Search products">' +
+        '<input type="search" name="q" placeholder="Search waxed cotton, wool, boots…" autocomplete="off" aria-label="Search products">' +
         '<button class="icon-btn" type="button" data-search-open aria-label="Close search">' + I.close + '</button></div>' +
         '<div class="search-results"></div></form></div>';
       var input = $("input", panel); input.focus();
@@ -203,13 +202,13 @@
     q = (q || "").trim().toLowerCase();
     var res = q ? M.products.filter(function (p) {
       return (p.name + " " + p.maker + " " + p.category + " " + p.collection).toLowerCase().indexOf(q) > -1;
-    }).slice(0, 6) : M.products.filter(function (p) { return p.badges.indexOf("most-gifted") > -1 || p.badges.indexOf("bestseller") > -1; }).slice(0, 4);
+    }).slice(0, 6) : M.byCollection("outerwear").slice(0, 4);
     host.innerHTML =
-      '<p class="search-label">' + (q ? (res.length + ' result' + (res.length === 1 ? '' : 's')) : 'Most wanted') + '</p>' +
+      '<p class="search-label">' + (q ? (res.length + ' result' + (res.length === 1 ? '' : 's')) : 'In the shop') + '</p>' +
       (res.length ? '<div class="search-grid">' + res.map(function (p) {
         return '<a class="search-hit" href="product.html?id=' + p.id + '"><span class="search-hit__img">' + M.art.media(p, 0) + '</span>' +
           '<span><b>' + esc(p.name) + '</b><i>' + esc(p.maker) + ' · ' + money(p.price) + '</i></span></a>';
-      }).join("") + '</div>' : '<p class="search-empty">No matches. Try the <a href="gift-finder.html">gift finder</a>.</p>');
+      }).join("") + '</div>' : '<p class="search-empty">Nothing under that. Try <a href="shop.html">the whole shop</a>.</p>');
   }
 
   function injectFooter() {
@@ -217,7 +216,7 @@
       '<footer class="site-footer"><div class="container">' +
       '<div class="footer-grid">' +
       '<div class="footer-brand"><a class="brand brand--footer" href="index.html"><span class="brand__logo">' + MARK + '</span><span class="brand__word">Bield</span></a>' +
-      '<p>The UK’s one-stop men’s shop and community: kit, knowledge and good company for men who want to get out there and lead.</p>' +
+      '<p>Properly made things, for weather that doesn’t let up. Waxed cotton, wool and leather, made in Britain and built to be kept.</p>' +
       '<div class="footer-social">' +
       '<a href="#" aria-label="Instagram">' + I.insta + '</a>' +
       '<a href="#" aria-label="Pinterest">' + I.pin + '</a>' +
@@ -226,15 +225,15 @@
       '</div></div>' +
       '<div class="footer-col"><h4>Shop</h4>' +
       M.collections.map(function (c) { return '<a href="collection.html?c=' + c.slug + '">' + c.name + '</a>'; }).join("") +
-      '<a href="shop.html">All products</a></div>' +
-      '<div class="footer-col"><h4>Community</h4>' +
-      '<a href="journal.html">The Journal</a><a href="gift-finder.html">Gift finder</a>' +
-      '<a href="collection.html?c=the-crate">Gift crates</a><a href="#">Route guides</a><a href="#">Events &amp; meet-ups</a></div>' +
+      '<a href="shop.html">Everything</a></div>' +
+      '<div class="footer-col"><h4>The brand</h4>' +
+      '<a href="journal.html">Journal</a><a href="journal.html">Makers</a>' +
+      '<a href="about.html">Our story</a><a href="#">Reproofing &amp; repairs</a><a href="#">Stockists</a></div>' +
       '<div class="footer-col"><h4>Help</h4>' +
-      '<a href="#">Delivery &amp; returns</a><a href="#">Size &amp; fit</a><a href="#">Free size swaps</a>' +
-      '<a href="#">Gift wrap &amp; cards</a><a href="about.html">Our story</a></div>' +
+      '<a href="#">Delivery &amp; returns</a><a href="#">Size &amp; fit</a><a href="#">Care guides</a>' +
+      '<a href="#">Contact</a><a href="account.html">Account</a></div>' +
       '</div>' +
-      '<div class="footer-bottom"><span>© ' + new Date().getFullYear() + ' Bield. Kit, knowledge and good company.</span>' +
+      '<div class="footer-bottom"><span>© ' + new Date().getFullYear() + ' Bield. Made in Britain, for the weather.</span>' +
       '<span><a href="#">Privacy</a> · <a href="#">Terms</a> · <a href="#">Cookies</a></span></div>' +
       '</div></footer>'
     );
@@ -247,10 +246,8 @@
   function badgeHtml(p) {
     var out = [];
     if (p.badges.indexOf("sale") > -1) out.push('<span class="badge badge--sale">Save ' + money(p.oldPrice - p.price) + '</span>');
-    if (p.badges.indexOf("new") > -1) out.push('<span class="badge badge--new">Just in</span>');
-    if (p.badges.indexOf("most-gifted") > -1) out.push('<span class="badge badge--gift">Most gifted</span>');
-    else if (p.badges.indexOf("gift") > -1) out.push('<span class="badge badge--gift">Gift ready</span>');
-    if (p.badges.indexOf("bestseller") > -1 && p.badges.indexOf("sale") < 0) out.push('<span class="badge">Bestseller</span>');
+    else if (p.badges.indexOf("last-few") > -1) out.push('<span class="badge badge--sale">Last few</span>');
+    if (p.badges.indexOf("new") > -1) out.push('<span class="badge badge--new">New in</span>');
     return out.length ? '<div class="card__badges">' + out.join("") + '</div>' : "";
   }
 
@@ -306,7 +303,7 @@
       '<span class="article-card__meta">' + esc(a.date) + ' · ' + esc(a.read) + ' read</span></a>';
   }
   function pickBase(cat) {
-    var map = { "Kit Tests": "#4A3B2E", "Gift Guides": "#6B2F2A", "Field Notes": "#3E4548", "Maker Stories": "#2C3B33", "Adventures": "#8D9478" };
+    var map = { "Kit Tests": "#4A3B2E", "Makers": "#6B2F2A", "Field Notes": "#3E4548" };
     return map[cat] || "#3E4548";
   }
 
@@ -316,80 +313,80 @@
   function renderHome() {
     var main = $("#main");
     var newest = M.products.filter(function (p) { return p.badges.indexOf("new") > -1; });
-    var gifted = M.products.filter(function (p) { return p.badges.indexOf("most-gifted") > -1 || p.badges.indexOf("gift") > -1; }).slice(0, 4);
-    var best = M.products.filter(function (p) { return p.badges.indexOf("bestseller") > -1; }).slice(0, 4);
+    var outer = M.byCollection("outerwear").slice(0, 4);
+    var goods = M.byCollection("goods").slice(0, 4);
 
     main.innerHTML =
       // HERO
       '<section class="hero"><div class="hero__media">' + M.art.scene({ sky: "#3E4548", mid: "#4A3B2E", fore: "#2C3B33", accent: "#9A5B2E", id: "hero" }) + '</div><div class="hero__scrim"></div>' +
-      '<div class="container hero__inner"><p class="eyebrow eyebrow--light">Kit · Knowledge · Good company</p>' +
-      '<h1>Good kit, good company.</h1>' +
-      '<p>The UK’s one-stop men’s shop and community — the kit, the know-how and the good company to get you out there and leading. Chosen by people who’ve actually used it.</p>' +
-      '<div class="hero__cta"><a class="btn btn--accent" href="shop.html">Shop the range ' + I.arrow + '</a>' +
-      '<a class="btn btn--light" href="gift-finder.html">Find a gift</a></div></div></section>' +
+      '<div class="container hero__inner"><p class="eyebrow eyebrow--light">Est. Cumbria · Made in Britain</p>' +
+      '<h1>Properly made things, for weather that doesn’t let up.</h1>' +
+      '<p>Waxed cotton, wool and leather, made within a few hours of the fells and built to be reproofed, resoled and kept. Not adventure gear. What you need because it is going to rain for four days.</p>' +
+      '<div class="hero__cta"><a class="btn btn--accent" href="collection.html?c=outerwear">Shop outerwear ' + I.arrow + '</a>' +
+      '<a class="btn btn--light" href="journal.html">Read the Journal</a></div></div></section>' +
 
       // ASSURANCE
       '<section class="assurance"><div class="container"><div class="assurance__grid">' +
-      assure(I.gift, "Free gift wrap", "On everything, with a handwritten card") +
-      assure(I.truck, "Free UK delivery", "On orders over £75, next-day option") +
-      assure(I.swap, "Free size swaps", "Not sure of his size? Send it back free") +
-      assure(I.leaf, "Made to last", "Chosen to be used for years, not weeks") +
+      assure(I.leaf, "Made in Britain", "Lancashire wax, Yorkshire wool, Northampton leather") +
+      assure(I.truck, "Free UK delivery", "On orders over £100") +
+      assure(I.swap, "60-day returns", "Worn or not") +
+      assure(I.mountain, "Made to be mended", "Reproofed, resoled and kept for years") +
       '</div></div></section>' +
 
-      // COLLECTIONS
+      // CATEGORIES
       '<section class="section" id="collections"><div class="container">' +
-      '<div class="section-head"><div><p class="eyebrow">Shop by the man</p><h2>Five collections, one shop</h2></div>' +
-      '<a class="link-more" href="shop.html">All products ' + I.arrow + '</a></div>' +
+      '<div class="section-head"><div><p class="eyebrow">The range</p><h2>Four things, made well</h2></div>' +
+      '<a class="link-more" href="shop.html">Everything ' + I.arrow + '</a></div>' +
       '<div class="tiles">' + M.collections.map(function (c, i) {
         var wide = i === 0 ? " tile--wide" : "";
         return '<a class="tile' + wide + '" href="collection.html?c=' + c.slug + '">' +
           '<div class="tile__media">' + M.art.scene(Object.assign({ id: c.slug }, c.scene)) + '</div><div class="tile__scrim"></div>' +
           '<div class="tile__body"><span class="tile__kicker">' + esc(c.tagline) + '</span>' +
           '<h3 class="tile__title">' + esc(c.name) + '</h3><p class="tile__desc">' + esc(c.desc) + '</p>' +
-          '<span class="tile__cta">Explore ' + I.arrow + '</span></div></a>';
+          '<span class="tile__cta">Shop ' + esc(c.name) + ' ' + I.arrow + '</span></div></a>';
       }).join("") + '</div></div></section>' +
 
-      // MOST GIFTED
+      // OUTERWEAR
       '<section class="section section--tight" style="background:var(--bothy-cream-2)"><div class="container">' +
-      '<div class="section-head"><div><p class="eyebrow">For the man who wants nothing</p><h2>Most gifted</h2></div>' +
-      '<a class="link-more" href="shop.html?gift=1">More gift ideas ' + I.arrow + '</a></div>' +
-      grid(gifted) + '</div></section>' +
+      '<div class="section-head"><div><p class="eyebrow">The layer between you and it</p><h2>Outerwear</h2></div>' +
+      '<a class="link-more" href="collection.html?c=outerwear">All outerwear ' + I.arrow + '</a></div>' +
+      grid(outer) + '</div></section>' +
 
-      // GIFT BAND
+      // MAKERS BAND
       '<section class="section"><div class="container"><div class="giftband"><div class="giftband__inner">' +
-      '<div><p class="eyebrow eyebrow--light">Not sure what to get?</p><h2>His gift, in three taps.</h2>' +
-      '<p>Tell us who he is, what he’s like and your budget. We’ll do the hard bit — then wrap it and post it with a card.</p>' +
-      '<a class="btn btn--light" href="gift-finder.html" style="margin-top:8px">Start the gift finder ' + I.arrow + '</a></div>' +
-      '<div class="giftfinder-mini"><div class="gf-mini-card">' + I.gift + '<b>Who’s it for?</b><span>Partner, dad, son, brother or a mate</span></div>' +
-      '<div class="gf-mini-card">' + I.mountain + '<b>What’s he like?</b><span>Grafter, walker, gent, weekender</span></div>' +
-      '<div class="gf-mini-card">' + I.tag + '<b>Your budget?</b><span>Under £25, £50, £100 — or treat him</span></div>' +
+      '<div><p class="eyebrow eyebrow--light">Made within a few hours’ drive</p><h2>The makers are the point.</h2>' +
+      '<p>The kit this brand sells is still made in Britain, up the road: waxed cotton in Lancashire, worsted spun and knitted in Yorkshire, boots welted in Northampton, steel ground in Sheffield.</p>' +
+      '<a class="btn btn--light" href="journal.html" style="margin-top:8px">Meet the makers ' + I.arrow + '</a></div>' +
+      '<div class="giftfinder-mini"><div class="gf-mini-card">' + I.leaf + '<b>Lancashire</b><span>Waxed cotton, woven and proofed</span></div>' +
+      '<div class="gf-mini-card">' + I.mountain + '<b>Yorkshire</b><span>Worsted wool, spun and knitted</span></div>' +
+      '<div class="gf-mini-card">' + I.tag + '<b>Northampton</b><span>Goodyear-welted leather boots</span></div>' +
       '</div></div></div></div></section>' +
 
-      // BESTSELLERS
-      '<section class="section section--tight"><div class="container">' +
-      '<div class="section-head"><div><p class="eyebrow">Tried and trusted</p><h2>This season’s bestsellers</h2></div>' +
-      '<a class="link-more" href="shop.html">Shop all ' + I.arrow + '</a></div>' +
-      grid(best) + '</div></section>' +
-
-      // JUST IN
-      (newest.length ? '<section class="section section--tight" style="background:var(--bothy-cream-2)"><div class="container">' +
-      '<div class="section-head"><div><p class="eyebrow">Fresh off the fell</p><h2>Just in</h2></div>' +
+      // NEW IN
+      (newest.length ? '<section class="section section--tight"><div class="container">' +
+      '<div class="section-head"><div><p class="eyebrow">Latest</p><h2>New in</h2></div>' +
       '<a class="link-more" href="shop.html?sort=new">See what’s new ' + I.arrow + '</a></div>' +
       grid(newest) + '</div></section>' : "") +
 
-      // COMMUNITY (more than a shop)
-      '<section class="section" style="background:var(--sand)"><div class="container"><div class="split">' +
-      '<div class="split__media" style="background:var(--oatmeal);display:grid;place-items:center;box-shadow:none;border:1px solid var(--line);padding:12%">' +
-      '<img src="assets/img/bield-mark.svg" alt="The Bield mark — a sheep bield drawn in plan" style="width:74%;height:auto"></div>' +
-      '<div><p class="eyebrow">Kit, knowledge &amp; good company</p><h2>More than a shop</h2>' +
-      '<p class="lede">Bield is a community as much as a shop — route guides, honest kit tests, meet-ups and good company for men who want to get out there and lead.</p>' +
-      '<p>We give you the know-how first: how to re-wax a jacket, plan a first wild swim, or pack for a night on the fells. Everything is chosen and explained by people who’ve actually used it.</p>' +
+      // GOODS
+      '<section class="section section--tight" style="background:var(--bothy-cream-2)"><div class="container">' +
+      '<div class="section-head"><div><p class="eyebrow">Steel, leather, wool</p><h2>Goods</h2></div>' +
+      '<a class="link-more" href="collection.html?c=goods">All goods ' + I.arrow + '</a></div>' +
+      grid(goods) + '</div></section>' +
+
+      // SHELTER (the idea)
+      '<section class="section"><div class="container"><div class="split">' +
+      '<div class="split__media" style="background:var(--oatmeal);display:grid;place-items:center;box-shadow:none;border:1px solid var(--line);padding:14%">' +
+      '<img src="assets/img/bield-mark.svg" alt="The Bield mark — a sheep bield drawn in plan" style="width:70%;height:auto"></div>' +
+      '<div><p class="eyebrow">The idea</p><h2>A bield is a shelter</h2>' +
+      '<p class="lede">Not a building. A lee — the drystone windbreak on open fell where sheep stand out of the weather. The whole brand comes out of that one word.</p>' +
+      '<p>Everyone else is selling departure: the open road, going somewhere. Bield is about being out in it, and being properly equipped to stay out in it. The mark is a sheep bield drawn in plan.</p>' +
       '<a class="btn btn--ghost" href="about.html">Our story ' + I.arrow + '</a></div>' +
       '</div></div></section>' +
 
       // JOURNAL
       '<section class="section section--tight"><div class="container">' +
-      '<div class="section-head"><div><p class="eyebrow">The Journal</p><h2>Kit tests, trail guides &amp; maker stories</h2></div>' +
+      '<div class="section-head"><div><p class="eyebrow">The Journal</p><h2>Kit tests, care guides and makers</h2></div>' +
       '<a class="link-more" href="journal.html">Read the Journal ' + I.arrow + '</a></div>' +
       '<div class="journal-grid">' + M.articles.slice(0, 3).map(articleCard).join("") + '</div></div></section>' +
 
@@ -419,13 +416,13 @@
       '<section class="page-hero"><div class="page-hero__media">' + M.art.scene({ id: "shop", sky: "#3E4548", mid: "#4A3B2E", fore: "#2C3B33" }) + '</div>' +
       '<div class="container page-hero__inner"><div class="breadcrumb"><a href="index.html">Home</a> / <span>Shop</span></div>' +
       '<h1>' + (state.search ? "Search “" + esc(state.search) + "”" : "The whole shop") + '</h1>' +
-      '<p>Curated kit across clothing, gear, gifts and grooming — every piece chosen by people who’ve used it.</p></div></section>' +
+      '<p>Everything Bield makes: outerwear, knitwear, boots and goods. Waxed cotton, wool and leather, made in Britain to be kept.</p></div></section>' +
       '<section class="section"><div class="container"><div class="shop-layout">' +
       '<aside class="filters" id="filters"><div class="drawer__head" style="display:none"></div>' +
       filterGroup("Collection", M.collections.map(function (c) { return { k: c.slug, label: c.name, group: "collections", checked: state.collections.indexOf(c.slug) > -1 }; })) +
       filterGroup("Category", allCats.map(function (c) { return { k: c, label: c, group: "categories" }; })) +
       filterGroupRadio("Price", priceBands.map(function (b) { return { k: b.k, label: b.label }; })) +
-      '<label class="filter-opt" style="margin-top:14px"><input type="checkbox" data-gift ' + (state.gift ? "checked" : "") + '> Gift ready only</label>' +
+      '<label class="filter-opt" style="margin-top:14px"><input type="checkbox" data-gift ' + (state.gift ? "checked" : "") + '> On offer only</label>' +
       '</aside>' +
       '<div><div class="shop-toolbar">' +
       '<button class="btn btn--ghost btn--sm filter-toggle" data-filter-toggle>Filters</button>' +
@@ -446,7 +443,7 @@
       if (state.q) list = list.filter(function (p) { return (p.name + " " + p.maker + " " + p.category + " " + p.collection).toLowerCase().indexOf(state.q) > -1; });
       if (state.collections.length) list = list.filter(function (p) { return state.collections.indexOf(p.collection) > -1; });
       if (state.categories.length) list = list.filter(function (p) { return state.categories.indexOf(p.category) > -1; });
-      if (state.gift) list = list.filter(function (p) { return p.badges.indexOf("gift") > -1 || p.badges.indexOf("most-gifted") > -1 || p.collection === "the-crate"; });
+      if (state.gift) list = list.filter(function (p) { return p.badges.indexOf("sale") > -1 || p.badges.indexOf("last-few") > -1; });
       if (state.price) { var band = priceBands.filter(function (b) { return b.k === state.price; })[0]; if (band) list = list.filter(band.t); }
       // sort
       if (state.sort === "price-asc") list.sort(function (a, b) { return a.price - b.price; });
@@ -463,7 +460,7 @@
       state.collections.forEach(function (s) { var c = M.collection(s); chips.push(chip(c ? c.name : s, function () { state.collections = state.collections.filter(function (x) { return x !== s; }); syncInputs(); apply(); })); });
       state.categories.forEach(function (s) { chips.push(chip(s, function () { state.categories = state.categories.filter(function (x) { return x !== s; }); syncInputs(); apply(); })); });
       if (state.price) chips.push(chip(priceBands.filter(function (b) { return b.k === state.price; })[0].label, function () { state.price = null; syncInputs(); apply(); }));
-      if (state.gift) chips.push(chip("Gift ready", function () { state.gift = false; syncInputs(); apply(); }));
+      if (state.gift) chips.push(chip("On offer", function () { state.gift = false; syncInputs(); apply(); }));
       if (state.q) chips.push(chip("“" + state.search + "”", function () { state.q = ""; state.search = ""; apply(); }));
       var host = $(".active-filters");
       host.innerHTML = "";
@@ -525,8 +522,8 @@
       '</div></section>' +
       // cross-sell to gift finder
       '<section class="section section--tight" style="background:var(--bothy-cream-2)"><div class="container center">' +
-      '<p class="eyebrow">Buying for someone?</p><h2 style="font-size:clamp(24px,3.4vw,34px);margin-bottom:12px">Let us pick from ' + esc(c.name) + '</h2>' +
-      '<a class="btn btn--accent" href="gift-finder.html">Try the gift finder ' + I.arrow + '</a></div></section>' +
+      '<p class="eyebrow">Not sure which?</p><h2 style="font-size:clamp(24px,3.4vw,34px);margin-bottom:12px">Let the kit finder sort it</h2>' +
+      '<a class="btn btn--accent" href="gift-finder.html">Open the kit finder ' + I.arrow + '</a></div></section>' +
       newsletterSection();
     mountNewsletter();
   }
@@ -555,7 +552,8 @@
       '<span class="pdp__maker">' + esc(p.maker) + '</span>' +
       '<h1>' + esc(p.name) + '</h1>' +
       '<div class="pdp__price">' + (p.oldPrice ? '<span class="price">' + money(p.price) + '</span><span class="price price--old">' + money(p.oldPrice) + '</span>' : '<span class="price">' + money(p.price) + '</span>') +
-      '<span class="rating"><span class="stars">' + stars + '</span> ' + p.rating.toFixed(1) + ' (' + p.reviews + ')</span></div>' +
+      '<span class="rating">' + esc(p.origin || "") + '</span></div>' +
+      (p.etym ? '<p class="pdp__etym">' + esc(p.etym) + '</p>' : "") +
       '<p class="pdp__pitch">' + esc(p.why) + '</p>' +
       // colour options
       (p.colors.length > 1 ? '<div class="opt-row"><div class="opt-row__label"><span>Colour: <b id="sel-color">' + esc(sel.color) + '</b></span></div>' +
@@ -566,19 +564,19 @@
         '<div class="opts" id="size-opts">' + p.sizes.map(function (s) { return '<button class="opt" data-size="' + esc(s) + '">' + esc(s) + '</button>'; }).join("") + '</div></div>' :
         '<input type="hidden" id="one-size" value="One size">') +
       // sizing help
-      '<p style="font-size:14px;color:var(--slate)"><b>Fit:</b> ' + esc(p.sizing) + '</p>' +
+      '<p style="font-size:14px;color:var(--slate)"><b>Fit:</b> ' + esc(p.sizing) + ' <span style="color:var(--ink-soft)">· ' + esc(p.whoFor) + '</span></p>' +
       // buy row
       '<div class="buy-row"><div class="qty"><button data-q="-1" aria-label="Decrease">−</button><input type="number" id="qty" value="1" min="1" aria-label="Quantity"><button data-q="1" aria-label="Increase">+</button></div>' +
       '<button class="btn btn--accent" style="flex:1" id="add-btn">Add to basket — ' + money(p.price) + '</button></div>' +
       '<button class="btn btn--ghost btn--block" id="wish-btn">' + (Wish.has(p.id) ? I.heartFill + " Saved" : I.heart + " Save to wishlist") + '</button>' +
-      // gift note
-      '<div class="gift-note">' + I.gift + '<span><b>A gift?</b> Add free wrap and a handwritten card at checkout. We never put prices in the parcel, and size swaps are free.</span></div>' +
-      // accordions
+      // care note
+      '<div class="gift-note">' + I.leaf + '<span><b>Made to be kept.</b> Reproofed, resoled and mended, not replaced. Free UK delivery over £100, returns within 60 days worn or not.</span></div>' +
+      // accordions — specification first, story second
       '<div class="pdp__accordion">' +
-      acc("Why it’s good", '<p>' + esc(p.why) + '</p><p><b>Who it’s for:</b> ' + esc(p.whoFor) + '</p>', true) +
-      acc("Great gift because…", '<p>' + esc(p.giftBecause) + '</p>') +
-      acc("Details", '<dl class="spec-list"><div><dt>Maker</dt><dd>' + esc(p.maker) + '</dd></div><div><dt>Collection</dt><dd>' + esc(M.collection(p.collection).name) + '</dd></div><div><dt>Category</dt><dd>' + esc(p.category) + '</dd></div><div><dt>Product code</dt><dd>' + esc(p.code) + '</dd></div></dl>') +
-      acc("Delivery &amp; returns", '<p>Free UK delivery over £75, or £4.95 below. Next-day available. Free returns and size swaps within 30 days — extended to 31 January over Christmas.</p>') +
+      acc("Specification", '<p>' + esc(p.why) + '</p><dl class="spec-list"><div><dt>Made</dt><dd>' + esc(p.origin || "—") + '</dd></div><div><dt>Fit</dt><dd>' + esc(p.sizing) + '</dd></div><div><dt>Code</dt><dd>' + esc(p.code) + '</dd></div></dl>', true) +
+      (p.etym ? acc("The name", '<p>' + esc(p.etym) + ' Each product is named after a northern landscape word — most of them Old Norse.</p>') : "") +
+      acc("Care", '<p>Wax cotton once a year to keep the rain off. Brush and reproof leather; resole welted boots rather than replacing them. Wash wool cool and dry flat.</p>') +
+      acc("Delivery &amp; returns", '<p>Free UK delivery over £100, or £5 below. Returns within 60 days, worn or not. We would rather you kept it and mended it, so ask us about repairs first.</p>') +
       '</div>' +
       '</div></div></div></section>' +
       // related
@@ -630,7 +628,7 @@
       this.innerHTML = on ? I.heartFill + " Saved" : I.heart + " Save to wishlist";
       toast(on ? "Saved to your wishlist" : "Removed from wishlist");
     });
-    $("[data-size-guide]") && $("[data-size-guide]").addEventListener("click", function (e) { e.preventDefault(); toast("Most men take a medium — free swaps if not"); });
+    $("[data-size-guide]") && $("[data-size-guide]").addEventListener("click", function (e) { e.preventDefault(); toast("Runs true to size. 60-day returns if not."); });
     // accordion
     $$(".acc__head").forEach(function (b) { b.addEventListener("click", function () { b.parentElement.classList.toggle("open"); }); });
   }
@@ -645,30 +643,30 @@
     var main = $("#main");
     var choice = { who: null, collection: null, budget: null };
     var budgets = [
-      { k: "25", label: "Under £25", t: function (p) { return p.price < 25; } },
-      { k: "50", label: "Under £50", t: function (p) { return p.price < 50; } },
-      { k: "100", label: "Under £100", t: function (p) { return p.price < 100; } },
-      { k: "treat", label: "Treat him", t: function (p) { return p.price >= 100; } }
+      { k: "60", label: "Under £60", t: function (p) { return p.price < 60; } },
+      { k: "150", label: "Under £150", t: function (p) { return p.price < 150; } },
+      { k: "300", label: "Under £300", t: function (p) { return p.price < 300; } },
+      { k: "any", label: "Anything", t: function () { return true; } }
     ];
 
     main.innerHTML =
       '<section class="page-hero" style="padding-block:clamp(40px,6vw,72px)"><div class="page-hero__media">' + M.art.scene({ id: "gf", sky: "#3E4548", mid: "#4A3B2E", fore: "#2C3B33", accent: "#9A5B2E" }) + '</div>' +
-      '<div class="container page-hero__inner center mx-auto"><p class="eyebrow eyebrow--light">The gift finder</p>' +
-      '<h1>His gift, in three taps</h1><p class="mx-auto" style="margin-inline:auto">He says he doesn’t want anything. He does. Answer three quick questions and we’ll find it — then wrap it with a card.</p></div></section>' +
+      '<div class="container page-hero__inner center mx-auto"><p class="eyebrow eyebrow--light">Kit finder</p>' +
+      '<h1>Kit for the conditions</h1><p class="mx-auto" style="margin-inline:auto">Three quick questions. Tell us where you’re headed, what it’s doing and roughly what you want to spend, and we’ll pull the kit for it.</p></div></section>' +
       '<section class="section"><div class="container">' +
       '<div class="gf-progress"><span class="done"></span><span></span><span></span></div>' +
       // step 1
-      '<div class="gf-step active" data-step="1"><h2 class="center" style="font-size:clamp(24px,3.4vw,34px);margin-bottom:8px">Who’s it for?</h2>' +
-      '<p class="center" style="color:var(--ink-soft);margin-bottom:28px">Pick the man you’re buying for.</p>' +
+      '<div class="gf-step active" data-step="1"><h2 class="center" style="font-size:clamp(24px,3.4vw,34px);margin-bottom:8px">Where are you headed?</h2>' +
+      '<p class="center" style="color:var(--ink-soft);margin-bottom:28px">Pick the nearest.</p>' +
       '<div class="gf-options">' + GF_WHO.map(function (w) { return gfOption("who", w.key, w.label, w.sub, w.icon); }).join("") + '</div></div>' +
       // step 2
-      '<div class="gf-step" data-step="2"><h2 class="center" style="font-size:clamp(24px,3.4vw,34px);margin-bottom:8px">What’s he like?</h2>' +
-      '<p class="center" style="color:var(--ink-soft);margin-bottom:28px">Choose the closest fit — you don’t have to be exact.</p>' +
+      '<div class="gf-step" data-step="2"><h2 class="center" style="font-size:clamp(24px,3.4vw,34px);margin-bottom:8px">What are you after?</h2>' +
+      '<p class="center" style="color:var(--ink-soft);margin-bottom:28px">The layer you’re short of.</p>' +
       '<div class="gf-options">' + M.collections.map(function (c) { return gfOption("collection", c.slug, c.name, c.tagline, collIcon(c.slug)); }).join("") + '</div>' +
       '<p class="center" style="margin-top:24px"><button class="link-more" data-back>← Back</button></p></div>' +
       // step 3
-      '<div class="gf-step" data-step="3"><h2 class="center" style="font-size:clamp(24px,3.4vw,34px);margin-bottom:8px">What’s your budget?</h2>' +
-      '<p class="center" style="color:var(--ink-soft);margin-bottom:28px">No pressure — there’s something good at every level.</p>' +
+      '<div class="gf-step" data-step="3"><h2 class="center" style="font-size:clamp(24px,3.4vw,34px);margin-bottom:8px">Roughly what budget?</h2>' +
+      '<p class="center" style="color:var(--ink-soft);margin-bottom:28px">There is something worth having at each level.</p>' +
       '<div class="gf-options">' + budgets.map(function (b) { return gfOption("budget", b.k, b.label, "", "tag"); }).join("") + '</div>' +
       '<p class="center" style="margin-top:24px"><button class="link-more" data-back>← Back</button></p></div>' +
       // results
@@ -703,30 +701,30 @@
       }
       var band = budgets.filter(function (b) { return b.k === choice.budget; })[0];
       var matched = list.filter(band.t);
-      // prefer gift-ready and chosen collection
+      // prefer the chosen category
       matched.sort(function (a, b) {
-        var ag = (a.collection === choice.collection ? 2 : 0) + (a.badges.indexOf("gift") > -1 || a.badges.indexOf("most-gifted") > -1 ? 1 : 0);
-        var bg = (b.collection === choice.collection ? 2 : 0) + (b.badges.indexOf("gift") > -1 || b.badges.indexOf("most-gifted") > -1 ? 1 : 0);
+        var ag = a.collection === choice.collection ? 1 : 0;
+        var bg = b.collection === choice.collection ? 1 : 0;
         return bg - ag;
       });
       matched = matched.slice(0, 8);
-      var whoLabel = (GF_WHO.filter(function (w) { return w.key === choice.who; })[0] || {}).label || "him";
+      var whoLabel = (GF_WHO.filter(function (w) { return w.key === choice.who; })[0] || {}).label || "out there";
       var collLabel = M.collection(choice.collection) ? M.collection(choice.collection).name : "";
       $("#gf-results").innerHTML =
-        '<div class="center" style="margin-bottom:32px"><p class="eyebrow">Your picks</p>' +
-        '<h2 style="font-size:clamp(26px,3.6vw,38px)">' + matched.length + ' ideas for your ' + esc(whoLabel.toLowerCase()) + '</h2>' +
-        '<p style="color:var(--ink-soft)">' + esc(collLabel) + ' · ' + esc(band.label) + ' · all wrappable with a handwritten card</p>' +
+        '<div class="center" style="margin-bottom:32px"><p class="eyebrow">The kit</p>' +
+        '<h2 style="font-size:clamp(26px,3.6vw,38px)">' + matched.length + ' for ' + esc(whoLabel.toLowerCase()) + '</h2>' +
+        '<p style="color:var(--ink-soft)">' + esc(collLabel) + ' · ' + esc(band.label) + '</p>' +
         '<p style="margin-top:14px"><button class="btn btn--ghost btn--sm" data-restart>Start again</button></p></div>' +
-        (matched.length ? grid(matched) : '<div class="empty-state"><p>Nothing in that exact budget — try nudging it up.</p><button class="btn btn--ghost" data-restart>Start again</button></div>');
+        (matched.length ? grid(matched) : '<div class="empty-state"><p>Nothing in that band. Nudge the budget up.</p><button class="btn btn--ghost" data-restart>Start again</button></div>');
       $$("[data-restart]").forEach(function (b) { b.addEventListener("click", function () { choice = { who: null, collection: null, budget: null }; go(1); }); });
     }
 
     function gfOption(field, val, label, sub, icon) {
-      return '<button class="gf-option" data-field="' + field + '" data-value="' + val + '">' + (I[icon] || I.gift) +
+      return '<button class="gf-option" data-field="' + field + '" data-value="' + val + '">' + (I[icon] || I.mountain) +
         '<b>' + esc(label) + '</b>' + (sub ? '<span>' + esc(sub) + '</span>' : '') + '</button>';
     }
   }
-  function collIcon(slug) { return { graft: "mountain", fellside: "mountain", "sunday-best": "user", "off-shift": "gift", "the-crate": "gift" }[slug] || "gift"; }
+  function collIcon(slug) { return { outerwear: "mountain", knitwear: "user", boots: "leaf", goods: "tag" }[slug] || "mountain"; }
 
   /* =========================================================================
      PAGE: JOURNAL + ARTICLE
@@ -737,7 +735,7 @@
     main.innerHTML =
       '<section class="page-hero"><div class="page-hero__media">' + M.art.scene({ id: "journal", sky: "#3E4548", mid: "#4A3B2E", fore: "#2C3B33" }) + '</div>' +
       '<div class="container page-hero__inner"><div class="breadcrumb"><a href="index.html">Home</a> / <span>Journal</span></div>' +
-      '<h1>The Journal</h1><p>Trail guides, honest kit tests and the makers behind the shop — the stories that help you choose well.</p></div></section>' +
+      '<h1>The Journal</h1><p>Kit tested in real weather, care guides that keep it going, and the makers who still make this in Britain.</p></div></section>' +
       // feature
       '<section class="section"><div class="container"><a class="split" href="article.html?id=' + feature.id + '" style="text-decoration:none">' +
       '<div class="split__media">' + M.art.editorial({ base: pickBase(feature.cat), motif: feature.motif, id: 99 }) + '</div>' +
@@ -785,37 +783,37 @@
     main.innerHTML =
       '<section class="page-hero"><div class="page-hero__media">' + M.art.scene({ id: "about", sky: "#3E4548", mid: "#4A3B2E", fore: "#2C3B33", accent: "#9A5B2E" }) + '</div>' +
       '<div class="container page-hero__inner"><div class="breadcrumb"><a href="index.html">Home</a> / <span>Our Story</span></div>' +
-      '<p class="eyebrow eyebrow--light">Kit, knowledge &amp; good company</p><h1>More than a shop</h1>' +
-      '<p>We give men the kit, the know-how and the good company to get out there and lead.</p></div></section>' +
+      '<p class="eyebrow eyebrow--light">The idea</p><h1>A bield is a shelter</h1>' +
+      '<p>Not a building. A lee on open fell — and a reason to make things properly.</p></div></section>' +
       '<section class="section"><div class="container"><div class="prose">' +
-      '<p>Bield is the UK’s one-stop men’s shop and community: kit, knowledge and good company for men who want to get out there and lead. A bield is a Cumbrian word for shelter — the drystone wall or hollow on a fellside where you get out of the weather. It names exactly what we are: somewhere to stop, take stock and set off better equipped.</p>' +
-      '<blockquote>Kit is only half of it. The know-how and the good company are what actually get you out the door.</blockquote>' +
-      '<p>So we lead with knowledge: honest kit tests, route guides and plain-English advice from people who’ve actually used the gear. Gift buyers are a welcome second audience, and everything can be wrapped with a handwritten card — but the man, and getting him out there, comes first.</p>' +
+      '<p>A bield is a drystone or turf windbreak, built on the open fell so sheep have somewhere to stand out of the weather. It is the most useful thing this brand owns, and the whole of it comes out of that one word.</p>' +
+      '<blockquote>Everyone else is selling departure — the open road, going somewhere. We are about being out in it, and being properly equipped to stay out in it.</blockquote>' +
+      '<p>So the kit is not aspirational. It is what you need because it is going to rain for four days: 18oz waxed cotton, worsted wool, welted leather. Things that mark and fade and can be reproofed, resoled and mended rather than replaced. Bought once, kept for years.</p>' +
       '</div></div></section>' +
       '<section class="section" style="background:var(--sand)"><div class="container"><div class="split">' +
-      '<div class="split__media" style="background:var(--oatmeal);display:grid;place-items:center;box-shadow:none;border:1px solid var(--line);padding:12%">' +
-      '<img src="assets/img/bield-mark.svg" alt="The Bield mark — a sheep bield drawn in plan" style="width:74%;height:auto"></div>' +
-      '<div><p class="eyebrow">The community</p><h2>Good company, out there</h2>' +
-      '<p class="lede">Route guides, meet-ups, kit tests and a Journal worth reading — Bield is the people as much as the products.</p>' +
-      '<p>It’s there in the mark, too: a sheep bield drawn in plan — four short wall arms from a centre, so there’s a lee whatever way the wind comes. Everything points back to getting out there together.</p>' +
-      '<a class="btn btn--ghost" href="journal.html">Into the Journal ' + I.arrow + '</a></div>' +
+      '<div class="split__media" style="background:var(--oatmeal);display:grid;place-items:center;box-shadow:none;border:1px solid var(--line);padding:14%">' +
+      '<img src="assets/img/bield-mark.svg" alt="The Bield mark — a sheep bield drawn in plan" style="width:70%;height:auto"></div>' +
+      '<div><p class="eyebrow">The mark</p><h2>A sheep bield, drawn in plan</h2>' +
+      '<p class="lede">A sheep bield is often built as a cross — four short wall arms from a centre, so there is a lee whatever direction the wind comes from.</p>' +
+      '<p>Seen from above it is a plain, four-armed figure. That is the mark: geometric, evenly weighted, almost too plain, and genuinely drawn from the thing the brand is named after.</p>' +
+      '<a class="btn btn--ghost" href="journal.html">Read the Journal ' + I.arrow + '</a></div>' +
       '</div></div></section>' +
       '<section class="section section--tight"><div class="container">' +
-      '<div class="section-head center" style="justify-content:center"><div><p class="eyebrow">How we talk</p><h2>What we stand for</h2></div></div>' +
+      '<div class="section-head center" style="justify-content:center"><div><p class="eyebrow">How we work</p><h2>What we hold to</h2></div></div>' +
       '<div class="grid-3">' +
-      valueCard(I.heart, "Warm, not macho", "We talk like a well-travelled friend, never like a kit-list bore.") +
-      valueCard(I.mountain, "Knowledgeable, not technical", "Why it’s good, in one plain sentence. No jargon, no stacked adjectives.") +
-      valueCard(I.gift, "Wry, not silly", "Dry northern humour, used lightly. No “LAST CHANCE!!!”.") +
-      valueCard(I.check, "Honest, not salesy", "Real reviews, clear sizing, no fake countdowns. Ever.") +
-      valueCard(I.leaf, "Made to last", "Quality over quantity. One great jacket beats three average ones.") +
-      valueCard(I.user, "Good company", "A community, not a mailing list — get out there, and bring someone.") +
+      valueCard(I.leaf, "Made in Britain", "Waxed cotton in Lancashire, wool in Yorkshire, boots in Northampton, steel in Sheffield.") +
+      valueCard(I.mountain, "For the weather", "Not adventure gear. Kit for the four days it does not stop.") +
+      valueCard(I.swap, "Made to be mended", "Reproofed, resoled and repaired. We would rather you kept it than replaced it.") +
+      valueCard(I.check, "Understated", "Lead with the fact, not the feeling. One adjective, no exclamation marks.") +
+      valueCard(I.tag, "Named for the ground", "Bield, Ghyll, Rigg, Scar — northern landscape words, most of them Old Norse.") +
+      valueCard(I.truck, "Fair and slow", "Fewer things, made well, priced for what they cost to make properly.") +
       '</div></div></section>' +
       '<section class="section" style="background:var(--sand)"><div class="container"><div class="split split--reverse">' +
       '<div class="split__media">' + M.art.scene({ id: "curation", sky: "#4A3B2E", mid: "#8D9478", fore: "#2C3B33", accent: "#9A5B2E" }) + '</div>' +
-      '<div><p class="eyebrow">Curation, not clutter</p><h2>If we wouldn’t use it, it doesn’t go in</h2>' +
-      '<p class="lede">We favour British and independent makers wherever the quality allows, from Borders knitwear to Cumbrian bootmakers.</p>' +
-      '<p>Every product page answers the same four questions: why it’s good, who it’s for, how it fits, and — for the gift buyer — why it makes a great gift. Plain, useful English throughout.</p>' +
-      '<a class="btn btn--ghost" href="shop.html">Shop the range ' + I.arrow + '</a></div>' +
+      '<div><p class="eyebrow">The makers</p><h2>Still made a couple of hours up the road</h2>' +
+      '<p class="lede">The advantage a northern brand has over an American one is simple: the things it sells are still made in Britain, within a few hours of the fells.</p>' +
+      '<p>That is Sheffield steel, Yorkshire worsted, Northampton and Cumbrian bootmakers, Harris Tweed, Cumbrian slate and Lancashire leatherwork. Each is a maker we can name and a reason the kit is worth the money.</p>' +
+      '<a class="btn btn--ghost" href="shop.html">Shop everything ' + I.arrow + '</a></div>' +
       '</div></div></section>' + newsletterSection();
     mountNewsletter();
   }
@@ -836,8 +834,8 @@
     if (!items.length) {
       host.innerHTML = '<section class="section"><div class="container"><div class="empty-state" style="padding:80px 20px">' +
         '<p class="eyebrow">Your basket</p><h1 style="font-size:clamp(28px,4vw,40px);margin:8px 0 16px">Nothing in here yet</h1>' +
-        '<p style="max-width:40ch;margin:0 auto 22px">Have a look round the shop, or let us find a gift for you.</p>' +
-        '<div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap"><a class="btn btn--accent" href="shop.html">Shop the range</a><a class="btn btn--ghost" href="gift-finder.html">Find a gift</a></div>' +
+        '<p style="max-width:40ch;margin:0 auto 22px">Have a look round the shop, or let the kit finder sort you out.</p>' +
+        '<div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap"><a class="btn btn--accent" href="shop.html">Shop everything</a><a class="btn btn--ghost" href="gift-finder.html">Kit finder</a></div>' +
         '</div></div></section>';
       return;
     }
@@ -866,9 +864,9 @@
         '<p style="font-size:12px;color:var(--ink-soft);margin:6px 0 0">Add ' + money(toFree) + ' for free UK delivery</p></div>' :
         '<p style="font-size:12px;color:var(--fell-green);margin:6px 0 0">' + I.check.replace("24 24", "24 24") + ' You’ve unlocked free delivery</p>') +
       '<div class="summary__row summary__row--total"><span>Total</span><span>' + money(sub + shipping) + '</span></div>' +
-      '<label class="filter-opt" style="margin:16px 0 4px"><input type="checkbox" id="gift-wrap"> This is a gift — add free wrap &amp; a card</label>' +
+      '<label class="filter-opt" style="margin:16px 0 4px"><input type="checkbox" id="gift-wrap"> Buying this as a gift (no price on the packing slip)</label>' +
       '<button class="btn btn--accent btn--block" id="checkout" style="margin-top:12px">Checkout</button>' +
-      '<p style="font-size:12px;color:var(--ink-soft);text-align:center;margin-top:12px">Free size swaps · no prices in the parcel</p>' +
+      '<p style="font-size:12px;color:var(--ink-soft);text-align:center;margin-top:12px">60-day returns · reproofing and repairs available</p>' +
       '</aside></div></div></section>';
 
     $$("[data-cq]").forEach(function (b) { b.addEventListener("click", function () { var lid = b.getAttribute("data-lid"); var it = Cart.items.filter(function (i) { return i.lid === lid; })[0]; if (it) Cart.setQty(lid, it.qty + (+b.getAttribute("data-cq"))); }); });
@@ -888,7 +886,7 @@
     main.innerHTML =
       '<section class="page-hero" style="padding-block:clamp(40px,6vw,72px)"><div class="page-hero__media">' + M.art.scene({ id: "wish", sky: "#3E4548", mid: "#4A3B2E", fore: "#2C3B33" }) + '</div>' +
       '<div class="container page-hero__inner"><div class="breadcrumb"><a href="index.html">Home</a> / <span>Wishlist</span></div>' +
-      '<h1>Your wishlist</h1><p>Save the things he’d love. Share the list, or send it to whoever’s asking what to get you.</p></div></section>' +
+      '<h1>Saved</h1><p>The things you’re weighing up. Keep them here and come back when the forecast turns.</p></div></section>' +
       '<section class="section"><div class="container">' +
       (items.length ? grid(items) : '<div class="empty-state" style="padding:70px 20px"><p style="max-width:40ch;margin:0 auto 20px">Nothing saved yet. Tap the heart on anything you like the look of.</p><a class="btn btn--accent" href="shop.html">Browse the shop</a></div>') +
       '</div></section>' + newsletterSection();
@@ -899,7 +897,7 @@
     main.innerHTML =
       '<section class="page-hero" style="padding-block:clamp(40px,6vw,72px)"><div class="page-hero__media">' + M.art.scene({ id: "acct", sky: "#3E4548", mid: "#4A3B2E", fore: "#2C3B33" }) + '</div>' +
       '<div class="container page-hero__inner"><div class="breadcrumb"><a href="index.html">Home</a> / <span>Account</span></div>' +
-      '<h1>Your account</h1><p>Sign in to track orders, save wishlists and set gift reminders for the dates that matter.</p></div></section>' +
+      '<h1>Your account</h1><p>Sign in to track orders, save what you’re after, and book a reproof or repair.</p></div></section>' +
       '<section class="section"><div class="container" style="max-width:440px">' +
       '<form id="signin" class="stack" style="background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-lg);padding:28px">' +
       '<h2 style="font-size:24px">Sign in</h2>' +
@@ -917,11 +915,11 @@
      ========================================================================= */
   function newsletterSection() {
     return '<section class="section newsletter"><div class="container"><div class="newsletter__inner">' +
-      '<p class="eyebrow eyebrow--light">Field notes</p><h2>Good kit, worth knowing about</h2>' +
-      '<p>A weekly note — trail guides, honest kit tests and the odd gift idea. No fake urgency, unsubscribe anytime.</p>' +
+      '<p class="eyebrow eyebrow--light">Field notes</p><h2>A note now and then</h2>' +
+      '<p>A photograph, three sentences and one link. New kit, the odd maker story, no noise. Unsubscribe anytime.</p>' +
       '<form class="subscribe" id="newsletter-form"><input type="email" required placeholder="Your email address" aria-label="Email address">' +
       '<button class="btn btn--accent" type="submit">Subscribe</button></form>' +
-      '<p class="form-note" id="newsletter-note">Prefer gift ideas only? You can pick that after you sign up.</p>' +
+      '<p class="form-note" id="newsletter-note">No more than one a fortnight. We check the forecast so you don’t have to.</p>' +
       '</div></div></section>';
   }
   function mountNewsletter() {
