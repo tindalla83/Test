@@ -15,6 +15,14 @@
   function $$(sel, ctx) { return Array.prototype.slice.call((ctx || document).querySelectorAll(sel)); }
   function param(name) { return new URLSearchParams(location.search).get(name); }
   function esc(s) { return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+  // Collection artwork: a real photo when the collection has one, else the
+  // generated on-brand scene. Covers both the homepage tile and the
+  // collection page hero.
+  function collectionMedia(c) {
+    return c.image
+      ? '<img src="' + esc(c.image) + '" alt="' + esc(c.imageAlt || c.name) + '" loading="lazy">'
+      : M.art.scene(Object.assign({ id: c.slug }, c.scene));
+  }
 
   /* ---------------- UI icons ---------------- */
   var I = {
@@ -352,7 +360,7 @@
       '<div class="tiles">' + M.collections.map(function (c, i) {
         var wide = i === 0 ? " tile--wide" : "";
         return '<a class="tile' + wide + '" href="collection.html?c=' + c.slug + '">' +
-          '<div class="tile__media">' + M.art.scene(Object.assign({ id: c.slug }, c.scene)) + '</div><div class="tile__scrim"></div>' +
+          '<div class="tile__media">' + collectionMedia(c) + '</div><div class="tile__scrim"></div>' +
           '<div class="tile__body"><span class="tile__kicker">' + esc(c.tagline) + '</span>' +
           '<h3 class="tile__title">' + esc(c.name) + '</h3><p class="tile__desc">' + esc(c.desc) + '</p>' +
           '<span class="tile__cta">Explore ' + I.arrow + '</span></div></a>';
@@ -525,7 +533,7 @@
     if (!c) { main.innerHTML = notFound("We couldn’t find that collection."); return; }
     var list = M.byCollection(slug);
     main.innerHTML =
-      '<section class="page-hero"><div class="page-hero__media">' + M.art.scene(Object.assign({ id: c.slug }, c.scene)) + '</div>' +
+      '<section class="page-hero"><div class="page-hero__media' + (c.image ? ' page-hero__media--photo' : '') + '">' + collectionMedia(c) + '</div>' +
       '<div class="container page-hero__inner"><div class="breadcrumb"><a href="index.html">Home</a> / <a href="shop.html">Shop</a> / <span>' + esc(c.name) + '</span></div>' +
       '<p class="eyebrow eyebrow--light">' + esc(c.tagline) + '</p><h1>' + esc(c.name) + '</h1><p>' + esc(c.desc) + '</p></div></section>' +
       '<section class="section"><div class="container">' +
@@ -792,7 +800,7 @@
   function renderAbout() {
     var main = $("#main");
     main.innerHTML =
-      '<section class="page-hero"><div class="page-hero__media">' + M.art.scene({ id: "about", sky: "#3E4548", mid: "#4A3B2E", fore: "#2C3B33", accent: "#9A5B2E" }) + '</div>' +
+      '<section class="page-hero"><div class="page-hero__media page-hero__media--photo"><img src="assets/img/about-hero.jpg" alt="A man in a hooded gilet looking out over pine forest and distant mountains"></div>' +
       '<div class="container page-hero__inner"><div class="breadcrumb"><a href="index.html">Home</a> / <span>Our Story</span></div>' +
       '<p class="eyebrow eyebrow--light">Kit, knowledge &amp; good company</p><h1>More than a shop</h1>' +
       '<p>We give men the kit, the know-how and the good company to get out there and lead.</p></div></section>' +
