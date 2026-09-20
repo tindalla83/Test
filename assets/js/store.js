@@ -135,7 +135,7 @@
     }).join("");
 
     var header = h(
-      '<div>' +
+      '<div class="site-head">' +
       '<a class="skip-link" href="#main">Skip to content</a>' +
       '<div class="topbar"><div class="container topbar__inner">' +
       '<span class="topbar__msg"><span class="topbar__dot"></span> Free UK delivery over £75 · free gift wrap on everything</span>' +
