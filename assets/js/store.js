@@ -322,9 +322,10 @@
     // Main homepage image. Put a file in assets/img/ and set the path here, e.g.
     //   var heroImage = "assets/img/hero.jpg";
     // Leave it "" to keep the generated artwork. Landscape works best (e.g. 2400x1400).
-    var heroImage = "";
+    var heroImage = "assets/img/hero.jpg";
+    var heroAlt = "Two people in winter coats walking through bare woodland under a flat white sky";
     var heroMedia = heroImage
-      ? '<img src="' + heroImage + '" alt="">'
+      ? '<img src="' + heroImage + '" alt="' + heroAlt + '">'
       : M.art.scene({ sky: "#3E4548", mid: "#4A3B2E", fore: "#2C3B33", accent: "#9A5B2E", id: "hero" });
 
     main.innerHTML =
