@@ -319,9 +319,17 @@
     var gifted = M.products.filter(function (p) { return p.badges.indexOf("most-gifted") > -1 || p.badges.indexOf("gift") > -1; }).slice(0, 4);
     var best = M.products.filter(function (p) { return p.badges.indexOf("bestseller") > -1; }).slice(0, 4);
 
+    // Main homepage image. Put a file in assets/img/ and set the path here, e.g.
+    //   var heroImage = "assets/img/hero.jpg";
+    // Leave it "" to keep the generated artwork. Landscape works best (e.g. 2400x1400).
+    var heroImage = "";
+    var heroMedia = heroImage
+      ? '<img src="' + heroImage + '" alt="">'
+      : M.art.scene({ sky: "#3E4548", mid: "#4A3B2E", fore: "#2C3B33", accent: "#9A5B2E", id: "hero" });
+
     main.innerHTML =
       // HERO
-      '<section class="hero"><div class="hero__media">' + M.art.scene({ sky: "#3E4548", mid: "#4A3B2E", fore: "#2C3B33", accent: "#9A5B2E", id: "hero" }) + '</div><div class="hero__scrim"></div>' +
+      '<section class="hero"><div class="hero__media">' + heroMedia + '</div><div class="hero__scrim"></div>' +
       '<div class="container hero__inner"><p class="eyebrow eyebrow--light">Kit · Knowledge · Good company</p>' +
       '<h1>Good kit, good company.</h1>' +
       '<p>The UK’s one-stop men’s shop and community — the kit, the know-how and the good company to get you out there and leading. Chosen by people who’ve actually used it.</p>' +
