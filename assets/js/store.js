@@ -108,7 +108,7 @@
      ========================================================================= */
   var NAV = [
     { label: "Shop", href: "shop.html" },
-    { label: "Collections", href: "shop.html#collections" },
+    { label: "Collections", href: "index.html#collections" },
     { label: "Gifts", href: "gift-finder.html" },
     { label: "Journal", href: "journal.html" },
     { label: "Our Story", href: "about.html" }
