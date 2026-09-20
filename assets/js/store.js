@@ -323,7 +323,7 @@
     //   var heroImage = "assets/img/hero.jpg";
     // Leave it "" to keep the generated artwork. Landscape works best (e.g. 2400x1400).
     var heroImage = "assets/img/hero.jpg";
-    var heroAlt = "Two people in winter coats walking through bare woodland under a flat white sky";
+    var heroAlt = "A man in a flat cap and wool jacket standing in autumn woodland at dusk";
     var heroMedia = heroImage
       ? '<img src="' + heroImage + '" alt="' + heroAlt + '">'
       : M.art.scene({ sky: "#3E4548", mid: "#4A3B2E", fore: "#2C3B33", accent: "#9A5B2E", id: "hero" });
