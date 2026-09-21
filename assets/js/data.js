@@ -183,13 +183,7 @@
   function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
 
   /* ======================= COLLECTIONS ======================= */
-  var collections = [
-    { slug: "graft", name: "Graft", tagline: "The working man", desc: "Kit that earns its keep — workwear, boots and tools built to take a beating.", image: "assets/img/collections/graft.jpg", imageAlt: "Waxed cotton jackets on a row of hooks above a worn leather Chesterfield", scene: { sky: "#4A3B2E", mid: "#8D9478", fore: "#2C3B33", accent: "#9A5B2E" } },
-    { slug: "fellside", name: "Fellside", tagline: "The outdoor man", desc: "For the walker, fell runner and wild swimmer. Waterproofs, packs and trail kit.", image: "assets/img/collections/fellside.jpg", imageAlt: "A man pulling up the fur-lined hood of his parka on a rocky mountainside", scene: { sky: "#2C3B33", mid: "#8D9478", fore: "#2C3B33", accent: "#E8E4DC" } },
-    { slug: "sunday-best", name: "Sunday Best", tagline: "The gentleman", desc: "Smart-casual things made well — knitwear, leather and a watch to keep.", image: "assets/img/collections/sunday-best.jpg", imageAlt: "A man in a camel overcoat leaning on a fence beneath an autumn tree", scene: { sky: "#3E4548", mid: "#4A3B2E", fore: "#2C3B33", accent: "#9A5B2E" } },
-    { slug: "off-shift", name: "Off Shift", tagline: "The weekend man", desc: "Pub, football and the barbecue. Easy kit for time off.", image: "assets/img/collections/off-shift.jpg", imageAlt: "A man in a quilted jacket reading a newspaper at a table", scene: { sky: "#4C4E4C", mid: "#686A66", fore: "#191815", accent: "#B09A6B" } },
-    { slug: "the-crate", name: "The Crate", tagline: "Gifting, sorted", desc: "Curated gift boxes, wrapped, carded and ready to give.", scene: { sky: "#232220", mid: "#4C4E4C", fore: "#191815", accent: "#C2907C" } }
-  ];
+  var collections = [];
 
   /* ======================= PRODUCTS ======================= */
   // helper to build a product tersely
@@ -211,131 +205,11 @@
   // e.g. images: ["assets/img/products/ridgeway-jacket-green.jpg", ...]
   // See assets/img/products/README.md. Any product without `images` keeps the
   // generated SVG art, so you can switch products over one at a time.
-  var products = [
-    /* ---------------- GRAFT ---------------- */
-    P({ name: "Ridgeway Waxed Work Jacket", maker: "Fenwick & Sons", collection: "graft", category: "Clothing", icon: "jacket", price: 129, badges: ["bestseller"], colorNames: ["Fell Green", "Peat", "Slate"], images: ["assets/img/products/91842_Flint_and_Tinder_Waxed_Harrington_Jacket_Olive_01_PXLZ.avif"], sizes: ["S", "M", "L", "XL", "XXL"],
-      why: "Waxed cotton that shrugs off Lakeland drizzle and only looks better with age.", whoFor: "The man who's always outside fixing something.", sizing: "Runs true to size; size up for layers underneath.", giftBecause: "He'll wear it every weekend for the next ten years." }),
-    P({ name: "Grafter Leather Work Boots", maker: "Cumbria Bootworks", collection: "graft", category: "Footwear", icon: "boot", price: 165, badges: ["most-gifted"], colorNames: ["Tan", "Peat", "Charcoal"], sizes: ["7", "8", "9", "10", "11", "12"],
-      why: "Goodyear-welted and resoleable, so a scuff is never the end.", whoFor: "Anyone on their feet all day.", sizing: "Standard fit; take your usual size.", giftBecause: "A proper pair of boots he'd never buy himself." }),
-    P({ name: "Ten-Tool Pocket Multi", maker: "Brindle Tools", collection: "graft", category: "Gear", icon: "multitool", price: 58, badges: ["new"], colorNames: ["Slate", "Fell Green"],
-      why: "Ten tools that actually lock, in a brushed-steel body that lives in a pocket.", whoFor: "The fixer, the fettler, the camping dad.", sizing: "One size.", giftBecause: "The gift he'll use every single week." }),
-    P({ name: "Site Flask 1L", maker: "Kelder", collection: "graft", category: "Gear", icon: "flask", price: 34, colorNames: ["Fell Green", "Bracken", "Charcoal"],
-      why: "Keeps a brew hot for twelve hours, dents-and-all guaranteed for life.", whoFor: "Early starts and long shifts.", sizing: "1 litre.", giftBecause: "A daily reminder you were thinking of him." }),
-    P({ name: "Waxed Canvas Tool Roll", maker: "Brindle Tools", collection: "graft", category: "Gear", icon: "crate", price: 45, colorNames: ["Oat", "Peat"],
-      why: "Rolls flat, hangs on a nail, keeps chisels where they should be.", whoFor: "The tidy sort, or the one who should be.", sizing: "Fits 12 tools.", giftBecause: "Practical, handsome and personalisable." }),
-    P({ name: "Suede Rigger Gloves", maker: "Hartside", collection: "graft", category: "Gear", icon: "gloves", price: 28, colorNames: ["Tan", "Charcoal"], sizes: ["M", "L", "XL"],
-      why: "Split-suede palms that soften as they work.", whoFor: "Log-splitters and bonfire-builders.", sizing: "Snug at first; they give.", giftBecause: "A small, useful surprise in a stocking." }),
+  var products = [];
 
-    /* ---------------- FELLSIDE ---------------- */
-    P({ name: "Skiddaw 3-Layer Waterproof", maker: "Fellside Kit", collection: "fellside", category: "Clothing", icon: "waterproof", price: 189, oldPrice: 219, badges: ["sale", "bestseller"], colorNames: ["Storm Blue", "Fell Green", "Rust"], sizes: ["S", "M", "L", "XL"],
-      why: "Fully taped seams and a proper hood — 20k waterproof, still breathes on the climb.", whoFor: "The hillwalker who checks the forecast and goes anyway.", sizing: "Athletic; room for a fleece.", giftBecause: "It'll get him out of the house in any weather." }),
-    P({ name: "Blencathra Grid Fleece", maker: "Fellside Kit", collection: "fellside", category: "Clothing", icon: "fleece", price: 78, badges: ["most-gifted"], colorNames: ["Moss", "Slate", "Oat"], sizes: ["S", "M", "L", "XL"],
-      why: "Grid-backed fleece that traps warmth without the bulk.", whoFor: "Layer-uppers and shed-dwellers alike.", sizing: "Regular fit.", giftBecause: "The mid-layer he'll live in from October to April." }),
-    P({ name: "Wainwright 28L Daypack", maker: "Roam", collection: "fellside", category: "Gear", icon: "backpack", price: 95, colorNames: ["Fell Green", "Charcoal", "Rust"],
-      why: "One good pack for a day on the tops — roll-top, hip belt, room for a flask.", whoFor: "Day-walkers and commuters.", sizing: "28 litres.", giftBecause: "Sized for exactly the adventures he keeps talking about." }),
-    P({ name: "Fell Runner Headtorch 400", maker: "Lumen North", collection: "fellside", category: "Gear", icon: "torch", price: 42, badges: ["new"], colorNames: ["Charcoal", "Bracken"],
-      why: "400 lumens, USB-C, light enough to forget you're wearing it.", whoFor: "Dark mornings and night descents.", sizing: "One size.", giftBecause: "Genuinely useful, and he won't have one this good." }),
-    P({ name: "Merino Trail Socks (3 pack)", maker: "Wooler", collection: "fellside", category: "Clothing", icon: "socks", price: 24, colorNames: ["Moss", "Slate", "Oat"], sizes: ["S/M", "L/XL"],
-      why: "Merino cushioning that won't blister or stink.", whoFor: "Every walker, ever.", sizing: "Two size bands.", giftBecause: "The gift men are secretly delighted by." }),
-    P({ name: "Wild Swim Changing Robe", maker: "Coldwater Co.", collection: "fellside", category: "Gear", icon: "robe", price: 69, badges: ["bestseller"], colorNames: ["Storm Blue", "Fell Green", "Damson"], sizes: ["S/M", "L/XL"],
-      why: "Sherpa-lined and windproof, for the shivery bit after a cold dip.", whoFor: "Wild swimmers and touchline parents.", sizing: "Generous; goes over clothes.", giftBecause: "For the dad who's discovered cold water and won't shut up about it." }),
-
-    /* ---------------- SUNDAY BEST ---------------- */
-    P({ name: "Lambswool Crew Jumper", maker: "Alderley Knitwear", collection: "sunday-best", category: "Clothing", icon: "jumper", price: 88, badges: ["most-gifted"], colorNames: ["Bilberry", "Moss", "Oat", "Slate"], sizes: ["S", "M", "L", "XL"],
-      why: "Spun and knitted in the Scottish Borders from proper lambswool.", whoFor: "The man who's earned a nice jumper.", sizing: "Classic fit.", giftBecause: "Soft, smart and impossible to get wrong." }),
-    P({ name: "Bridle Leather Card Wallet", maker: "Currier & Bell", collection: "sunday-best", category: "Accessories", icon: "wallet", price: 52, colorNames: ["Peat", "Tan", "Charcoal"],
-      why: "English bridle leather that patinas beautifully; free monogram.", whoFor: "The overstuffed-wallet upgrader.", sizing: "Six cards plus notes.", giftBecause: "Small, personal and used every day." }),
-    P({ name: "Explorer Field Watch", maker: "Dalefield Watch Co.", collection: "sunday-best", category: "Accessories", icon: "watch", price: 145, badges: ["bestseller"], colorNames: ["Fell Green", "Charcoal", "Storm Blue"],
-      why: "A clean field watch on a waxed strap — 100m water resistant, quietly handsome.", whoFor: "The one who still likes to wear a watch.", sizing: "38mm case.", giftBecause: "A proper keepsake at a sensible price." }),
-    P({ name: "Sandalwood Grooming Set", maker: "Hearth & Hollow", collection: "sunday-best", category: "Grooming", icon: "grooming", price: 46, badges: ["gift"], colorNames: ["Bracken"],
-      why: "Face wash, balm and beard oil, all cedar and sandalwood, all UK-made.", whoFor: "The low-key groomer.", sizing: "Full-size trio.", giftBecause: "Boxed and ribboned, it looks like you tried." }),
-    P({ name: "Waxed Holdall Weekender", maker: "Currier & Bell", collection: "sunday-best", category: "Accessories", icon: "holdall", price: 160, colorNames: ["Fell Green", "Peat"],
-      why: "A weekend's worth of kit in waxed canvas and bridle leather.", whoFor: "Mini-break takers and stag-do survivors.", sizing: "40 litres.", giftBecause: "The bag that makes him plan a trip." }),
-
-    /* ---------------- OFF SHIFT ---------------- */
-    P({ name: "Terrace Waffle Overshirt", maker: "Off Shift", collection: "off-shift", category: "Clothing", icon: "overshirt", price: 74, badges: ["new"], colorNames: ["Rust", "Moss", "Slate", "Ecru"], sizes: ["S", "M", "L", "XL"],
-      why: "Half shirt, half jacket — the thing he'll reach for every Saturday.", whoFor: "Pub gardens and dog walks.", sizing: "Relaxed fit.", giftBecause: "That easy, everyday layer he never gets round to buying." }),
-    P({ name: "Hand-Warmer Enamel Tankard", maker: "Kelder", collection: "off-shift", category: "Home", icon: "tankard", price: 22, colorNames: ["Fell Green", "Bracken", "Storm Blue"],
-      why: "Speckled enamel that holds a pint of tea by the fire.", whoFor: "Campervans and cold touchlines.", sizing: "500ml.", giftBecause: "Cheerful, useful and personalisable." }),
-    P({ name: "Peated Whisky Tasting Set", maker: "Cask & Crag", collection: "off-shift", category: "Food & Drink", icon: "whisky", price: 48, badges: ["gift"], colorNames: ["Peat"],
-      why: "Five island drams and tasting notes for a proper night in.", whoFor: "The armchair adventurer.", sizing: "5 × 30ml.", giftBecause: "An experience, not just a bottle." }),
-    P({ name: "Cast Iron BBQ Branding Kit", maker: "Ember & Oak", collection: "off-shift", category: "Home", icon: "bbq", price: 39, colorNames: ["Charcoal"],
-      why: "Sear, brand and swagger — cast iron tools that last a lifetime of summers.", whoFor: "The self-appointed grill master.", sizing: "3-piece.", giftBecause: "Plays straight to his favourite hobby." }),
-    P({ name: "Pub Quiz Pocket Games", maker: "Gable Games", collection: "off-shift", category: "Home", icon: "games", price: 18, colorNames: ["Bilberry", "Bracken"],
-      why: "Three pocket games for the pub, the tent or the passenger seat.", whoFor: "The good-company sort.", sizing: "Pocket-sized.", giftBecause: "A cracking little stocking filler." }),
-    P({ name: "Cotton Twill Cap", maker: "Off Shift", collection: "off-shift", category: "Accessories", icon: "cap", price: 26, colorNames: ["Moss", "Rust", "Charcoal", "Storm Blue"],
-      why: "A soft, unstructured cap that's better after a few washes.", whoFor: "Bad-hair-day walkers.", sizing: "Adjustable.", giftBecause: "Easy, safe and always worn." }),
-
-    /* ---------------- THE CRATE ---------------- */
-    P({ name: "The Fellside Crate", maker: "Bield", collection: "the-crate", category: "Gifts", icon: "crate", price: 95, badges: ["gift", "most-gifted"], colorNames: ["Fell Green"],
-      why: "Merino socks, a hip flask, trail bars and an OS map, boxed and ribboned.", whoFor: "The walker who's hard to buy for.", sizing: "5-piece crate.", giftBecause: "A whole gift, wrapped and carded, in one click." }),
-    P({ name: "The Gentleman's Crate", maker: "Bield", collection: "the-crate", category: "Gifts", icon: "crate", price: 110, badges: ["gift"], colorNames: ["Bilberry"],
-      why: "Grooming trio, a card wallet and a dram, for the man who likes nice things.", whoFor: "Dads, husbands, best men.", sizing: "4-piece crate.", giftBecause: "Looks and feels expensive; you barely lifted a finger." }),
-    P({ name: "The Working Man's Crate", maker: "Bield", collection: "the-crate", category: "Gifts", icon: "crate", price: 85, badges: ["gift"], colorNames: ["Bracken"],
-      why: "A flask, work gloves, a multi-tool and a tin of hand balm.", whoFor: "The one who's always grafting.", sizing: "4-piece crate.", giftBecause: "Practical to the core, and properly presented." }),
-    P({ name: "Build-Your-Own Crate", maker: "Bield", collection: "the-crate", category: "Gifts", icon: "crate", price: 45, badges: ["gift", "new"], colorNames: ["Oat"],
-      why: "Pick the box, choose three to five bits, add a handwritten card.", whoFor: "When you know him best.", sizing: "From £45.", giftBecause: "As thoughtful as you make it — and we wrap it." }),
-    P({ name: "The Wild Swimmer's Crate", maker: "Bield", collection: "the-crate", category: "Gifts", icon: "crate", price: 120, badges: ["gift", "new"], colorNames: ["Storm Blue"],
-      why: "A changing robe, neoprene gloves, a flask and a tide almanac.", whoFor: "The cold-water convert.", sizing: "4-piece crate.", giftBecause: "Everything for the hobby he's obsessed with, in one box." })
-  ];
-
-  // give each product a stable id based on slug of name for nicer URLs
-  products.forEach(function (p) {
-    p.id = p.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-  });
 
   /* ======================= JOURNAL ======================= */
-  var articles = [
-    { id: "six-flasks-blencathra", cat: "Kit Tests", title: "We tested six flasks on a wet weekend on Blencathra", excerpt: "One kept tea hot for a genuinely absurd length of time. Here's the one that won — and the two that leaked.", read: "6 min", date: "12 Sep 2026", motif: "flask",
-      body: [
-        "It rained, of course. That was rather the point. We wanted to know which flask still poured a hot brew after a night out on the fell, so we filled six with boiling water at nine on Friday evening, lashed them to the outside of our packs, and walked up Blencathra in the sort of drizzle the brand guidelines politely call 'on-brand'.",
-        { h: "The test" },
-        "Each flask started at 96°C. We measured again at 7am — ten hours later, after a cold, wet night in a bothy porch — and again at lunchtime on the summit.",
-        { q: "The winner still poured tea you'd actually want to drink, twelve hours after we filled it." },
-        "The Kelder Site Flask 1L was the clear winner. Twelve hours in, it was still handing out tea at a proper 68°C. It's also the one we'd trust to survive being dropped down a scree slope, which — full disclosure — happened.",
-        { h: "What we'd buy" },
-        "If you want one flask for one price, buy the Kelder. If you're buying for someone who takes their brew seriously, it's in The Working Man's Crate too."
-      ] },
-    { id: "gifts-for-the-man-who-wants-nothing", cat: "Gift Guides", title: "For the man who says he doesn't want anything", excerpt: "He does. He always does. A short, honest guide to the presents men pretend not to want and then use every day.", read: "4 min", date: "5 Sep 2026", motif: "crate",
-      body: [
-        "Every year, someone tells us their husband, dad or brother 'doesn't want anything'. And every year, that same man quietly buys himself the exact thing you might have got him. We've made a living out of this contradiction, so let us help.",
-        { h: "The rule" },
-        "Buy the upgrade he won't buy himself. Men are oddly reluctant to replace things that still technically work — the fraying wallet, the flask with the broken seal, the boots held together by optimism.",
-        { q: "The best gift is the nicer version of the thing he already loves." },
-        "Start with the wallet, the watch or the boots. If you're not sure, The Gentleman's Crate does the thinking for you, and it arrives wrapped."
-      ] },
-    { id: "waxed-cotton-care", cat: "Field Notes", title: "How to re-wax a jacket (and why you should)", excerpt: "A waxed jacket is a fifteen-year jacket if you look after it. It takes twenty minutes, a tin of wax and a warm afternoon.", read: "5 min", date: "28 Aug 2026", motif: "jacket",
-      body: [
-        "A waxed cotton jacket isn't meant to look new. It's meant to look like yours. But every couple of years the wax wears thin at the cuffs and shoulders, and water stops beading and starts soaking. That's your cue.",
-        { h: "You'll need" },
-        "A tin of wax, a hairdryer or a warm room, a clean cloth, and an afternoon you don't mind smelling faintly of a saddlery.",
-        { q: "Warm the wax, warm the jacket, work it in with a cloth, then hang it somewhere warm overnight." },
-        "Do the seams and high-wear areas twice. By morning it'll have soaked in, and your jacket will be good for another few winters of drizzle."
-      ] },
-    { id: "meet-the-maker-cumbria-bootworks", cat: "Maker Stories", title: "Meet the maker: Cumbria Bootworks", excerpt: "In a workshop outside Kendal, a small team still welts boots by hand — and will resole them for as long as you own them.", read: "7 min", date: "20 Aug 2026", motif: "boot",
-      body: [
-        "You can hear the workshop before you see it: the tap of a hammer, the hiss of a steam press, radio two under all of it. Cumbria Bootworks has made Goodyear-welted boots on the same benches for three generations.",
-        { h: "Made to be mended" },
-        "The welt is the whole point. Because the sole is stitched, not glued, it can be replaced — again and again. A pair of these boots, resoled every few years, will outlast almost everything else in the wardrobe.",
-        { q: "We'd rather sell you one pair for twenty years than four pairs for five." },
-        "It's exactly the sort of quiet, stubborn quality Bield was built to sell. Their Grafter boot is one of our most-gifted things, and we're not surprised."
-      ] },
-    { id: "first-wild-swim", cat: "Adventures", title: "Your first wild swim, without the drama", excerpt: "You don't need to be brave, or cold-adapted, or anything really. You need a friend, a flask and somewhere shallow to start.", read: "5 min", date: "14 Aug 2026", motif: "robe",
-      body: [
-        "Wild swimming has a bit of a reputation — ice baths, wet-suited hardcases, breathing techniques with names. Ignore all that. Your first swim should be gentle, shallow and short.",
-        { h: "The kit" },
-        "You genuinely need very little: a towel, a warm layer for after, and — the one real upgrade — a decent changing robe for the shivery bit. A flask of something hot helps more than you'd think.",
-        { q: "Get in slowly, stay near the edge, get out before you stop enjoying it." },
-        "That's it. Do that a few times through the summer and you'll understand why people won't stop banging on about it. We've a Wild Swimmer's Crate if you want it all in one box."
-      ] },
-    { id: "more-than-a-shop", cat: "Field Notes", title: "More than a shop: the idea behind Bield", excerpt: "Kit, knowledge and good company. A short note on why we're a community as much as a shop — and what that means for you.", read: "3 min", date: "1 Aug 2026", motif: "waterproof",
-      body: [
-        "Most shops sell you a thing and wave goodbye. We wanted to do the harder, better bit: give men the know-how and the good company to actually get out there and lead.",
-        "So kit is only half of what we do. The other half is knowledge — honest tests, plain-English advice, route guides — and company: meet-ups, a Journal worth reading, and the sense that there's a group of you at it, not just a parcel on the doormat.",
-        { q: "Kit is only half of it. The know-how and the good company are what get you out the door." },
-        "That's the idea in our mark, too: a sheep bield drawn in plan. A bield is a Cumbrian word for shelter — the drystone wall on a fellside where you stop, take stock and set off better equipped. Everything in the shop is chosen and explained by people who've actually used it — and if you're buying it as a gift, we'll wrap it with a card."
-      ] }
-  ];
+  var articles = [];
 
   /* attach convenience arrays and helpers */
   function byCollection(slug) { return products.filter(function (p) { return p.collection === slug; }); }
@@ -343,12 +217,19 @@
   function getArticle(id) { return articles.filter(function (a) { return a.id === id; })[0]; }
   function collection(slug) { return collections.filter(function (c) { return c.slug === slug; })[0]; }
 
-  window.BIELD = {
+  function slugify(name) {
+    return String(name).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  }
+
+  // Build the public API object. `products`, `collections`, `articles` and
+  // `site` are filled in once the content JSON has loaded (see below).
+  var BIELD = {
     palette: PALETTE,
     colours: COLOURS,
     collections: collections,
     products: products,
     articles: articles,
+    site: {},
     icons: ICONS,
     art: { product: productArt, media: productMedia, scene: scene, editorial: editorial, tint: tint },
     byCollection: byCollection,
@@ -357,4 +238,53 @@
     collection: collection,
     money: function (n) { return "£" + (Number(n) % 1 === 0 ? n : n.toFixed(2)); }
   };
+  window.BIELD = BIELD;
+
+  // ---- Load editable content from /content/*.json ------------------------
+  // The catalogue and copy live in JSON files the CMS (/admin) edits. We fetch
+  // them, build the products through P() (adds ids, colours, ratings), and
+  // resolve window.BIELD_READY so store.js can render once the data is in.
+  function getJSON(path) {
+    return fetch(path, { cache: "no-cache" }).then(function (r) {
+      if (!r.ok) throw new Error("Failed to load " + path + " (" + r.status + ")");
+      return r.json();
+    });
+  }
+
+  window.BIELD_READY = Promise.all([
+    getJSON("content/site.json"),
+    getJSON("content/collections.json"),
+    getJSON("content/products.json"),
+    getJSON("content/articles.json")
+  ]).then(function (res) {
+    var site = res[0] || {};
+    var colls = (res[1] && res[1].collections) || [];
+    var rawProducts = (res[2] && res[2].products) || [];
+    var arts = (res[3] && res[3].articles) || [];
+
+    // rebuild the arrays in place so the closures above see the new data
+    collections.length = 0;
+    colls.forEach(function (c) { collections.push(c); });
+
+    products.length = 0;
+    rawProducts.forEach(function (o) {
+      var p = P(o);
+      p.id = slugify(p.name);
+      products.push(p);
+    });
+
+    articles.length = 0;
+    arts.forEach(function (a) { articles.push(a); });
+
+    BIELD.site = site;
+    return BIELD;
+  }).catch(function (err) {
+    console.error("Bield: could not load site content —", err);
+    var main = document.getElementById("main");
+    if (main) {
+      main.innerHTML = '<div style="padding:48px 20px;max-width:640px;margin:0 auto;font-family:Georgia,serif">' +
+        '<h1>Bield</h1><p>Sorry — the shop content couldn’t load. Please refresh, or check back shortly.</p></div>';
+    }
+    throw err;
+  });
 })();

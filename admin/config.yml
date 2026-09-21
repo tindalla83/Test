@@ -1,0 +1,263 @@
+# Bield content manager (Sveltia CMS) configuration.
+# Edit the storefront through friendly forms; saving commits to GitHub and
+# Render redeploys automatically (~1 min to go live).
+#
+# ── One-time setup (see ADMIN.md) ────────────────────────────────────────────
+#   1. `branch` below must match the branch Render deploys from.
+#   2. `base_url` must point at your Sveltia auth worker (GitHub login relay).
+# ─────────────────────────────────────────────────────────────────────────────
+
+backend:
+  name: github
+  repo: tindalla83/Test
+  branch: claude/quirky-clarke-2g6ub8
+  # The GitHub login relay you deploy once (Cloudflare Worker). See ADMIN.md.
+  base_url: https://bield-cms-auth.YOUR-SUBDOMAIN.workers.dev
+
+# Where uploaded images are stored, and the path the site references them by.
+media_folder: assets/img/uploads
+public_folder: assets/img/uploads
+
+# Shown in the editor UI; update to your real domain when live.
+site_url: https://bield.example
+display_url: https://bield.example
+
+collections:
+  # ───────────────────────────── PRODUCTS ─────────────────────────────
+  - name: products
+    label: Products
+    label_singular: Product
+    description: Everything the shop sells. Add, edit, reorder or remove items.
+    files:
+      - name: catalogue
+        label: Product catalogue
+        file: content/products.json
+        description: The full list of products.
+        fields:
+          - name: products
+            label: Products
+            label_singular: Product
+            widget: list
+            summary: "{{fields.name}} — £{{fields.price}}"
+            fields:
+              - { name: name, label: Name, widget: string }
+              - { name: maker, label: Maker / brand, widget: string, required: false }
+              - name: collection
+                label: Collection
+                widget: select
+                options:
+                  - { label: Graft, value: graft }
+                  - { label: Fellside, value: fellside }
+                  - { label: Sunday Best, value: sunday-best }
+                  - { label: Off Shift, value: off-shift }
+                  - { label: The Crate, value: the-crate }
+              - name: category
+                label: Category
+                widget: select
+                options: [Clothing, Footwear, Gear, Accessories, Grooming, Home, Food & Drink, Gifts]
+              - { name: price, label: Price (£), widget: number, value_type: float, min: 0 }
+              - { name: oldPrice, label: "Was price (£, optional — shows a sale)", widget: number, value_type: float, required: false, min: 0 }
+              - name: badges
+                label: Badges
+                widget: select
+                multiple: true
+                required: false
+                options:
+                  - { label: Bestseller, value: bestseller }
+                  - { label: Most gifted, value: most-gifted }
+                  - { label: New, value: new }
+                  - { label: Sale, value: sale }
+                  - { label: Gift, value: gift }
+              - name: icon
+                label: Icon (used when there is no photo)
+                widget: select
+                options: [jacket, waterproof, fleece, jumper, boot, flask, torch, backpack, holdall, watch, wallet, multitool, gloves, socks, mug, tankard, grooming, whisky, bbq, games, cap, beanie, robe, crate, overshirt, knife]
+              - name: colorNames
+                label: Colours
+                widget: list
+                field: { name: colour, label: Colour, widget: string }
+                required: false
+              - name: sizes
+                label: Sizes
+                widget: list
+                field: { name: size, label: Size, widget: string }
+                required: false
+              - name: images
+                label: Photos (optional — one per colour, in the same order)
+                widget: list
+                required: false
+                field: { name: image, label: Photo, widget: image }
+              - { name: why, label: "Why it's good", widget: text, required: false }
+              - { name: whoFor, label: "Who it's for", widget: text, required: false }
+              - { name: sizing, label: Sizing / fit, widget: text, required: false }
+              - { name: giftBecause, label: Why it makes a good gift, widget: text, required: false }
+
+  # ─────────────────────────── COLLECTIONS ────────────────────────────
+  - name: collections
+    label: Collections
+    description: The shop's collections (their tiles, heroes and copy).
+    files:
+      - name: list
+        label: Collections
+        file: content/collections.json
+        fields:
+          - name: collections
+            label: Collections
+            label_singular: Collection
+            widget: list
+            summary: "{{fields.name}}"
+            fields:
+              - { name: slug, label: "Slug (URL id — avoid changing)", widget: string, pattern: ['^[a-z0-9-]+$', 'lowercase letters, numbers and hyphens only'] }
+              - { name: name, label: Name, widget: string }
+              - { name: tagline, label: Tagline (small kicker), widget: string }
+              - { name: desc, label: Description, widget: text }
+              - { name: image, label: Photo (optional), widget: image, required: false }
+              - { name: imageAlt, label: Photo description (accessibility), widget: string, required: false }
+              - name: scene
+                label: Fallback artwork colours (used when no photo)
+                widget: object
+                collapsed: true
+                fields:
+                  - { name: sky, label: Sky, widget: string, required: false }
+                  - { name: mid, label: Mid, widget: string, required: false }
+                  - { name: fore, label: Foreground, widget: string, required: false }
+                  - { name: accent, label: Accent, widget: string, required: false }
+
+  # ───────────────────────────── JOURNAL ──────────────────────────────
+  - name: articles
+    label: Journal
+    label_singular: Article
+    description: Journal stories.
+    files:
+      - name: list
+        label: Journal articles
+        file: content/articles.json
+        fields:
+          - name: articles
+            label: Articles
+            label_singular: Article
+            widget: list
+            summary: "{{fields.title}}"
+            fields:
+              - { name: id, label: "Slug (URL id)", widget: string, pattern: ['^[a-z0-9-]+$', 'lowercase letters, numbers and hyphens only'] }
+              - name: cat
+                label: Category
+                widget: select
+                options: [Kit Tests, Gift Guides, Field Notes, Maker Stories, Adventures]
+              - { name: title, label: Title, widget: string }
+              - { name: excerpt, label: Excerpt (shown on cards), widget: text }
+              - { name: read, label: Read time (e.g. "5 min"), widget: string }
+              - { name: date, label: Date (e.g. "12 Sep 2026"), widget: string }
+              - name: motif
+                label: Artwork motif
+                widget: select
+                options: [jacket, waterproof, fleece, jumper, boot, flask, torch, backpack, holdall, watch, wallet, multitool, gloves, socks, mug, tankard, grooming, whisky, bbq, games, cap, beanie, robe, crate, overshirt, knife]
+              - { name: body, label: "Body (use ## for a subheading, > for a quote)", widget: markdown }
+
+  # ───────────────────────── SITE & PAGE COPY ─────────────────────────
+  - name: site
+    label: Site & page text
+    description: Homepage, About and Journal wording, the announcement bar and footer.
+    files:
+      - name: settings
+        label: Site & page text
+        file: content/site.json
+        fields:
+          - name: announcement
+            label: Announcement bar (top strip)
+            widget: object
+            fields:
+              - { name: text, label: Message, widget: string }
+              - { name: linkLabel, label: Link text (optional), widget: string, required: false }
+              - { name: linkHref, label: Link URL, widget: string, required: false }
+
+          - name: home
+            label: Homepage
+            widget: object
+            fields:
+              - { name: heroEyebrow, label: Hero — kicker, widget: string }
+              - { name: heroTitle, label: Hero — headline, widget: string }
+              - { name: heroText, label: Hero — text, widget: text }
+              - { name: heroImage, label: Hero — image, widget: image, required: false }
+              - { name: heroImageAlt, label: Hero — image description, widget: string, required: false }
+              - { name: heroCtaPrimaryLabel, label: Hero — button 1 text, widget: string }
+              - { name: heroCtaPrimaryHref, label: Hero — button 1 link, widget: string }
+              - { name: heroCtaSecondaryLabel, label: Hero — button 2 text, widget: string }
+              - { name: heroCtaSecondaryHref, label: Hero — button 2 link, widget: string }
+              - name: assurances
+                label: Promise strip (4 items)
+                widget: list
+                max: 4
+                fields:
+                  - { name: title, label: Title, widget: string }
+                  - { name: sub, label: Sub-text, widget: string }
+              - { name: collectionsEyebrow, label: "Collections — kicker", widget: string }
+              - { name: collectionsTitle, label: "Collections — heading", widget: string }
+              - { name: mostGiftedEyebrow, label: "Most gifted — kicker", widget: string }
+              - { name: mostGiftedTitle, label: "Most gifted — heading", widget: string }
+              - { name: giftBandEyebrow, label: "Gift band — kicker", widget: string }
+              - { name: giftBandTitle, label: "Gift band — heading", widget: string }
+              - { name: giftBandText, label: "Gift band — text", widget: text }
+              - name: giftMiniCards
+                label: Gift band — three cards
+                widget: list
+                max: 3
+                fields:
+                  - { name: title, label: Title, widget: string }
+                  - { name: sub, label: Sub-text, widget: string }
+              - { name: bestsellersEyebrow, label: "Bestsellers — kicker", widget: string }
+              - { name: bestsellersTitle, label: "Bestsellers — heading", widget: string }
+              - { name: justInEyebrow, label: "Just in — kicker", widget: string }
+              - { name: justInTitle, label: "Just in — heading", widget: string }
+              - { name: communityEyebrow, label: "Community band — kicker", widget: string }
+              - { name: communityTitle, label: "Community band — heading", widget: string }
+              - { name: communityLede, label: "Community band — lead text", widget: text }
+              - { name: communityText, label: "Community band — text", widget: text }
+              - { name: journalEyebrow, label: "Journal band — kicker", widget: string }
+              - { name: journalTitle, label: "Journal band — heading", widget: string }
+
+          - name: journalPage
+            label: Journal page header
+            widget: object
+            fields:
+              - { name: title, label: Heading, widget: string }
+              - { name: text, label: Intro text, widget: text }
+
+          - name: about
+            label: About / Our Story page
+            widget: object
+            fields:
+              - { name: heroEyebrow, label: Hero — kicker, widget: string }
+              - { name: heroTitle, label: Hero — headline, widget: string }
+              - { name: heroText, label: Hero — text, widget: text }
+              - { name: heroImage, label: Hero — image, widget: image, required: false }
+              - { name: heroImageAlt, label: Hero — image description, widget: string, required: false }
+              - { name: intro, label: "Intro (## subheading, > quote)", widget: markdown }
+              - { name: communityEyebrow, label: "Community — kicker", widget: string }
+              - { name: communityTitle, label: "Community — heading", widget: string }
+              - { name: communityLede, label: "Community — lead text", widget: text }
+              - { name: communityText, label: "Community — text", widget: text }
+              - { name: valuesEyebrow, label: "Values — kicker", widget: string }
+              - { name: valuesTitle, label: "Values — heading", widget: string }
+              - name: values
+                label: Values (cards)
+                widget: list
+                summary: "{{fields.title}}"
+                fields:
+                  - name: icon
+                    label: Icon
+                    widget: select
+                    options: [heart, mountain, gift, check, leaf, user, truck, swap, tag]
+                  - { name: title, label: Title, widget: string }
+                  - { name: body, label: Text, widget: text }
+              - { name: curationEyebrow, label: "Curation — kicker", widget: string }
+              - { name: curationTitle, label: "Curation — heading", widget: string }
+              - { name: curationLede, label: "Curation — lead text", widget: text }
+              - { name: curationText, label: "Curation — text", widget: text }
+
+          - name: footer
+            label: Footer
+            widget: object
+            fields:
+              - { name: blurb, label: Footer blurb, widget: text }
+              - { name: tagline, label: Bottom tagline, widget: string }

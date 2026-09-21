@@ -6,8 +6,9 @@
 
 (function () {
   "use strict";
-  var M = window.BIELD;
-  var money = M.money;
+  // Populated once the content JSON has loaded (see BOOT). SITE holds the
+  // editable copy from content/site.json.
+  var M, money, SITE;
 
   /* ---------------- tiny helpers ---------------- */
   function h(html) { var t = document.createElement("template"); t.innerHTML = html.trim(); return t.content.firstElementChild; }
@@ -15,6 +16,25 @@
   function $$(sel, ctx) { return Array.prototype.slice.call((ctx || document).querySelectorAll(sel)); }
   function param(name) { return new URLSearchParams(location.search).get(name); }
   function esc(s) { return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+  // Minimal Markdown → HTML for article bodies (paragraphs, ## subheadings,
+  // > pull-quotes, **bold**, *italic*, [links](url)). Input is treated as text.
+  function mdInline(escaped) {
+    return escaped
+      .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, '<a href="$2">$1</a>')
+      .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+      .replace(/\*([^*]+)\*/g, "<em>$1</em>");
+  }
+  function renderMarkdown(md) {
+    if (!md) return "";
+    return String(md).replace(/\r\n/g, "\n").trim().split(/\n{2,}/).map(function (blk) {
+      if (/^#{1,6}\s+/.test(blk)) return "<h2>" + mdInline(esc(blk.replace(/^#{1,6}\s+/, ""))) + "</h2>";
+      if (/^>\s?/.test(blk)) {
+        var quote = blk.split("\n").map(function (l) { return l.replace(/^>\s?/, ""); }).join(" ");
+        return "<blockquote>" + mdInline(esc(quote)) + "</blockquote>";
+      }
+      return "<p>" + mdInline(esc(blk).replace(/\n/g, "<br>")) + "</p>";
+    }).join("");
+  }
   // Collection artwork: a real photo when the collection has one, else the
   // generated on-brand scene. Covers both the homepage tile and the
   // collection page hero.
@@ -142,12 +162,13 @@
       return '<a href="' + n.href + '"' + active + '>' + n.label + '</a>';
     }).join("");
 
+    var ann = SITE.announcement || {};
     var header = h(
       '<div class="site-head">' +
       '<a class="skip-link" href="#main">Skip to content</a>' +
       '<div class="topbar"><div class="container topbar__inner">' +
-      '<span class="topbar__msg"><span class="topbar__dot"></span> Free UK delivery over £75 · free gift wrap on everything</span>' +
-      '<a href="gift-finder.html" class="hide-sm">Find his gift in 3 taps →</a>' +
+      '<span class="topbar__msg"><span class="topbar__dot"></span> ' + esc(ann.text || "") + '</span>' +
+      (ann.linkLabel ? '<a href="' + esc(ann.linkHref || "gift-finder.html") + '" class="hide-sm">' + esc(ann.linkLabel) + '</a>' : "") +
       '</div></div>' +
       '<header class="site-header"><div class="container site-header__inner">' +
       '<nav class="nav-primary" aria-label="Primary">' + navLinks + '</nav>' +
@@ -225,7 +246,7 @@
       '<footer class="site-footer"><div class="container">' +
       '<div class="footer-grid">' +
       '<div class="footer-brand"><a class="brand brand--footer" href="index.html"><span class="brand__logo">' + MARK + '</span><span class="brand__word">Bield</span></a>' +
-      '<p>The UK’s one-stop men’s shop and community: kit, knowledge and good company for men who want to get out there and lead.</p>' +
+      '<p>' + esc((SITE.footer || {}).blurb || "") + '</p>' +
       '<div class="footer-social">' +
       '<a href="#" aria-label="Instagram">' + I.insta + '</a>' +
       '<a href="#" aria-label="Pinterest">' + I.pin + '</a>' +
@@ -242,7 +263,7 @@
       '<a href="#">Delivery &amp; returns</a><a href="#">Size &amp; fit</a><a href="#">Free size swaps</a>' +
       '<a href="#">Gift wrap &amp; cards</a><a href="about.html">Our story</a></div>' +
       '</div>' +
-      '<div class="footer-bottom"><span>© ' + new Date().getFullYear() + ' Bield. Kit, knowledge and good company.</span>' +
+      '<div class="footer-bottom"><span>© ' + new Date().getFullYear() + ' Bield. ' + esc((SITE.footer || {}).tagline || "") + '</span>' +
       '<span><a href="#">Privacy</a> · <a href="#">Terms</a> · <a href="#">Cookies</a></span></div>' +
       '</div></footer>'
     );
@@ -327,35 +348,37 @@
     var gifted = M.products.filter(function (p) { return p.badges.indexOf("most-gifted") > -1 || p.badges.indexOf("gift") > -1; }).slice(0, 4);
     var best = M.products.filter(function (p) { return p.badges.indexOf("bestseller") > -1; }).slice(0, 4);
 
-    // Main homepage image. Put a file in assets/img/ and set the path here, e.g.
-    //   var heroImage = "assets/img/hero.jpg";
-    // Leave it "" to keep the generated artwork. Landscape works best (e.g. 2400x1400).
-    var heroImage = "assets/img/hero.jpg";
-    var heroAlt = "A man in a flat cap and wool jacket standing in autumn woodland at dusk";
+    var s = SITE.home || {};
+    var heroImage = s.heroImage || "";
     var heroMedia = heroImage
-      ? '<img src="' + heroImage + '" alt="' + heroAlt + '">'
+      ? '<img src="' + esc(heroImage) + '" alt="' + esc(s.heroImageAlt || "") + '">'
       : M.art.scene({ sky: "#3E4548", mid: "#4A3B2E", fore: "#2C3B33", accent: "#9A5B2E", id: "hero" });
+
+    var assureIcons = [I.gift, I.truck, I.swap, I.leaf];
+    var assurances = (s.assurances || []).map(function (a, i) {
+      return assure(assureIcons[i % assureIcons.length], a.title, a.sub);
+    }).join("");
+
+    var miniIcons = [I.gift, I.mountain, I.tag];
+    var miniCards = (s.giftMiniCards || []).map(function (m, i) {
+      return '<div class="gf-mini-card">' + miniIcons[i % miniIcons.length] + '<b>' + esc(m.title) + '</b><span>' + esc(m.sub) + '</span></div>';
+    }).join("");
 
     main.innerHTML =
       // HERO
       '<section class="hero"><div class="hero__media">' + heroMedia + '</div><div class="hero__scrim"></div>' +
-      '<div class="container hero__inner"><p class="eyebrow eyebrow--light">Kit · Knowledge · Good company</p>' +
-      '<h1>Good kit, good company.</h1>' +
-      '<p>The UK’s one-stop men’s shop and community — the kit, the know-how and the good company to get you out there and leading. Chosen by people who’ve actually used it.</p>' +
-      '<div class="hero__cta"><a class="btn btn--accent" href="shop.html">Shop the range ' + I.arrow + '</a>' +
-      '<a class="btn btn--light" href="gift-finder.html">Find a gift</a></div></div></section>' +
+      '<div class="container hero__inner"><p class="eyebrow eyebrow--light">' + esc(s.heroEyebrow || "") + '</p>' +
+      '<h1>' + esc(s.heroTitle || "") + '</h1>' +
+      '<p>' + esc(s.heroText || "") + '</p>' +
+      '<div class="hero__cta"><a class="btn btn--accent" href="' + esc(s.heroCtaPrimaryHref || "shop.html") + '">' + esc(s.heroCtaPrimaryLabel || "Shop the range") + ' ' + I.arrow + '</a>' +
+      '<a class="btn btn--light" href="' + esc(s.heroCtaSecondaryHref || "gift-finder.html") + '">' + esc(s.heroCtaSecondaryLabel || "Find a gift") + '</a></div></div></section>' +
 
       // ASSURANCE
-      '<section class="assurance"><div class="container"><div class="assurance__grid">' +
-      assure(I.gift, "Free gift wrap", "On everything, with a handwritten card") +
-      assure(I.truck, "Free UK delivery", "On orders over £75, next-day option") +
-      assure(I.swap, "Free size swaps", "Not sure of his size? Send it back free") +
-      assure(I.leaf, "Made to last", "Chosen to be used for years, not weeks") +
-      '</div></div></section>' +
+      '<section class="assurance"><div class="container"><div class="assurance__grid">' + assurances + '</div></div></section>' +
 
       // COLLECTIONS
       '<section class="section" id="collections"><div class="container">' +
-      '<div class="section-head"><div><p class="eyebrow">Shop by the man</p><h2>Five collections, one shop</h2></div>' +
+      '<div class="section-head"><div><p class="eyebrow">' + esc(s.collectionsEyebrow || "") + '</p><h2>' + esc(s.collectionsTitle || "") + '</h2></div>' +
       '<a class="link-more" href="shop.html">All products ' + I.arrow + '</a></div>' +
       '<div class="tiles">' + M.collections.map(function (c, i) {
         var wide = i === 0 ? " tile--wide" : "";
@@ -368,29 +391,26 @@
 
       // MOST GIFTED
       '<section class="section section--tight" style="background:var(--bothy-cream-2)"><div class="container">' +
-      '<div class="section-head"><div><p class="eyebrow">For the man who wants nothing</p><h2>Most gifted</h2></div>' +
+      '<div class="section-head"><div><p class="eyebrow">' + esc(s.mostGiftedEyebrow || "") + '</p><h2>' + esc(s.mostGiftedTitle || "") + '</h2></div>' +
       '<a class="link-more" href="shop.html?gift=1">More gift ideas ' + I.arrow + '</a></div>' +
       grid(gifted) + '</div></section>' +
 
       // GIFT BAND
       '<section class="section"><div class="container"><div class="giftband"><div class="giftband__inner">' +
-      '<div><p class="eyebrow eyebrow--light">Not sure what to get?</p><h2>His gift, in three taps.</h2>' +
-      '<p>Tell us who he is, what he’s like and your budget. We’ll do the hard bit — then wrap it and post it with a card.</p>' +
+      '<div><p class="eyebrow eyebrow--light">' + esc(s.giftBandEyebrow || "") + '</p><h2>' + esc(s.giftBandTitle || "") + '</h2>' +
+      '<p>' + esc(s.giftBandText || "") + '</p>' +
       '<a class="btn btn--light" href="gift-finder.html" style="margin-top:8px">Start the gift finder ' + I.arrow + '</a></div>' +
-      '<div class="giftfinder-mini"><div class="gf-mini-card">' + I.gift + '<b>Who’s it for?</b><span>Partner, dad, son, brother or a mate</span></div>' +
-      '<div class="gf-mini-card">' + I.mountain + '<b>What’s he like?</b><span>Grafter, walker, gent, weekender</span></div>' +
-      '<div class="gf-mini-card">' + I.tag + '<b>Your budget?</b><span>Under £25, £50, £100 — or treat him</span></div>' +
-      '</div></div></div></div></section>' +
+      '<div class="giftfinder-mini">' + miniCards + '</div></div></div></div></section>' +
 
       // BESTSELLERS
       '<section class="section section--tight"><div class="container">' +
-      '<div class="section-head"><div><p class="eyebrow">Tried and trusted</p><h2>This season’s bestsellers</h2></div>' +
+      '<div class="section-head"><div><p class="eyebrow">' + esc(s.bestsellersEyebrow || "") + '</p><h2>' + esc(s.bestsellersTitle || "") + '</h2></div>' +
       '<a class="link-more" href="shop.html">Shop all ' + I.arrow + '</a></div>' +
       grid(best) + '</div></section>' +
 
       // JUST IN
       (newest.length ? '<section class="section section--tight" style="background:var(--bothy-cream-2)"><div class="container">' +
-      '<div class="section-head"><div><p class="eyebrow">Fresh off the fell</p><h2>Just in</h2></div>' +
+      '<div class="section-head"><div><p class="eyebrow">' + esc(s.justInEyebrow || "") + '</p><h2>' + esc(s.justInTitle || "") + '</h2></div>' +
       '<a class="link-more" href="shop.html?sort=new">See what’s new ' + I.arrow + '</a></div>' +
       grid(newest) + '</div></section>' : "") +
 
@@ -398,22 +418,22 @@
       '<section class="section" style="background:var(--sand)"><div class="container"><div class="split">' +
       '<div class="split__media" style="background:var(--oatmeal);display:grid;place-items:center;box-shadow:none;border:1px solid var(--line);padding:12%">' +
       '<img src="assets/img/bield-mark.svg" alt="The Bield mark — a sheep bield drawn in plan" style="width:74%;height:auto"></div>' +
-      '<div><p class="eyebrow">Kit, knowledge &amp; good company</p><h2>More than a shop</h2>' +
-      '<p class="lede">Bield is a community as much as a shop — route guides, honest kit tests, meet-ups and good company for men who want to get out there and lead.</p>' +
-      '<p>We give you the know-how first: how to re-wax a jacket, plan a first wild swim, or pack for a night on the fells. Everything is chosen and explained by people who’ve actually used it.</p>' +
+      '<div><p class="eyebrow">' + esc(s.communityEyebrow || "") + '</p><h2>' + esc(s.communityTitle || "") + '</h2>' +
+      '<p class="lede">' + esc(s.communityLede || "") + '</p>' +
+      '<p>' + esc(s.communityText || "") + '</p>' +
       '<a class="btn btn--ghost" href="about.html">Our story ' + I.arrow + '</a></div>' +
       '</div></div></section>' +
 
       // JOURNAL
       '<section class="section section--tight"><div class="container">' +
-      '<div class="section-head"><div><p class="eyebrow">The Journal</p><h2>Kit tests, trail guides &amp; maker stories</h2></div>' +
+      '<div class="section-head"><div><p class="eyebrow">' + esc(s.journalEyebrow || "") + '</p><h2>' + esc(s.journalTitle || "") + '</h2></div>' +
       '<a class="link-more" href="journal.html">Read the Journal ' + I.arrow + '</a></div>' +
       '<div class="journal-grid">' + M.articles.slice(0, 3).map(articleCard).join("") + '</div></div></section>' +
 
       newsletterSection();
     mountNewsletter();
   }
-  function assure(icon, title, sub) { return '<div class="assurance__item">' + icon + '<div><b>' + title + '</b><span>' + sub + '</span></div></div>'; }
+  function assure(icon, title, sub) { return '<div class="assurance__item">' + icon + '<div><b>' + esc(title) + '</b><span>' + esc(sub) + '</span></div></div>'; }
 
   /* =========================================================================
      PAGE: SHOP
@@ -754,7 +774,7 @@
     main.innerHTML =
       '<section class="page-hero"><div class="page-hero__media">' + M.art.scene({ id: "journal", sky: "#3E4548", mid: "#4A3B2E", fore: "#2C3B33" }) + '</div>' +
       '<div class="container page-hero__inner"><div class="breadcrumb"><a href="index.html">Home</a> / <span>Journal</span></div>' +
-      '<h1>The Journal</h1><p>Trail guides, honest kit tests and the makers behind the shop — the stories that help you choose well.</p></div></section>' +
+      '<h1>' + esc((SITE.journalPage || {}).title || "The Journal") + '</h1><p>' + esc((SITE.journalPage || {}).text || "") + '</p></div></section>' +
       // feature
       '<section class="section"><div class="container"><a class="split" href="article.html?id=' + feature.id + '" style="text-decoration:none">' +
       '<div class="split__media">' + M.art.editorial({ base: pickBase(feature.cat), motif: feature.motif, id: 99 }) + '</div>' +
@@ -772,12 +792,14 @@
     var main = $("#main");
     if (!a) { main.innerHTML = notFound("We couldn’t find that article."); return; }
     document.title = a.title + " — Bield Journal";
-    var body = a.body.map(function (b) {
-      if (typeof b === "string") return "<p>" + esc(b) + "</p>";
-      if (b.h) return "<h2>" + esc(b.h) + "</h2>";
-      if (b.q) return "<blockquote>" + esc(b.q) + "</blockquote>";
-      return "";
-    }).join("");
+    var body = typeof a.body === "string"
+      ? renderMarkdown(a.body)
+      : (a.body || []).map(function (b) {
+          if (typeof b === "string") return "<p>" + esc(b) + "</p>";
+          if (b.h) return "<h2>" + esc(b.h) + "</h2>";
+          if (b.q) return "<blockquote>" + esc(b.q) + "</blockquote>";
+          return "";
+        }).join("");
     main.innerHTML =
       '<article><section class="section" style="padding-bottom:0"><div class="container" style="max-width:820px">' +
       '<div class="breadcrumb breadcrumb--dark"><a href="index.html">Home</a> / <a href="journal.html">Journal</a> / <span>' + esc(a.cat) + '</span></div>' +
@@ -799,44 +821,40 @@
      ========================================================================= */
   function renderAbout() {
     var main = $("#main");
+    var a = SITE.about || {};
+    var heroMedia = a.heroImage
+      ? '<div class="page-hero__media page-hero__media--photo"><img src="' + esc(a.heroImage) + '" alt="' + esc(a.heroImageAlt || "") + '"></div>'
+      : '<div class="page-hero__media">' + M.art.scene({ id: "about", sky: "#3E4548", mid: "#4A3B2E", fore: "#2C3B33", accent: "#9A5B2E" }) + '</div>';
+    var values = (a.values || []).map(function (v) {
+      return valueCard(I[v.icon] || I.check, v.title, v.body);
+    }).join("");
     main.innerHTML =
-      '<section class="page-hero"><div class="page-hero__media page-hero__media--photo"><img src="assets/img/about-hero.jpg" alt="A man in a hooded gilet looking out over pine forest and distant mountains"></div>' +
+      '<section class="page-hero">' + heroMedia +
       '<div class="container page-hero__inner"><div class="breadcrumb"><a href="index.html">Home</a> / <span>Our Story</span></div>' +
-      '<p class="eyebrow eyebrow--light">Kit, knowledge &amp; good company</p><h1>More than a shop</h1>' +
-      '<p>We give men the kit, the know-how and the good company to get out there and lead.</p></div></section>' +
-      '<section class="section"><div class="container"><div class="prose">' +
-      '<p>Bield is the UK’s one-stop men’s shop and community: kit, knowledge and good company for men who want to get out there and lead. A bield is a Cumbrian word for shelter — the drystone wall or hollow on a fellside where you get out of the weather. It names exactly what we are: somewhere to stop, take stock and set off better equipped.</p>' +
-      '<blockquote>Kit is only half of it. The know-how and the good company are what actually get you out the door.</blockquote>' +
-      '<p>So we lead with knowledge: honest kit tests, route guides and plain-English advice from people who’ve actually used the gear. Gift buyers are a welcome second audience, and everything can be wrapped with a handwritten card — but the man, and getting him out there, comes first.</p>' +
-      '</div></div></section>' +
+      '<p class="eyebrow eyebrow--light">' + esc(a.heroEyebrow || "") + '</p><h1>' + esc(a.heroTitle || "") + '</h1>' +
+      '<p>' + esc(a.heroText || "") + '</p></div></section>' +
+      '<section class="section"><div class="container"><div class="prose">' + renderMarkdown(a.intro) + '</div></div></section>' +
       '<section class="section" style="background:var(--sand)"><div class="container"><div class="split">' +
       '<div class="split__media" style="background:var(--oatmeal);display:grid;place-items:center;box-shadow:none;border:1px solid var(--line);padding:12%">' +
       '<img src="assets/img/bield-mark.svg" alt="The Bield mark — a sheep bield drawn in plan" style="width:74%;height:auto"></div>' +
-      '<div><p class="eyebrow">The community</p><h2>Good company, out there</h2>' +
-      '<p class="lede">Route guides, meet-ups, kit tests and a Journal worth reading — Bield is the people as much as the products.</p>' +
-      '<p>It’s there in the mark, too: a sheep bield drawn in plan — four short wall arms from a centre, so there’s a lee whatever way the wind comes. Everything points back to getting out there together.</p>' +
+      '<div><p class="eyebrow">' + esc(a.communityEyebrow || "") + '</p><h2>' + esc(a.communityTitle || "") + '</h2>' +
+      '<p class="lede">' + esc(a.communityLede || "") + '</p>' +
+      '<p>' + esc(a.communityText || "") + '</p>' +
       '<a class="btn btn--ghost" href="journal.html">Into the Journal ' + I.arrow + '</a></div>' +
       '</div></div></section>' +
       '<section class="section section--tight"><div class="container">' +
-      '<div class="section-head center" style="justify-content:center"><div><p class="eyebrow">How we talk</p><h2>What we stand for</h2></div></div>' +
-      '<div class="grid-3">' +
-      valueCard(I.heart, "Warm, not macho", "We talk like a well-travelled friend, never like a kit-list bore.") +
-      valueCard(I.mountain, "Knowledgeable, not technical", "Why it’s good, in one plain sentence. No jargon, no stacked adjectives.") +
-      valueCard(I.gift, "Wry, not silly", "Dry northern humour, used lightly. No “LAST CHANCE!!!”.") +
-      valueCard(I.check, "Honest, not salesy", "Real reviews, clear sizing, no fake countdowns. Ever.") +
-      valueCard(I.leaf, "Made to last", "Quality over quantity. One great jacket beats three average ones.") +
-      valueCard(I.user, "Good company", "A community, not a mailing list — get out there, and bring someone.") +
-      '</div></div></section>' +
+      '<div class="section-head center" style="justify-content:center"><div><p class="eyebrow">' + esc(a.valuesEyebrow || "") + '</p><h2>' + esc(a.valuesTitle || "") + '</h2></div></div>' +
+      '<div class="grid-3">' + values + '</div></div></section>' +
       '<section class="section" style="background:var(--sand)"><div class="container"><div class="split split--reverse">' +
       '<div class="split__media">' + M.art.scene({ id: "curation", sky: "#4A3B2E", mid: "#8D9478", fore: "#2C3B33", accent: "#9A5B2E" }) + '</div>' +
-      '<div><p class="eyebrow">Curation, not clutter</p><h2>If we wouldn’t use it, it doesn’t go in</h2>' +
-      '<p class="lede">We favour British and independent makers wherever the quality allows, from Borders knitwear to Cumbrian bootmakers.</p>' +
-      '<p>Every product page answers the same four questions: why it’s good, who it’s for, how it fits, and — for the gift buyer — why it makes a great gift. Plain, useful English throughout.</p>' +
+      '<div><p class="eyebrow">' + esc(a.curationEyebrow || "") + '</p><h2>' + esc(a.curationTitle || "") + '</h2>' +
+      '<p class="lede">' + esc(a.curationLede || "") + '</p>' +
+      '<p>' + esc(a.curationText || "") + '</p>' +
       '<a class="btn btn--ghost" href="shop.html">Shop the range ' + I.arrow + '</a></div>' +
       '</div></div></section>' + newsletterSection();
     mountNewsletter();
   }
-  function valueCard(icon, title, body) { return '<div class="value-card">' + icon + '<h3>' + title + '</h3><p>' + esc(body) + '</p></div>'; }
+  function valueCard(icon, title, body) { return '<div class="value-card">' + icon + '<h3>' + esc(title) + '</h3><p>' + esc(body) + '</p></div>'; }
 
   /* =========================================================================
      PAGE: CART
@@ -969,11 +987,17 @@
   };
 
   document.addEventListener("DOMContentLoaded", function () {
-    Cart.load(); Wish.load();
-    injectHeader();
-    var page = document.body.dataset.page;
-    if (ROUTES[page]) ROUTES[page]();
-    injectFooter();
-    Cart.sync();
+    // Wait for the catalogue + copy to load, then render.
+    window.BIELD_READY.then(function () {
+      M = window.BIELD;
+      money = M.money;
+      SITE = M.site || {};
+      Cart.load(); Wish.load();
+      injectHeader();
+      var page = document.body.dataset.page;
+      if (ROUTES[page]) ROUTES[page]();
+      injectFooter();
+      Cart.sync();
+    }).catch(function () { /* data.js has already shown an error message */ });
   });
 })();

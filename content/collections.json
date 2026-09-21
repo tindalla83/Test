@@ -1,0 +1,74 @@
+{
+  "collections": [
+    {
+      "slug": "graft",
+      "name": "Graft",
+      "tagline": "The working man",
+      "desc": "Kit that earns its keep — workwear, boots and tools built to take a beating.",
+      "image": "assets/img/collections/graft.jpg",
+      "imageAlt": "Waxed cotton jackets on a row of hooks above a worn leather Chesterfield",
+      "scene": {
+        "sky": "#4A3B2E",
+        "mid": "#8D9478",
+        "fore": "#2C3B33",
+        "accent": "#9A5B2E"
+      }
+    },
+    {
+      "slug": "fellside",
+      "name": "Fellside",
+      "tagline": "The outdoor man",
+      "desc": "For the walker, fell runner and wild swimmer. Waterproofs, packs and trail kit.",
+      "image": "assets/img/collections/fellside.jpg",
+      "imageAlt": "A man pulling up the fur-lined hood of his parka on a rocky mountainside",
+      "scene": {
+        "sky": "#2C3B33",
+        "mid": "#8D9478",
+        "fore": "#2C3B33",
+        "accent": "#E8E4DC"
+      }
+    },
+    {
+      "slug": "sunday-best",
+      "name": "Sunday Best",
+      "tagline": "The gentleman",
+      "desc": "Smart-casual things made well — knitwear, leather and a watch to keep.",
+      "image": "assets/img/collections/sunday-best.jpg",
+      "imageAlt": "A man in a camel overcoat leaning on a fence beneath an autumn tree",
+      "scene": {
+        "sky": "#3E4548",
+        "mid": "#4A3B2E",
+        "fore": "#2C3B33",
+        "accent": "#9A5B2E"
+      }
+    },
+    {
+      "slug": "off-shift",
+      "name": "Off Shift",
+      "tagline": "The weekend man",
+      "desc": "Pub, football and the barbecue. Easy kit for time off.",
+      "image": "assets/img/collections/off-shift.jpg",
+      "imageAlt": "A man in a quilted jacket reading a newspaper at a table",
+      "scene": {
+        "sky": "#4C4E4C",
+        "mid": "#686A66",
+        "fore": "#191815",
+        "accent": "#B09A6B"
+      }
+    },
+    {
+      "slug": "the-crate",
+      "name": "The Crate",
+      "tagline": "Gifting, sorted",
+      "desc": "Curated gift boxes, wrapped, carded and ready to give.",
+      "image": "",
+      "imageAlt": "",
+      "scene": {
+        "sky": "#232220",
+        "mid": "#4C4E4C",
+        "fore": "#191815",
+        "accent": "#C2907C"
+      }
+    }
+  ]
+}

@@ -1,0 +1,80 @@
+{
+  "announcement": {
+    "text": "Free UK delivery over £75 · free gift wrap on everything",
+    "linkLabel": "Find his gift in 3 taps →",
+    "linkHref": "gift-finder.html"
+  },
+  "home": {
+    "heroEyebrow": "Kit · Knowledge · Good company",
+    "heroTitle": "Good kit, good company.",
+    "heroText": "The UK’s one-stop men’s shop and community — the kit, the know-how and the good company to get you out there and leading. Chosen by people who’ve actually used it.",
+    "heroImage": "assets/img/hero.jpg",
+    "heroImageAlt": "A man in a flat cap and wool jacket standing in autumn woodland at dusk",
+    "heroCtaPrimaryLabel": "Shop the range",
+    "heroCtaPrimaryHref": "shop.html",
+    "heroCtaSecondaryLabel": "Find a gift",
+    "heroCtaSecondaryHref": "gift-finder.html",
+    "assurances": [
+      { "title": "Free gift wrap", "sub": "On everything, with a handwritten card" },
+      { "title": "Free UK delivery", "sub": "On orders over £75, next-day option" },
+      { "title": "Free size swaps", "sub": "Not sure of his size? Send it back free" },
+      { "title": "Made to last", "sub": "Chosen to be used for years, not weeks" }
+    ],
+    "collectionsEyebrow": "Shop by the man",
+    "collectionsTitle": "Five collections, one shop",
+    "mostGiftedEyebrow": "For the man who wants nothing",
+    "mostGiftedTitle": "Most gifted",
+    "giftBandEyebrow": "Not sure what to get?",
+    "giftBandTitle": "His gift, in three taps.",
+    "giftBandText": "Tell us who he is, what he’s like and your budget. We’ll do the hard bit — then wrap it and post it with a card.",
+    "giftMiniCards": [
+      { "title": "Who’s it for?", "sub": "Partner, dad, son, brother or a mate" },
+      { "title": "What’s he like?", "sub": "Grafter, walker, gent, weekender" },
+      { "title": "Your budget?", "sub": "Under £25, £50, £100 — or treat him" }
+    ],
+    "bestsellersEyebrow": "Tried and trusted",
+    "bestsellersTitle": "This season’s bestsellers",
+    "justInEyebrow": "Fresh off the fell",
+    "justInTitle": "Just in",
+    "communityEyebrow": "Kit, knowledge & good company",
+    "communityTitle": "More than a shop",
+    "communityLede": "Bield is a community as much as a shop — route guides, honest kit tests, meet-ups and good company for men who want to get out there and lead.",
+    "communityText": "We give you the know-how first: how to re-wax a jacket, plan a first wild swim, or pack for a night on the fells. Everything is chosen and explained by people who’ve actually used it.",
+    "journalEyebrow": "The Journal",
+    "journalTitle": "Kit tests, trail guides & maker stories"
+  },
+  "journalPage": {
+    "title": "The Journal",
+    "text": "Trail guides, honest kit tests and the makers behind the shop — the stories that help you choose well."
+  },
+  "about": {
+    "heroEyebrow": "Kit, knowledge & good company",
+    "heroTitle": "More than a shop",
+    "heroText": "We give men the kit, the know-how and the good company to get out there and lead.",
+    "heroImage": "assets/img/about-hero.jpg",
+    "heroImageAlt": "A man in a hooded gilet looking out over pine forest and distant mountains",
+    "intro": "Bield is the UK’s one-stop men’s shop and community: kit, knowledge and good company for men who want to get out there and lead. A bield is a Cumbrian word for shelter — the drystone wall or hollow on a fellside where you get out of the weather. It names exactly what we are: somewhere to stop, take stock and set off better equipped.\n\n> Kit is only half of it. The know-how and the good company are what actually get you out the door.\n\nSo we lead with knowledge: honest kit tests, route guides and plain-English advice from people who’ve actually used the gear. Gift buyers are a welcome second audience, and everything can be wrapped with a handwritten card — but the man, and getting him out there, comes first.",
+    "communityEyebrow": "The community",
+    "communityTitle": "Good company, out there",
+    "communityLede": "Route guides, meet-ups, kit tests and a Journal worth reading — Bield is the people as much as the products.",
+    "communityText": "It’s there in the mark, too: a sheep bield drawn in plan — four short wall arms from a centre, so there’s a lee whatever way the wind comes. Everything points back to getting out there together.",
+    "valuesEyebrow": "How we talk",
+    "valuesTitle": "What we stand for",
+    "values": [
+      { "icon": "heart", "title": "Warm, not macho", "body": "We talk like a well-travelled friend, never like a kit-list bore." },
+      { "icon": "mountain", "title": "Knowledgeable, not technical", "body": "Why it’s good, in one plain sentence. No jargon, no stacked adjectives." },
+      { "icon": "gift", "title": "Wry, not silly", "body": "Dry northern humour, used lightly. No “LAST CHANCE!!!”." },
+      { "icon": "check", "title": "Honest, not salesy", "body": "Real reviews, clear sizing, no fake countdowns. Ever." },
+      { "icon": "leaf", "title": "Made to last", "body": "Quality over quantity. One great jacket beats three average ones." },
+      { "icon": "user", "title": "Good company", "body": "A community, not a mailing list — get out there, and bring someone." }
+    ],
+    "curationEyebrow": "Curation, not clutter",
+    "curationTitle": "If we wouldn’t use it, it doesn’t go in",
+    "curationLede": "We favour British and independent makers wherever the quality allows, from Borders knitwear to Cumbrian bootmakers.",
+    "curationText": "Every product page answers the same four questions: why it’s good, who it’s for, how it fits, and — for the gift buyer — why it makes a great gift. Plain, useful English throughout."
+  },
+  "footer": {
+    "blurb": "The UK’s one-stop men’s shop and community: kit, knowledge and good company for men who want to get out there and lead.",
+    "tagline": "Kit, knowledge and good company."
+  }
+}

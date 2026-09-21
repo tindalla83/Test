@@ -45,16 +45,29 @@ Then visit <http://localhost:8000>.
 ```
 index.html, shop.html, …     Page shells (each sets <body data-page="…">)
 assets/css/styles.css        Design system — palette tokens at the top
-assets/js/data.js            Catalogue data + on-brand generative SVG artwork
+assets/js/data.js            Loads the content JSON + on-brand generative SVG artwork
 assets/js/store.js           Header/footer, cart, wishlist and page rendering
+content/*.json               Editable content: products, collections, articles, site copy
+admin/                       The /admin no-code content manager (Sveltia CMS)
 assets/img/favicon.svg       Bield mark (bield-in-plan)
 render.yaml                  Render static-site blueprint
 ```
 
 The header, footer and every product/collection view are rendered by
-`store.js`, which routes on the `data-page` attribute. Catalogue content lives in
-`assets/js/data.js` — edit the `products`, `collections` and `articles` arrays
-there to change what the shop sells.
+`store.js`, which routes on the `data-page` attribute. All editable content —
+the catalogue and the page copy — lives in `content/*.json`; `data.js` fetches
+those files at runtime and builds the shop from them. Because the site now reads
+JSON over `fetch`, view it through a local server (see above), not by opening
+`index.html` from the file system.
+
+## Editing the site (no code)
+
+There's a built-in editor at **`/admin`** for changing products, prices,
+homepage/About/Journal text and images through forms — no code, no touching
+files. Publishing saves to GitHub and Render redeploys automatically. It needs a
+short one-time login setup; full instructions are in
+[`ADMIN.md`](ADMIN.md). You can still edit `content/*.json` by hand if you
+prefer.
 
 ## <a name="brand"></a>Brand
 
