@@ -12,7 +12,7 @@ backend:
   repo: tindalla83/Test
   branch: claude/quirky-clarke-2g6ub8
   # The GitHub login relay you deploy once (Cloudflare Worker). See ADMIN.md.
-  base_url: https://sveltia-cms-auth.tindalla1983.workers.dev
+  base_url: https://bield-cms-auth.tindalla1983.workers.dev
 
 # Where uploaded images are stored, and the path the site references them by.
 media_folder: assets/img/uploads
