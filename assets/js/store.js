@@ -241,30 +241,37 @@
       }).join("") + '</div>' : '<p class="search-empty">No matches. Try the <a href="gift-finder.html">gift finder</a>.</p>');
   }
 
+  var SOCIAL_ICONS = { instagram: "insta", pinterest: "pin", youtube: "yt", tiktok: "tiktok" };
+  var SOCIAL_LABELS = { instagram: "Instagram", pinterest: "Pinterest", youtube: "YouTube", tiktok: "TikTok" };
+  // A footer/column link: external URLs open in a new tab; "#" and internal ones don't.
+  function footerLink(lk) {
+    var href = lk.href || "#";
+    var ext = /^https?:\/\//i.test(href);
+    return '<a href="' + esc(href) + '"' + (ext ? ' target="_blank" rel="noopener"' : "") + '>' + esc(lk.label || "") + '</a>';
+  }
   function injectFooter() {
+    var f = SITE.footer || {};
+    var social = (f.social || []).map(function (s) {
+      var href = s.url || "#";
+      var ext = /^https?:\/\//i.test(href);
+      return '<a href="' + esc(href) + '" aria-label="' + esc(SOCIAL_LABELS[s.platform] || s.platform || "") + '"' +
+        (ext ? ' target="_blank" rel="noopener"' : "") + '>' + (I[SOCIAL_ICONS[s.platform]] || I.insta) + '</a>';
+    }).join("");
+    var columns = (f.columns || []).map(function (col) {
+      return '<div class="footer-col"><h4>' + esc(col.heading || "") + '</h4>' +
+        (col.links || []).map(footerLink).join("") + '</div>';
+    }).join("");
+    var legal = (f.legal || []).map(footerLink).join(" · ");
     var footer = h(
       '<footer class="site-footer"><div class="container">' +
       '<div class="footer-grid">' +
       '<div class="footer-brand"><a class="brand brand--footer" href="index.html"><span class="brand__logo">' + MARK + '</span><span class="brand__word">Bield</span></a>' +
-      '<p>' + esc((SITE.footer || {}).blurb || "") + '</p>' +
-      '<div class="footer-social">' +
-      '<a href="#" aria-label="Instagram">' + I.insta + '</a>' +
-      '<a href="#" aria-label="Pinterest">' + I.pin + '</a>' +
-      '<a href="#" aria-label="YouTube">' + I.yt + '</a>' +
-      '<a href="#" aria-label="TikTok">' + I.tiktok + '</a>' +
-      '</div></div>' +
-      '<div class="footer-col"><h4>Shop</h4>' +
-      M.collections.map(function (c) { return '<a href="collection.html?c=' + c.slug + '">' + c.name + '</a>'; }).join("") +
-      '<a href="shop.html">All products</a></div>' +
-      '<div class="footer-col"><h4>Community</h4>' +
-      '<a href="journal.html">The Journal</a><a href="gift-finder.html">Gift finder</a>' +
-      '<a href="collection.html?c=the-crate">Gift crates</a><a href="#">Route guides</a><a href="#">Events &amp; meet-ups</a></div>' +
-      '<div class="footer-col"><h4>Help</h4>' +
-      '<a href="#">Delivery &amp; returns</a><a href="#">Size &amp; fit</a><a href="#">Free size swaps</a>' +
-      '<a href="#">Gift wrap &amp; cards</a><a href="about.html">Our story</a></div>' +
+      '<p>' + esc(f.blurb || "") + '</p>' +
+      '<div class="footer-social">' + social + '</div></div>' +
+      columns +
       '</div>' +
-      '<div class="footer-bottom"><span>© ' + new Date().getFullYear() + ' Bield. ' + esc((SITE.footer || {}).tagline || "") + '</span>' +
-      '<span><a href="#">Privacy</a> · <a href="#">Terms</a> · <a href="#">Cookies</a></span></div>' +
+      '<div class="footer-bottom"><span>© ' + new Date().getFullYear() + ' Bield. ' + esc(f.tagline || "") + '</span>' +
+      '<span>' + legal + '</span></div>' +
       '</div></footer>'
     );
     document.body.appendChild(footer);

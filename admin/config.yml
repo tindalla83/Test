@@ -261,3 +261,34 @@ collections:
             fields:
               - { name: blurb, label: Footer blurb, widget: text }
               - { name: tagline, label: Bottom tagline, widget: string }
+              - name: social
+                label: Social links
+                widget: list
+                summary: "{{fields.platform}}"
+                fields:
+                  - name: platform
+                    label: Platform
+                    widget: select
+                    options: [instagram, pinterest, youtube, tiktok]
+                  - { name: url, label: "URL (e.g. https://instagram.com/…)", widget: string }
+              - name: columns
+                label: Link columns
+                widget: list
+                max: 3
+                summary: "{{fields.heading}}"
+                fields:
+                  - { name: heading, label: Column heading, widget: string }
+                  - name: links
+                    label: Links
+                    widget: list
+                    summary: "{{fields.label}}"
+                    fields:
+                      - { name: label, label: Text, widget: string }
+                      - { name: href, label: URL, widget: string }
+              - name: legal
+                label: Bottom links (Privacy, Terms…)
+                widget: list
+                summary: "{{fields.label}}"
+                fields:
+                  - { name: label, label: Text, widget: string }
+                  - { name: href, label: URL, widget: string }

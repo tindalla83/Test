@@ -75,6 +75,50 @@
   },
   "footer": {
     "blurb": "The UK’s one-stop men’s shop and community: kit, knowledge and good company for men who want to get out there and lead.",
-    "tagline": "Kit, knowledge and good company."
+    "tagline": "Kit, knowledge and good company.",
+    "social": [
+      { "platform": "instagram", "url": "#" },
+      { "platform": "pinterest", "url": "#" },
+      { "platform": "youtube", "url": "#" },
+      { "platform": "tiktok", "url": "#" }
+    ],
+    "columns": [
+      {
+        "heading": "Shop",
+        "links": [
+          { "label": "Graft", "href": "collection.html?c=graft" },
+          { "label": "Fellside", "href": "collection.html?c=fellside" },
+          { "label": "Sunday Best", "href": "collection.html?c=sunday-best" },
+          { "label": "Off Shift", "href": "collection.html?c=off-shift" },
+          { "label": "The Crate", "href": "collection.html?c=the-crate" },
+          { "label": "All products", "href": "shop.html" }
+        ]
+      },
+      {
+        "heading": "Community",
+        "links": [
+          { "label": "The Journal", "href": "journal.html" },
+          { "label": "Gift finder", "href": "gift-finder.html" },
+          { "label": "Gift crates", "href": "collection.html?c=the-crate" },
+          { "label": "Route guides", "href": "#" },
+          { "label": "Events & meet-ups", "href": "#" }
+        ]
+      },
+      {
+        "heading": "Help",
+        "links": [
+          { "label": "Delivery & returns", "href": "#" },
+          { "label": "Size & fit", "href": "#" },
+          { "label": "Free size swaps", "href": "#" },
+          { "label": "Gift wrap & cards", "href": "#" },
+          { "label": "Our story", "href": "about.html" }
+        ]
+      }
+    ],
+    "legal": [
+      { "label": "Privacy", "href": "#" },
+      { "label": "Terms", "href": "#" },
+      { "label": "Cookies", "href": "#" }
+    ]
   }
 }
