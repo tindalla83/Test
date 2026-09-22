@@ -586,6 +586,10 @@
     var variants = p.images && p.images.length ? p.images.length : Math.max(p.colors.length, 3);
     var sel = { size: null, color: p.colors[0] && p.colors[0].name, qty: 1, img: 0 };
     var stars = "★★★★★";
+    var pr = SITE.product || {};
+    var extraTabs = (pr.extraTabs || []).map(function (t) {
+      return acc(t.title || "", renderMarkdown(t.body));
+    }).join("");
 
     main.innerHTML =
       '<section class="section"><div class="container">' +
@@ -616,13 +620,14 @@
       '<button class="btn btn--accent" style="flex:1" id="add-btn">Add to basket — ' + money(p.price) + '</button></div>' +
       '<button class="btn btn--ghost btn--block" id="wish-btn">' + (Wish.has(p.id) ? I.heartFill + " Saved" : I.heart + " Save to wishlist") + '</button>' +
       // gift note
-      '<div class="gift-note">' + I.gift + '<span><b>A gift?</b> Add free wrap and a handwritten card at checkout. We never put prices in the parcel, and size swaps are free.</span></div>' +
+      '<div class="gift-note">' + I.gift + '<span><b>' + esc(pr.giftNoteLead || "") + '</b> ' + esc(pr.giftNote || "") + '</span></div>' +
       // accordions
       '<div class="pdp__accordion">' +
-      acc("Why it’s good", '<p>' + esc(p.why) + '</p><p><b>Who it’s for:</b> ' + esc(p.whoFor) + '</p>', true) +
-      acc("Great gift because…", '<p>' + esc(p.giftBecause) + '</p>') +
-      acc("Details", '<dl class="spec-list"><div><dt>Maker</dt><dd>' + esc(p.maker) + '</dd></div><div><dt>Collection</dt><dd>' + esc(M.collection(p.collection).name) + '</dd></div><div><dt>Category</dt><dd>' + esc(p.category) + '</dd></div><div><dt>Product code</dt><dd>' + esc(p.code) + '</dd></div></dl>') +
-      acc("Delivery &amp; returns", '<p>Free UK delivery over £75, or £4.95 below. Next-day available. Free returns and size swaps within 30 days — extended to 31 January over Christmas.</p>') +
+      acc(pr.whyTitle || "Why it’s good", '<p>' + esc(p.why) + '</p><p><b>Who it’s for:</b> ' + esc(p.whoFor) + '</p>', true) +
+      acc(pr.giftTitle || "Great gift because…", '<p>' + esc(p.giftBecause) + '</p>') +
+      acc(pr.detailsTitle || "Details", '<dl class="spec-list"><div><dt>Maker</dt><dd>' + esc(p.maker) + '</dd></div><div><dt>Collection</dt><dd>' + esc(M.collection(p.collection).name) + '</dd></div><div><dt>Category</dt><dd>' + esc(p.category) + '</dd></div><div><dt>Product code</dt><dd>' + esc(p.code) + '</dd></div></dl>') +
+      acc(pr.deliveryTitle || "Delivery & returns", renderMarkdown(pr.deliveryBody)) +
+      extraTabs +
       '</div>' +
       '</div></div></div></section>' +
       // related
@@ -679,7 +684,7 @@
     $$(".acc__head").forEach(function (b) { b.addEventListener("click", function () { b.parentElement.classList.toggle("open"); }); });
   }
   function acc(title, body, open) {
-    return '<div class="acc' + (open ? " open" : "") + '"><button class="acc__head">' + title + I.plus + '</button><div class="acc__body">' + body + '</div></div>';
+    return '<div class="acc' + (open ? " open" : "") + '"><button class="acc__head">' + esc(title) + I.plus + '</button><div class="acc__body">' + body + '</div></div>';
   }
 
   /* =========================================================================

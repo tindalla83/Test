@@ -47,6 +47,16 @@
     "title": "The Journal",
     "text": "Trail guides, honest kit tests and the makers behind the shop — the stories that help you choose well."
   },
+  "product": {
+    "giftNoteLead": "A gift?",
+    "giftNote": "Add free wrap and a handwritten card at checkout. We never put prices in the parcel, and size swaps are free.",
+    "whyTitle": "Why it’s good",
+    "giftTitle": "Great gift because…",
+    "detailsTitle": "Details",
+    "deliveryTitle": "Delivery & returns",
+    "deliveryBody": "Free UK delivery over £75, or £4.95 below. Next-day available. Free returns and size swaps within 30 days — extended to 31 January over Christmas.",
+    "extraTabs": []
+  },
   "about": {
     "heroEyebrow": "Kit, knowledge & good company",
     "heroTitle": "More than a shop",

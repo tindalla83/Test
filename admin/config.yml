@@ -223,6 +223,26 @@ collections:
               - { name: title, label: Heading, widget: string }
               - { name: text, label: Intro text, widget: text }
 
+          - name: product
+            label: Product page tabs
+            widget: object
+            fields:
+              - { name: giftNoteLead, label: "Gift note — bold lead (e.g. \"A gift?\")", widget: string }
+              - { name: giftNote, label: Gift note — text, widget: text }
+              - { name: whyTitle, label: "Tab title — why it's good", widget: string }
+              - { name: giftTitle, label: "Tab title — gift", widget: string }
+              - { name: detailsTitle, label: "Tab title — details", widget: string }
+              - { name: deliveryTitle, label: "Delivery tab — title", widget: string }
+              - { name: deliveryBody, label: "Delivery tab — text (shared on every product)", widget: markdown }
+              - name: extraTabs
+                label: Extra tabs (added to every product)
+                widget: list
+                required: false
+                summary: "{{fields.title}}"
+                fields:
+                  - { name: title, label: Tab title, widget: string }
+                  - { name: body, label: "Tab text (## subheading, > quote)", widget: markdown }
+
           - name: about
             label: About / Our Story page
             widget: object
