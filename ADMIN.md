@@ -103,6 +103,32 @@ Commit that change. That's it — the setup is done.
 - Every publish is an ordinary GitHub commit, so nothing is ever lost — you can
   see the history (and undo) in the repository if needed.
 
+## Connecting the newsletter (email capture)
+
+The "Field notes" sign-up form is ready — it just needs the address of your
+email provider so sign-ups go somewhere. You paste one URL in the editor; no
+code. In `/admin` → **Site & page text → Newsletter sign-up**, fill in
+**Form endpoint URL** (and, for Mailchimp only, change **Email field name**).
+Until you set it, the form politely says sign-up is opening soon.
+
+Pick a provider and grab its endpoint:
+
+- **Buttondown** (simplest, and it also *sends* your emails) — free to start.
+  Your endpoint is `https://buttondown.com/api/emails/embed-subscribe/YOUR-USERNAME`.
+  Leave **Email field name** as `email`.
+- **Mailchimp** — in Audience → Signup forms → **Embedded form**, copy the
+  form's `action` URL (it looks like
+  `https://YOURACCOUNT.usX.list-manage.com/subscribe/post?u=…&id=…`). Set
+  **Email field name** to `EMAIL` (capitals — Mailchimp is fussy about this).
+- **Formspree** / **Formspark** / **Kit (ConvertKit)** — create a form, copy its
+  POST/endpoint URL, paste it in, and keep **Email field name** as `email`.
+
+How it works: the form posts straight to your provider (no server needed). For
+providers that allow it, the visitor sees a real success/error; for ones that
+don't (Mailchimp), it submits and shows success. A hidden honeypot field quietly
+blocks spam bots. Test it after connecting by subscribing with your own address
+and checking it lands in your provider's dashboard.
+
 ## Troubleshooting
 
 - **"Failed to authenticate" / login popup closes:** the callback URL on the

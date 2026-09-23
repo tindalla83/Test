@@ -963,23 +963,61 @@
      SHARED: NEWSLETTER
      ========================================================================= */
   function newsletterSection() {
+    var n = SITE.newsletter || {};
+    var field = n.emailField || "email";
     return '<section class="section newsletter"><div class="container"><div class="newsletter__inner">' +
-      '<p class="eyebrow eyebrow--light">Field notes</p><h2>Good kit, worth knowing about</h2>' +
-      '<p>A weekly note — trail guides, honest kit tests and the odd gift idea. No fake urgency, unsubscribe anytime.</p>' +
-      '<form class="subscribe" id="newsletter-form"><input type="email" required placeholder="Your email address" aria-label="Email address">' +
+      '<p class="eyebrow eyebrow--light">' + esc(n.eyebrow || "Field notes") + '</p><h2>' + esc(n.title || "") + '</h2>' +
+      '<p>' + esc(n.blurb || "") + '</p>' +
+      '<form class="subscribe" id="newsletter-form">' +
+      '<input type="email" name="' + esc(field) + '" required placeholder="Your email address" aria-label="Email address">' +
+      // honeypot — hidden from people, catches bots
+      '<input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">' +
       '<button class="btn btn--accent" type="submit">Subscribe</button></form>' +
-      '<p class="form-note" id="newsletter-note">Prefer gift ideas only? You can pick that after you sign up.</p>' +
+      '<p class="form-note" id="newsletter-note">' + esc(n.note || "") + '</p>' +
       '</div></div></section>';
   }
   function mountNewsletter() {
     var form = $("#newsletter-form");
     if (!form) return;
+    var n = SITE.newsletter || {};
+    var note = $("#newsletter-note", form.parentNode) || $("#newsletter-note");
+    var btn = $("button[type=submit]", form);
+    function setNote(msg, kind) { if (note) { note.textContent = msg; note.className = "form-note" + (kind ? " form-note--" + kind : ""); } }
+
     form.addEventListener("submit", function (e) {
       e.preventDefault();
-      var note = $("#newsletter-note");
-      note.textContent = "You’re on the list — welcome to Bield. Check your inbox to confirm.";
-      note.className = "form-note form-note--ok";
-      form.reset();
+      if (form._gotcha && form._gotcha.value) return;            // bot
+      var email = (form.querySelector("input[type=email]") || {}).value || "";
+      if (!email) return;
+
+      if (!n.action) {                                            // not connected yet
+        console.warn("Bield: newsletter.action is not set in content/site.json — sign-ups aren't being stored. See ADMIN.md.");
+        setNote("Sign-up is opening soon — check back shortly.", null);
+        return;
+      }
+
+      if (btn) { btn.disabled = true; }
+      setNote("One moment…", null);
+      var data = new FormData(form);
+      var ok = function () {
+        setNote(n.successMessage || "You’re on the list — thank you.", "ok");
+        form.reset();
+        if (btn) btn.disabled = false;
+      };
+      var fail = function () {
+        setNote(n.errorMessage || "Sorry — something went wrong. Please try again.", "error");
+        if (btn) btn.disabled = false;
+      };
+
+      // Try a normal CORS POST first (Formspree, Buttondown API, Formspark…),
+      // then fall back to a no-cors submit for providers that block CORS
+      // (e.g. Mailchimp) — there we can't read the reply, so assume success.
+      fetch(n.action, { method: "POST", headers: { "Accept": "application/json" }, body: data })
+        .then(function (r) { if (r.ok) ok(); else fail(); })
+        .catch(function () {
+          fetch(n.action, { method: "POST", mode: "no-cors", body: data })
+            .then(ok).catch(fail);
+        });
     });
   }
 

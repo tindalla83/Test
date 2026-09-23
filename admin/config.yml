@@ -275,6 +275,19 @@ collections:
               - { name: curationLede, label: "Curation — lead text", widget: text }
               - { name: curationText, label: "Curation — text", widget: text }
 
+          - name: newsletter
+            label: Newsletter sign-up
+            widget: object
+            fields:
+              - { name: eyebrow, label: Kicker, widget: string }
+              - { name: title, label: Heading, widget: string }
+              - { name: blurb, label: Text, widget: text }
+              - { name: note, label: Small note under the form, widget: string, required: false }
+              - { name: action, label: "Form endpoint URL (from your email provider — see ADMIN.md)", widget: string, required: false }
+              - { name: emailField, label: "Email field name (email for most; EMAIL for Mailchimp)", widget: string, default: "email" }
+              - { name: successMessage, label: Success message, widget: string }
+              - { name: errorMessage, label: Error message, widget: string }
+
           - name: footer
             label: Footer
             widget: object
