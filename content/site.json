@@ -7,7 +7,7 @@
   "home": {
     "heroEyebrow": "Gear · Knowledge · Craic",
     "heroTitle": "Good kit, good company.",
-    "heroText": "The one-stop men’s shop and community — the gear, the know-how and the good company to get you out there and leading.",
+    "heroText": "The one-stop men’s shop and community — the gear, the know-how and the good company to get you out there and make an impact.",
     "heroImage": "assets/img/hero.jpg",
     "heroImageAlt": "A man in a flat cap and wool jacket standing in autumn woodland at dusk",
     "heroCtaPrimaryLabel": "Shop the range",
@@ -128,16 +128,6 @@
     "curationLede": "We favour British and independent makers wherever the quality allows, from Borders knitwear to Cumbrian bootmakers.",
     "curationText": "Every product page answers the same four questions: why it’s good, who it’s for, how it fits, and — for the gift buyer — why it makes a great gift. Plain, useful English throughout."
   },
-  "newsletter": {
-    "eyebrow": "Field notes",
-    "title": "Good kit, worth knowing about",
-    "blurb": "A weekly note — trail guides, honest kit tests and the odd gift idea. No fake urgency, unsubscribe anytime.",
-    "note": "Prefer gift ideas only? You can pick that after you sign up.",
-    "action": "",
-    "emailField": "email",
-    "successMessage": "You’re on the list — welcome to Bield. Check your inbox to confirm.",
-    "errorMessage": "Sorry — something went wrong. Please try again."
-  },
   "footer": {
     "blurb": "The UK’s one-stop men’s shop and community: kit, knowledge and good company for men who want to get out there and lead.",
     "tagline": "Kit, knowledge and good company.",
@@ -254,5 +244,15 @@
         "href": "#"
       }
     ]
+  },
+  "newsletter": {
+    "action": "",
+    "blurb": "A weekly note — trail guides, honest kit tests and the odd gift idea. No fake urgency, unsubscribe anytime.",
+    "emailField": "email",
+    "errorMessage": "Sorry — something went wrong. Please try again.",
+    "eyebrow": "Field notes",
+    "note": "Prefer gift ideas only? You can pick that after you sign up.",
+    "successMessage": "You’re on the list — welcome to Bield. Check your inbox to confirm.",
+    "title": "Good kit, worth knowing about"
   }
 }
