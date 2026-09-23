@@ -302,7 +302,7 @@
       '<a href="product.html?id=' + p.id + '" aria-label="' + esc(p.name) + '">' + M.art.media(p, 0) + '</a>' +
       '<div class="card__quick"><button class="btn btn--light btn--sm btn--block" data-add="' + p.id + '">Add to basket</button></div>' +
       '</div>' +
-      '<span class="card__maker">' + esc(p.maker) + '</span>' +
+      (p.maker ? '<span class="card__maker">' + esc(p.maker) + '</span>' : '') +
       '<h3 class="card__name"><a href="product.html?id=' + p.id + '">' + esc(p.name) + '</a></h3>' +
       '<div class="card__meta">' + priceHtml + '</div>' +
       (swatches ? '<div class="card__swatches">' + swatches + '</div>' : "") +
@@ -600,7 +600,7 @@
       Array.apply(null, { length: variants }).map(function (_, i) { return '<button class="pdp__thumb' + (i === 0 ? " is-active" : "") + '" data-img="' + i + '">' + M.art.media(p, i) + '</button>'; }).join("") +
       '</div></div>' +
       '<div class="pdp__info">' +
-      '<span class="pdp__maker">' + esc(p.maker) + '</span>' +
+      (p.maker ? '<span class="pdp__maker">' + esc(p.maker) + '</span>' : '') +
       '<h1>' + esc(p.name) + '</h1>' +
       '<div class="pdp__price">' + (p.oldPrice ? '<span class="price">' + money(p.price) + '</span><span class="price price--old">' + money(p.oldPrice) + '</span>' : '<span class="price">' + money(p.price) + '</span>') +
       '<span class="rating"><span class="stars">' + stars + '</span> ' + p.rating.toFixed(1) + ' (' + p.reviews + ')</span></div>' +
@@ -614,7 +614,7 @@
         '<div class="opts" id="size-opts">' + p.sizes.map(function (s) { return '<button class="opt" data-size="' + esc(s) + '">' + esc(s) + '</button>'; }).join("") + '</div></div>' :
         '<input type="hidden" id="one-size" value="One size">') +
       // sizing help
-      '<p style="font-size:14px;color:var(--slate)"><b>Fit:</b> ' + esc(p.sizing) + '</p>' +
+      (p.sizing ? '<p style="font-size:14px;color:var(--slate)"><b>Fit:</b> ' + esc(p.sizing) + '</p>' : '') +
       // buy row
       '<div class="buy-row"><div class="qty"><button data-q="-1" aria-label="Decrease">−</button><input type="number" id="qty" value="1" min="1" aria-label="Quantity"><button data-q="1" aria-label="Increase">+</button></div>' +
       '<button class="btn btn--accent" style="flex:1" id="add-btn">Add to basket — ' + money(p.price) + '</button></div>' +
@@ -623,9 +623,9 @@
       '<div class="gift-note">' + I.gift + '<span><b>' + esc(pr.giftNoteLead || "") + '</b> ' + esc(pr.giftNote || "") + '</span></div>' +
       // accordions
       '<div class="pdp__accordion">' +
-      acc(pr.whyTitle || "Why it’s good", '<p>' + esc(p.why) + '</p><p><b>Who it’s for:</b> ' + esc(p.whoFor) + '</p>', true) +
-      acc(pr.giftTitle || "Great gift because…", '<p>' + esc(p.giftBecause) + '</p>') +
-      acc(pr.detailsTitle || "Details", '<dl class="spec-list"><div><dt>Maker</dt><dd>' + esc(p.maker) + '</dd></div><div><dt>Collection</dt><dd>' + esc(M.collection(p.collection).name) + '</dd></div><div><dt>Category</dt><dd>' + esc(p.category) + '</dd></div><div><dt>Product code</dt><dd>' + esc(p.code) + '</dd></div></dl>') +
+      ((p.why || p.whoFor) ? acc(pr.whyTitle || "Why it’s good", (p.why ? '<p>' + esc(p.why) + '</p>' : '') + (p.whoFor ? '<p><b>Who it’s for:</b> ' + esc(p.whoFor) + '</p>' : ''), true) : '') +
+      (p.giftBecause ? acc(pr.giftTitle || "Great gift because…", '<p>' + esc(p.giftBecause) + '</p>') : '') +
+      acc(pr.detailsTitle || "Details", '<dl class="spec-list">' + (p.maker ? '<div><dt>Maker</dt><dd>' + esc(p.maker) + '</dd></div>' : '') + '<div><dt>Collection</dt><dd>' + esc(M.collection(p.collection).name) + '</dd></div><div><dt>Category</dt><dd>' + esc(p.category) + '</dd></div><div><dt>Product code</dt><dd>' + esc(p.code) + '</dd></div></dl>') +
       acc(pr.deliveryTitle || "Delivery & returns", renderMarkdown(pr.deliveryBody)) +
       extraTabs +
       '</div>' +
@@ -898,7 +898,7 @@
         var p = x.p, l = x.line;
         var opts = [l.color, l.size].filter(function (v) { return v && v !== "One size"; }).join(" · ");
         return '<div class="cart-line"><a class="cart-line__media" href="product.html?id=' + p.id + '">' + M.art.media(p, Math.max(0, p.colors.map(function (c) { return c.name; }).indexOf(l.color))) + '</a>' +
-          '<div><div class="cart-line__name">' + esc(p.name) + '</div><div class="cart-line__opts">' + esc(p.maker) + (opts ? " · " + esc(opts) : "") + '</div>' +
+          '<div><div class="cart-line__name">' + esc(p.name) + '</div><div class="cart-line__opts">' + esc([p.maker, opts].filter(Boolean).join(" · ")) + '</div>' +
           '<div class="qty" style="width:fit-content"><button data-cq="-1" data-lid="' + l.lid + '">−</button><input type="number" value="' + l.qty + '" min="1" data-lidq="' + l.lid + '" aria-label="Quantity"><button data-cq="1" data-lid="' + l.lid + '">+</button></div>' +
           '<button class="cart-line__remove" data-remove="' + l.lid + '" style="margin-top:10px">Remove</button></div>' +
           '<div class="cart-line__price">' + money(p.price * l.qty) + '</div></div>';

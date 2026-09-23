@@ -1,48 +1,212 @@
 {
   "products": [
     {
-      "name": "Ridgeway Waxed Work Jacket",
-      "maker": "Fenwick & Sons",
+      "name": "Waxed cotton field jacket",
       "collection": "graft",
-      "category": "Clothing",
+      "category": "Wear",
       "icon": "jacket",
-      "price": 129,
+      "price": 225,
       "badges": [
         "bestseller"
       ],
       "colorNames": [
         "Fell Green",
-        "Peat",
+        "Peat"
+      ],
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "why": "Waxed cotton that shrugs off the weather and only looks better with age."
+    },
+    {
+      "name": "Wool overshirt",
+      "collection": "sunday-best",
+      "category": "Wear",
+      "icon": "overshirt",
+      "price": 145,
+      "colorNames": [
+        "Moss",
+        "Slate",
+        "Charcoal"
+      ],
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "why": "A wool overshirt that works as a light jacket or a heavy shirt."
+    },
+    {
+      "name": "Heavy cotton overshirt",
+      "collection": "graft",
+      "category": "Wear",
+      "icon": "overshirt",
+      "price": 95,
+      "colorNames": [
+        "Ecru",
+        "Fell Green"
+      ],
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "why": "UK-made heavy cotton — an honest, hard-wearing everyday layer."
+    },
+    {
+      "name": "Lambswool crew jumper",
+      "collection": "sunday-best",
+      "category": "Wear",
+      "icon": "jumper",
+      "price": 95,
+      "badges": [
+        "most-gifted"
+      ],
+      "colorNames": [
+        "Bilberry",
+        "Moss",
+        "Oat",
         "Slate"
       ],
       "sizes": [
         "S",
         "M",
         "L",
-        "XL",
-        "XXL"
+        "XL"
       ],
-      "images": [
-        "assets/img/products/91842_Flint_and_Tinder_Waxed_Harrington_Jacket_Olive_01_PXLZ.avif"
-      ],
-      "why": "Waxed cotton that shrugs off Lakeland drizzle and only looks better with age.",
-      "whoFor": "The man who's always outside fixing something.",
-      "sizing": "Runs true to size; size up for layers underneath.",
-      "giftBecause": "He'll wear it every weekend for the next ten years."
+      "why": "Lambswool knitted in Hawick — soft, smart and hard to get wrong."
     },
     {
-      "name": "Grafter Leather Work Boots",
-      "maker": "Cumbria Bootworks",
+      "name": "Fisherman rib jumper",
+      "collection": "sunday-best",
+      "category": "Wear",
+      "icon": "jumper",
+      "price": 130,
+      "colorNames": [
+        "Ecru",
+        "Slate"
+      ],
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "why": "A chunky fisherman rib for cold days and coastal walks."
+    },
+    {
+      "name": "Selvedge jean, straight",
+      "collection": "sunday-best",
+      "category": "Wear",
+      "icon": "trousers",
+      "price": 180,
+      "colorNames": [
+        "Storm Blue"
+      ],
+      "sizes": [
+        "30",
+        "32",
+        "34",
+        "36",
+        "38"
+      ],
+      "why": "Selvedge denim in one honest straight fit, made to wear in."
+    },
+    {
+      "name": "Cotton twill trouser",
       "collection": "graft",
-      "category": "Footwear",
+      "category": "Wear",
+      "icon": "trousers",
+      "price": 79,
+      "colorNames": [
+        "Oat",
+        "Fell Green",
+        "Charcoal"
+      ],
+      "sizes": [
+        "30",
+        "32",
+        "34",
+        "36",
+        "38"
+      ],
+      "why": "A workhorse twill trouser for every day of the year."
+    },
+    {
+      "name": "Heavyweight pocket tee",
+      "maker": "Bield",
+      "collection": "off-shift",
+      "category": "Wear",
+      "icon": "tee",
+      "price": 38,
+      "badges": [
+        "new"
+      ],
+      "colorNames": [
+        "Ecru",
+        "Fell Green",
+        "Charcoal"
+      ],
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "why": "A proper heavyweight tee with a pocket — the one you'll reach for."
+    },
+    {
+      "name": "French workwear jacket",
+      "collection": "graft",
+      "category": "Wear",
+      "icon": "jacket",
+      "price": 95,
+      "colorNames": [
+        "Fell Green",
+        "Storm Blue"
+      ],
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "why": "The classic French chore jacket — cheap to love, built to last."
+    },
+    {
+      "name": "Merino base layer",
+      "collection": "fellside",
+      "category": "Wear",
+      "icon": "tee",
+      "price": 65,
+      "colorNames": [
+        "Charcoal",
+        "Moss"
+      ],
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "why": "Merino that keeps you warm, dry and fresh on the hill."
+    },
+    {
+      "name": "Derby boot, Goodyear welted",
+      "collection": "graft",
+      "category": "Step",
       "icon": "boot",
       "price": 165,
       "badges": [
-        "most-gifted"
+        "bestseller"
       ],
       "colorNames": [
         "Tan",
-        "Peat",
         "Charcoal"
       ],
       "sizes": [
@@ -53,480 +217,930 @@
         "11",
         "12"
       ],
-      "why": "Goodyear-welted and resoleable, so a scuff is never the end.",
-      "whoFor": "Anyone on their feet all day.",
-      "sizing": "Standard fit; take your usual size.",
-      "giftBecause": "A proper pair of boots he'd never buy himself."
+      "why": "British-made, Goodyear-welted and built to be resoled for years."
     },
     {
-      "name": "Ten-Tool Pocket Multi",
-      "maker": "Brindle Tools",
-      "collection": "graft",
-      "category": "Gear",
-      "icon": "multitool",
-      "price": 58,
-      "badges": [
-        "new"
-      ],
+      "name": "Country brogue",
+      "collection": "sunday-best",
+      "category": "Step",
+      "icon": "boot",
+      "price": 245,
       "colorNames": [
-        "Slate",
-        "Fell Green"
-      ],
-      "sizes": [
-        "One size"
-      ],
-      "why": "Ten tools that actually lock, in a brushed-steel body that lives in a pocket.",
-      "whoFor": "The fixer, the fettler, the camping dad.",
-      "sizing": "One size.",
-      "giftBecause": "The gift he'll use every single week."
-    },
-    {
-      "name": "Site Flask 1L",
-      "maker": "Kelder",
-      "collection": "graft",
-      "category": "Gear",
-      "icon": "flask",
-      "price": 34,
-      "badges": [],
-      "colorNames": [
-        "Fell Green",
-        "Bracken",
-        "Charcoal"
-      ],
-      "sizes": [
-        "One size"
-      ],
-      "why": "Keeps a brew hot for twelve hours, dents-and-all guaranteed for life.",
-      "whoFor": "Early starts and long shifts.",
-      "sizing": "1 litre.",
-      "giftBecause": "A daily reminder you were thinking of him."
-    },
-    {
-      "name": "Waxed Canvas Tool Roll",
-      "maker": "Brindle Tools",
-      "collection": "graft",
-      "category": "Gear",
-      "icon": "crate",
-      "price": 45,
-      "badges": [],
-      "colorNames": [
-        "Oat",
+        "Tan",
         "Peat"
       ],
       "sizes": [
-        "One size"
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12"
       ],
-      "why": "Rolls flat, hangs on a nail, keeps chisels where they should be.",
-      "whoFor": "The tidy sort, or the one who should be.",
-      "sizing": "Fits 12 tools.",
-      "giftBecause": "Practical, handsome and personalisable."
+      "why": "A proper country brogue — the smart end of the boot rack."
     },
     {
-      "name": "Suede Rigger Gloves",
-      "maker": "Hartside",
-      "collection": "graft",
-      "category": "Gear",
-      "icon": "gloves",
-      "price": 28,
-      "badges": [],
+      "name": "Chukka boot, suede",
+      "collection": "sunday-best",
+      "category": "Step",
+      "icon": "boot",
+      "price": 195,
       "colorNames": [
         "Tan",
         "Charcoal"
       ],
       "sizes": [
-        "M",
-        "L",
-        "XL"
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12"
       ],
-      "why": "Split-suede palms that soften as they work.",
-      "whoFor": "Log-splitters and bonfire-builders.",
-      "sizing": "Snug at first; they give.",
-      "giftBecause": "A small, useful surprise in a stocking."
+      "why": "Suede chukkas: an easy, forgiving boot that goes with everything."
     },
     {
-      "name": "Skiddaw 3-Layer Waterproof",
-      "maker": "Fellside Kit",
+      "name": "Hiking boot",
       "collection": "fellside",
-      "category": "Clothing",
-      "icon": "waterproof",
-      "price": 189,
-      "oldPrice": 219,
-      "badges": [
-        "sale",
-        "bestseller"
-      ],
+      "category": "Step",
+      "icon": "boot",
+      "price": 220,
       "colorNames": [
-        "Storm Blue",
-        "Fell Green",
-        "Rust"
-      ],
-      "sizes": [
-        "S",
-        "M",
-        "L",
-        "XL"
-      ],
-      "why": "Fully taped seams and a proper hood — 20k waterproof, still breathes on the climb.",
-      "whoFor": "The hillwalker who checks the forecast and goes anyway.",
-      "sizing": "Athletic; room for a fleece.",
-      "giftBecause": "It'll get him out of the house in any weather."
-    },
-    {
-      "name": "Blencathra Grid Fleece",
-      "maker": "Fellside Kit",
-      "collection": "fellside",
-      "category": "Clothing",
-      "icon": "fleece",
-      "price": 78,
-      "badges": [
-        "most-gifted"
-      ],
-      "colorNames": [
-        "Moss",
-        "Slate",
-        "Oat"
-      ],
-      "sizes": [
-        "S",
-        "M",
-        "L",
-        "XL"
-      ],
-      "why": "Grid-backed fleece that traps warmth without the bulk.",
-      "whoFor": "Layer-uppers and shed-dwellers alike.",
-      "sizing": "Regular fit.",
-      "giftBecause": "The mid-layer he'll live in from October to April."
-    },
-    {
-      "name": "Wainwright 28L Daypack",
-      "maker": "Roam",
-      "collection": "fellside",
-      "category": "Gear",
-      "icon": "backpack",
-      "price": 95,
-      "badges": [],
-      "colorNames": [
-        "Fell Green",
         "Charcoal",
-        "Rust"
+        "Peat"
       ],
       "sizes": [
-        "One size"
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12"
       ],
-      "why": "One good pack for a day on the tops — roll-top, hip belt, room for a flask.",
-      "whoFor": "Day-walkers and commuters.",
-      "sizing": "28 litres.",
-      "giftBecause": "Sized for exactly the adventures he keeps talking about."
+      "why": "Yorkshire-made hillwalking boots for real days out."
     },
     {
-      "name": "Fell Runner Headtorch 400",
-      "maker": "Lumen North",
-      "collection": "fellside",
-      "category": "Gear",
-      "icon": "torch",
-      "price": 42,
+      "name": "Running-style trainer",
+      "collection": "off-shift",
+      "category": "Step",
+      "icon": "boot",
+      "price": 110,
       "badges": [
         "new"
       ],
       "colorNames": [
-        "Charcoal",
-        "Bracken"
+        "Slate",
+        "Rust"
       ],
       "sizes": [
-        "One size"
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12"
       ],
-      "why": "400 lumens, USB-C, light enough to forget you're wearing it.",
-      "whoFor": "Dark mornings and night descents.",
-      "sizing": "One size.",
-      "giftBecause": "Genuinely useful, and he won't have one this good."
+      "why": "Bolton-made trainers with a proper northern running heritage."
     },
     {
-      "name": "Merino Trail Socks (3 pack)",
-      "maker": "Wooler",
-      "collection": "fellside",
-      "category": "Clothing",
-      "icon": "socks",
-      "price": 24,
-      "badges": [],
+      "name": "Canvas plimsoll",
+      "collection": "off-shift",
+      "category": "Step",
+      "icon": "boot",
+      "price": 65,
+      "colorNames": [
+        "Ecru",
+        "Fell Green"
+      ],
+      "sizes": [
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12"
+      ],
+      "why": "A simple canvas plimsoll for easy summer days."
+    },
+    {
+      "name": "Camp / after-boot slip-on",
+      "collection": "off-shift",
+      "category": "Step",
+      "icon": "boot",
+      "price": 85,
+      "badges": [
+        "gift"
+      ],
       "colorNames": [
         "Moss",
-        "Slate",
-        "Oat"
+        "Charcoal"
+      ],
+      "sizes": [
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12"
+      ],
+      "why": "The warm, soft slip-on for the end of a cold day."
+    },
+    {
+      "name": "Wool boot sock, heavy",
+      "maker": "Bield",
+      "collection": "graft",
+      "category": "Step",
+      "icon": "socks",
+      "price": 18,
+      "colorNames": [
+        "Moss",
+        "Oat",
+        "Charcoal"
       ],
       "sizes": [
         "S/M",
         "L/XL"
       ],
-      "why": "Merino cushioning that won't blister or stink.",
-      "whoFor": "Every walker, ever.",
-      "sizing": "Two size bands.",
-      "giftBecause": "The gift men are secretly delighted by."
+      "why": "Heavy wool socks that go with every pair of boots we sell."
     },
     {
-      "name": "Wild Swim Changing Robe",
-      "maker": "Coldwater Co.",
+      "name": "Leather boot care kit",
+      "collection": "graft",
+      "category": "Step",
+      "icon": "grooming",
+      "price": 22,
+      "colorNames": [
+        "Tan"
+      ],
+      "why": "Everything to keep good leather fed, clean and lasting."
+    },
+    {
+      "name": "Insoles / laces",
+      "collection": "graft",
+      "category": "Step",
+      "icon": "socks",
+      "price": 12,
+      "colorNames": [
+        "Charcoal"
+      ],
+      "why": "The small stuff that keeps your boots comfortable and going."
+    },
+    {
+      "name": "Canvas and leather rucksack",
       "collection": "fellside",
-      "category": "Gear",
-      "icon": "robe",
-      "price": 69,
+      "category": "Carry",
+      "icon": "backpack",
+      "price": 185,
       "badges": [
         "bestseller"
       ],
       "colorNames": [
-        "Storm Blue",
         "Fell Green",
-        "Damson"
+        "Tan"
       ],
-      "sizes": [
-        "S/M",
-        "L/XL"
-      ],
-      "why": "Sherpa-lined and windproof, for the shivery bit after a cold dip.",
-      "whoFor": "Wild swimmers and touchline parents.",
-      "sizing": "Generous; goes over clothes.",
-      "giftBecause": "For the dad who's discovered cold water and won't shut up about it."
+      "why": "Made ten minutes from Carlisle — a canvas-and-leather pack for life."
     },
     {
-      "name": "Lambswool Crew Jumper",
-      "maker": "Alderley Knitwear",
+      "name": "Waxed roll-top daypack",
+      "collection": "fellside",
+      "category": "Carry",
+      "icon": "backpack",
+      "price": 125,
+      "colorNames": [
+        "Charcoal",
+        "Fell Green"
+      ],
+      "why": "A waxed roll-top daypack, Keswick-made and weatherproof."
+    },
+    {
+      "name": "Alpine-style rucksack 32L",
+      "collection": "fellside",
+      "category": "Carry",
+      "icon": "backpack",
+      "price": 145,
+      "colorNames": [
+        "Slate",
+        "Rust"
+      ],
+      "why": "A 32-litre alpine pack that crosses town and trail."
+    },
+    {
+      "name": "Weekend holdall",
       "collection": "sunday-best",
-      "category": "Clothing",
-      "icon": "jumper",
-      "price": 88,
+      "category": "Carry",
+      "icon": "holdall",
+      "price": 245,
       "badges": [
         "most-gifted"
       ],
       "colorNames": [
-        "Bilberry",
-        "Moss",
-        "Oat",
-        "Slate"
+        "Fell Green",
+        "Peat"
       ],
-      "sizes": [
-        "S",
-        "M",
-        "L",
-        "XL"
-      ],
-      "why": "Spun and knitted in the Scottish Borders from proper lambswool.",
-      "whoFor": "The man who's earned a nice jumper.",
-      "sizing": "Classic fit.",
-      "giftBecause": "Soft, smart and impossible to get wrong."
+      "why": "The waxed weekend bag that makes you want to book a trip."
     },
     {
-      "name": "Bridle Leather Card Wallet",
-      "maker": "Currier & Bell",
+      "name": "Waxed canvas messenger",
       "collection": "sunday-best",
-      "category": "Accessories",
+      "category": "Carry",
+      "icon": "holdall",
+      "price": 165,
+      "colorNames": [
+        "Charcoal",
+        "Tan"
+      ],
+      "why": "A Glasgow-made messenger in waxed canvas, for work and beyond."
+    },
+    {
+      "name": "Tote, heavy canvas",
+      "maker": "Bield",
+      "collection": "off-shift",
+      "category": "Carry",
+      "icon": "holdall",
+      "price": 45,
+      "colorNames": [
+        "Ecru",
+        "Fell Green"
+      ],
+      "why": "A heavy canvas tote — the cheapest way to carry the mark."
+    },
+    {
+      "name": "Leather wallet",
+      "maker": "Bield",
+      "collection": "sunday-best",
+      "category": "Carry",
       "icon": "wallet",
-      "price": 52,
-      "badges": [],
+      "price": 55,
+      "badges": [
+        "gift"
+      ],
       "colorNames": [
         "Peat",
         "Tan",
         "Charcoal"
       ],
-      "sizes": [
-        "One size"
-      ],
-      "why": "English bridle leather that patinas beautifully; free monogram.",
-      "whoFor": "The overstuffed-wallet upgrader.",
-      "sizing": "Six cards plus notes.",
-      "giftBecause": "Small, personal and used every day."
+      "why": "A slim leather wallet that only looks better with use."
     },
     {
-      "name": "Explorer Field Watch",
-      "maker": "Dalefield Watch Co.",
+      "name": "Utility pouch / dopp-style",
       "collection": "sunday-best",
-      "category": "Accessories",
-      "icon": "watch",
-      "price": 145,
+      "category": "Carry",
+      "icon": "holdall",
+      "price": 35,
+      "colorNames": [
+        "Charcoal",
+        "Fell Green"
+      ],
+      "why": "A tough little pouch for the bits that rattle round your bag."
+    },
+    {
+      "name": "Card holder",
+      "maker": "Bield",
+      "collection": "sunday-best",
+      "category": "Carry",
+      "icon": "wallet",
+      "price": 30,
+      "colorNames": [
+        "Peat",
+        "Tan"
+      ],
+      "why": "A minimal leather card holder for the streamlined pocket."
+    },
+    {
+      "name": "Key fob / lanyard",
+      "maker": "Bield",
+      "collection": "off-shift",
+      "category": "Carry",
+      "icon": "key",
+      "price": 18,
+      "colorNames": [
+        "Tan",
+        "Peat"
+      ],
+      "why": "An offcut-leather key fob — small, useful, nicely made."
+    },
+    {
+      "name": "Enamel or titanium mug",
+      "collection": "fellside",
+      "category": "Field",
+      "icon": "mug",
+      "price": 22,
+      "colorNames": [
+        "Fell Green",
+        "Storm Blue"
+      ],
+      "why": "A camp mug that photographs beautifully and travels light."
+    },
+    {
+      "name": "Camp tableware set",
+      "collection": "fellside",
+      "category": "Field",
+      "icon": "mug",
+      "price": 45,
+      "colorNames": [
+        "Oat"
+      ],
+      "why": "Finnish camp tableware you won't find in every shop."
+    },
+    {
+      "name": "Insulated flask 750ml",
+      "collection": "fellside",
+      "category": "Field",
+      "icon": "flask",
+      "price": 38,
       "badges": [
         "bestseller"
       ],
       "colorNames": [
-        "Fell Green",
         "Charcoal",
-        "Storm Blue"
+        "Fell Green"
       ],
-      "sizes": [
-        "One size"
-      ],
-      "why": "A clean field watch on a waxed strap — 100m water resistant, quietly handsome.",
-      "whoFor": "The one who still likes to wear a watch.",
-      "sizing": "38mm case.",
-      "giftBecause": "A proper keepsake at a sensible price."
+      "why": "A reliable flask that keeps a brew hot all day."
     },
     {
-      "name": "Sandalwood Grooming Set",
-      "maker": "Hearth & Hollow",
-      "collection": "sunday-best",
-      "category": "Grooming",
-      "icon": "grooming",
-      "price": 46,
+      "name": "Folding knife",
+      "collection": "fellside",
+      "category": "Field",
+      "icon": "knife",
+      "price": 18,
       "badges": [
         "gift"
       ],
       "colorNames": [
+        "Tan"
+      ],
+      "why": "The classic folding knife — a proper gift that gets used."
+    },
+    {
+      "name": "Fixed-blade / bushcraft knife",
+      "collection": "fellside",
+      "category": "Field",
+      "icon": "knife",
+      "price": 35,
+      "colorNames": [
+        "Charcoal"
+      ],
+      "why": "A simple, dependable fixed-blade for the outdoors."
+    },
+    {
+      "name": "Wool blanket",
+      "collection": "off-shift",
+      "category": "Field",
+      "icon": "blanket",
+      "price": 85,
+      "badges": [
+        "most-gifted"
+      ],
+      "colorNames": [
+        "Moss",
+        "Rust",
+        "Slate"
+      ],
+      "why": "A wool blanket for the car boot, the picnic and the sofa."
+    },
+    {
+      "name": "Head torch",
+      "collection": "fellside",
+      "category": "Field",
+      "icon": "torch",
+      "price": 42,
+      "colorNames": [
+        "Charcoal",
         "Bracken"
       ],
-      "sizes": [
-        "One size"
-      ],
-      "why": "Face wash, balm and beard oil, all cedar and sandalwood, all UK-made.",
-      "whoFor": "The low-key groomer.",
-      "sizing": "Full-size trio.",
-      "giftBecause": "Boxed and ribboned, it looks like you tried."
+      "why": "A bright, light head torch for dark mornings and night descents."
     },
     {
-      "name": "Waxed Holdall Weekender",
-      "maker": "Currier & Bell",
-      "collection": "sunday-best",
-      "category": "Accessories",
+      "name": "Fire kit / flint striker",
+      "collection": "fellside",
+      "category": "Field",
+      "icon": "multitool",
+      "price": 15,
+      "colorNames": [
+        "Charcoal"
+      ],
+      "why": "A flint striker that turns damp kindling into a fire."
+    },
+    {
+      "name": "Fishing or game bag",
+      "collection": "fellside",
+      "category": "Field",
       "icon": "holdall",
-      "price": 160,
-      "badges": [],
+      "price": 149,
       "colorNames": [
         "Fell Green",
-        "Peat"
+        "Tan"
       ],
-      "sizes": [
-        "One size"
-      ],
-      "why": "A weekend's worth of kit in waxed canvas and bridle leather.",
-      "whoFor": "Mini-break takers and stag-do survivors.",
-      "sizing": "40 litres.",
-      "giftBecause": "The bag that makes him plan a trip."
+      "why": "The original Chapman bag — heritage you can carry."
     },
     {
-      "name": "Terrace Waffle Overshirt",
-      "maker": "Off Shift",
-      "collection": "off-shift",
-      "category": "Clothing",
-      "icon": "overshirt",
-      "price": 74,
+      "name": "Walking pole / stick",
+      "collection": "fellside",
+      "category": "Field",
+      "icon": "multitool",
+      "price": 55,
+      "colorNames": [
+        "Charcoal"
+      ],
+      "why": "A steady pole for long descents and tired knees."
+    },
+    {
+      "name": "Pocket knife, classic",
+      "collection": "sunday-best",
+      "category": "Daily",
+      "icon": "knife",
+      "price": 16,
+      "badges": [
+        "bestseller"
+      ],
+      "colorNames": [
+        "Tan"
+      ],
+      "why": "The pocket knife every good shop sells — and every man uses."
+    },
+    {
+      "name": "Notebook set",
+      "collection": "sunday-best",
+      "category": "Daily",
+      "icon": "notebook",
+      "price": 24,
+      "colorNames": [
+        "Slate",
+        "Oat"
+      ],
+      "why": "UK-made notebooks for lists, plans and better handwriting."
+    },
+    {
+      "name": "Pencil / pen",
+      "collection": "sunday-best",
+      "category": "Daily",
+      "icon": "pen",
+      "price": 22,
+      "colorNames": [
+        "Charcoal"
+      ],
+      "why": "A pen worth keeping on the desk and in the pocket."
+    },
+    {
+      "name": "Leather key case",
+      "maker": "Bield",
+      "collection": "sunday-best",
+      "category": "Daily",
+      "icon": "key",
+      "price": 28,
+      "colorNames": [
+        "Peat",
+        "Tan"
+      ],
+      "why": "A leather key case that stops your pocket sounding like a toolbox."
+    },
+    {
+      "name": "Watch strap, leather or NATO",
+      "collection": "sunday-best",
+      "category": "Daily",
+      "icon": "watch",
+      "price": 45,
+      "colorNames": [
+        "Peat",
+        "Charcoal",
+        "Fell Green"
+      ],
+      "why": "A quick way to make an old watch feel new again."
+    },
+    {
+      "name": "Sunglasses",
+      "collection": "sunday-best",
+      "category": "Daily",
+      "icon": "sunglasses",
+      "price": 145,
       "badges": [
         "new"
       ],
       "colorNames": [
-        "Rust",
-        "Moss",
-        "Slate",
-        "Ecru"
+        "Charcoal",
+        "Tan"
       ],
-      "sizes": [
-        "S",
-        "M",
-        "L",
-        "XL"
-      ],
-      "why": "Half shirt, half jacket — the thing he'll reach for every Saturday.",
-      "whoFor": "Pub gardens and dog walks.",
-      "sizing": "Relaxed fit.",
-      "giftBecause": "That easy, everyday layer he never gets round to buying."
+      "why": "Well-made sunglasses that don't shout about it."
     },
     {
-      "name": "Hand-Warmer Enamel Tankard",
-      "maker": "Kelder",
+      "name": "Multi-tool",
+      "collection": "graft",
+      "category": "Daily",
+      "icon": "multitool",
+      "price": 65,
+      "colorNames": [
+        "Slate"
+      ],
+      "why": "A recognisable multi-tool for the fixer and the fettler."
+    },
+    {
+      "name": "Lighter / torch, everyday",
       "collection": "off-shift",
-      "category": "Home",
-      "icon": "tankard",
-      "price": 22,
-      "badges": [],
+      "category": "Daily",
+      "icon": "torch",
+      "price": 30,
+      "colorNames": [
+        "Charcoal"
+      ],
+      "why": "A dependable everyday flame for candles, camps and hobs."
+    },
+    {
+      "name": "Card wallet, canvas",
+      "maker": "Bield",
+      "collection": "off-shift",
+      "category": "Daily",
+      "icon": "wallet",
+      "price": 25,
+      "colorNames": [
+        "Ecru",
+        "Fell Green"
+      ],
+      "why": "A slim canvas card wallet for a lighter pocket."
+    },
+    {
+      "name": "Carabiner / tool clip",
+      "collection": "off-shift",
+      "category": "Daily",
+      "icon": "key",
+      "price": 12,
+      "colorNames": [
+        "Charcoal"
+      ],
+      "why": "A checkout-impulse clip for keys, tools and dog leads."
+    },
+    {
+      "name": "Wash bag, waxed canvas",
+      "maker": "Bield",
+      "collection": "sunday-best",
+      "category": "Travel",
+      "icon": "holdall",
+      "price": 55,
+      "badges": [
+        "gift",
+        "most-gifted"
+      ],
       "colorNames": [
         "Fell Green",
-        "Bracken",
-        "Storm Blue"
+        "Charcoal"
       ],
-      "sizes": [
-        "One size"
-      ],
-      "why": "Speckled enamel that holds a pint of tea by the fire.",
-      "whoFor": "Campervans and cold touchlines.",
-      "sizing": "500ml.",
-      "giftBecause": "Cheerful, useful and personalisable."
+      "why": "A waxed wash bag that's a top gift for a reason."
     },
     {
-      "name": "Peated Whisky Tasting Set",
-      "maker": "Cask & Crag",
+      "name": "Packing cubes",
+      "collection": "sunday-best",
+      "category": "Travel",
+      "icon": "holdall",
+      "price": 35,
+      "colorNames": [
+        "Charcoal",
+        "Fell Green"
+      ],
+      "why": "Packing cubes that turn a chaotic bag into a tidy one."
+    },
+    {
+      "name": "Passport and document sleeve",
+      "maker": "Bield",
+      "collection": "sunday-best",
+      "category": "Travel",
+      "icon": "wallet",
+      "price": 38,
+      "colorNames": [
+        "Peat",
+        "Tan"
+      ],
+      "why": "A leather sleeve to keep travel documents together and smart."
+    },
+    {
+      "name": "Travel towel",
+      "collection": "sunday-best",
+      "category": "Travel",
+      "icon": "blanket",
+      "price": 28,
+      "colorNames": [
+        "Storm Blue",
+        "Moss"
+      ],
+      "why": "A quick-drying travel towel that packs down to nothing."
+    },
+    {
+      "name": "Luggage tag, leather",
+      "maker": "Bield",
+      "collection": "sunday-best",
+      "category": "Travel",
+      "icon": "wallet",
+      "price": 18,
+      "colorNames": [
+        "Tan",
+        "Peat"
+      ],
+      "why": "A leather luggage tag so your bag comes home with you."
+    },
+    {
+      "name": "Cable and tech pouch",
+      "collection": "sunday-best",
+      "category": "Travel",
+      "icon": "holdall",
+      "price": 32,
+      "colorNames": [
+        "Charcoal"
+      ],
+      "why": "The one modern pouch that tames chargers and cables."
+    },
+    {
+      "name": "Travel flask / hip flask",
       "collection": "off-shift",
-      "category": "Food & Drink",
+      "category": "Travel",
+      "icon": "flask",
+      "price": 45,
+      "badges": [
+        "gift"
+      ],
+      "colorNames": [
+        "Charcoal"
+      ],
+      "why": "An engravable hip flask for Christmas and Father's Day."
+    },
+    {
+      "name": "Eye mask and earplug set",
+      "collection": "off-shift",
+      "category": "Travel",
+      "icon": "grooming",
+      "price": 22,
+      "colorNames": [
+        "Charcoal"
+      ],
+      "why": "The small kit that turns a red-eye into some actual sleep."
+    },
+    {
+      "name": "Shoe bags, cotton",
+      "maker": "Bield",
+      "collection": "sunday-best",
+      "category": "Travel",
+      "icon": "holdall",
+      "price": 15,
+      "colorNames": [
+        "Ecru"
+      ],
+      "why": "Simple cotton shoe bags to keep clothes clean in the case."
+    },
+    {
+      "name": "Folding travel brush / comb",
+      "collection": "sunday-best",
+      "category": "Travel",
+      "icon": "brush",
+      "price": 15,
+      "colorNames": [
+        "Charcoal"
+      ],
+      "why": "A UK-made folding brush that lives in the wash bag."
+    },
+    {
+      "name": "Shaving cream",
+      "collection": "sunday-best",
+      "category": "Groom",
+      "icon": "grooming",
+      "price": 24,
+      "colorNames": [
+        "Charcoal"
+      ],
+      "why": "Barbershop shaving cream for a closer, calmer shave."
+    },
+    {
+      "name": "Safety razor",
+      "collection": "sunday-best",
+      "category": "Groom",
+      "icon": "razor",
+      "price": 45,
+      "badges": [
+        "bestseller"
+      ],
+      "colorNames": [
+        "Charcoal"
+      ],
+      "why": "A safety razor that saves money and gives a better shave."
+    },
+    {
+      "name": "Blade subscription / refills",
+      "collection": "sunday-best",
+      "category": "Groom",
+      "icon": "razor",
+      "price": 12,
+      "colorNames": [
+        "Charcoal"
+      ],
+      "why": "Keep the razor fed — sharp blades, delivered."
+    },
+    {
+      "name": "Beard oil",
+      "collection": "sunday-best",
+      "category": "Groom",
+      "icon": "grooming",
+      "price": 28,
+      "badges": [
+        "gift"
+      ],
+      "colorNames": [
+        "Bracken"
+      ],
+      "why": "Beard oil that softens the beard and the man wearing it."
+    },
+    {
+      "name": "Face wash / moisturiser",
+      "collection": "sunday-best",
+      "category": "Groom",
+      "icon": "grooming",
+      "price": 32,
+      "colorNames": [
+        "Charcoal"
+      ],
+      "why": "Design-led skincare that earns its place on the shelf."
+    },
+    {
+      "name": "Soap bar",
+      "collection": "off-shift",
+      "category": "Groom",
+      "icon": "grooming",
+      "price": 14,
+      "colorNames": [
+        "Oat"
+      ],
+      "why": "A proper soap bar that lasts and ships light."
+    },
+    {
+      "name": "Fragrance",
+      "collection": "sunday-best",
+      "category": "Groom",
+      "icon": "grooming",
+      "price": 85,
+      "colorNames": [
+        "Charcoal"
+      ],
+      "why": "One considered scent — natural, distinctive, not overdone."
+    },
+    {
+      "name": "Badger or synthetic brush",
+      "collection": "sunday-best",
+      "category": "Groom",
+      "icon": "brush",
+      "price": 38,
+      "colorNames": [
+        "Charcoal"
+      ],
+      "why": "A UK-made shaving brush to pair with the razor."
+    },
+    {
+      "name": "Hair pomade / clay",
+      "collection": "sunday-best",
+      "category": "Groom",
+      "icon": "grooming",
+      "price": 22,
+      "colorNames": [
+        "Charcoal"
+      ],
+      "why": "A matte clay that holds without the shine."
+    },
+    {
+      "name": "Wash kit, boxed",
+      "maker": "Bield",
+      "collection": "the-crate",
+      "category": "Groom",
+      "icon": "crate",
+      "price": 65,
+      "badges": [
+        "gift",
+        "most-gifted"
+      ],
+      "colorNames": [
+        "Fell Green"
+      ],
+      "why": "An own-label wash kit, boxed — your best gift of the season."
+    },
+    {
+      "name": "Coffee, whole bean",
+      "collection": "off-shift",
+      "category": "Home",
+      "icon": "coffee",
+      "price": 12,
+      "badges": [
+        "new"
+      ],
+      "colorNames": [
+        "Peat"
+      ],
+      "why": "A local Cumbrian roast — the cheap, easy way in."
+    },
+    {
+      "name": "Coffee, second roaster",
+      "collection": "off-shift",
+      "category": "Home",
+      "icon": "coffee",
+      "price": 13,
+      "colorNames": [
+        "Peat"
+      ],
+      "why": "Lancaster's Atkinsons, in proper northern packaging."
+    },
+    {
+      "name": "Stovetop or filter brewer",
+      "collection": "off-shift",
+      "category": "Home",
+      "icon": "flask",
+      "price": 45,
+      "colorNames": [
+        "Charcoal"
+      ],
+      "why": "The anchor for a better cup at home."
+    },
+    {
+      "name": "Enamel or stoneware mug",
+      "maker": "Bield",
+      "collection": "off-shift",
+      "category": "Home",
+      "icon": "mug",
+      "price": 22,
+      "colorNames": [
+        "Fell Green",
+        "Storm Blue"
+      ],
+      "why": "An own-label mug for the desk, the site and the shed."
+    },
+    {
+      "name": "Whisky glass, pair",
+      "collection": "off-shift",
+      "category": "Home",
       "icon": "whisky",
-      "price": 48,
+      "price": 38,
+      "badges": [
+        "gift"
+      ],
+      "colorNames": [
+        "Charcoal"
+      ],
+      "why": "A pair of glasses for a good dram, well shared."
+    },
+    {
+      "name": "Wool throw",
+      "collection": "off-shift",
+      "category": "Home",
+      "icon": "blanket",
+      "price": 95,
+      "badges": [
+        "most-gifted"
+      ],
+      "colorNames": [
+        "Moss",
+        "Rust",
+        "Slate"
+      ],
+      "why": "A wool throw for the sofa, the car and cold evenings."
+    },
+    {
+      "name": "Candle",
+      "collection": "off-shift",
+      "category": "Home",
+      "icon": "candle",
+      "price": 32,
+      "colorNames": [
+        "Oat"
+      ],
+      "why": "A candle that fills a room without shouting."
+    },
+    {
+      "name": "Chopping or serving board",
+      "collection": "off-shift",
+      "category": "Home",
+      "icon": "board",
+      "price": 45,
+      "colorNames": [
+        "Tan"
+      ],
+      "why": "A UK-made board that photographs as well as it serves."
+    },
+    {
+      "name": "Bar tool / bottle opener",
+      "maker": "Bield",
+      "collection": "off-shift",
+      "category": "Home",
+      "icon": "multitool",
+      "price": 18,
+      "colorNames": [
+        "Charcoal"
+      ],
+      "why": "An own-label opener for the end of the day."
+    },
+    {
+      "name": "Coffee subscription",
+      "collection": "off-shift",
+      "category": "Home",
+      "icon": "coffee",
+      "price": 30,
       "badges": [
         "gift"
       ],
       "colorNames": [
         "Peat"
       ],
-      "sizes": [
-        "One size"
-      ],
-      "why": "Five island drams and tasting notes for a proper night in.",
-      "whoFor": "The armchair adventurer.",
-      "sizing": "5 × 30ml.",
-      "giftBecause": "An experience, not just a bottle."
-    },
-    {
-      "name": "Cast Iron BBQ Branding Kit",
-      "maker": "Ember & Oak",
-      "collection": "off-shift",
-      "category": "Home",
-      "icon": "bbq",
-      "price": 39,
-      "badges": [],
-      "colorNames": [
-        "Charcoal"
-      ],
-      "sizes": [
-        "One size"
-      ],
-      "why": "Sear, brand and swagger — cast iron tools that last a lifetime of summers.",
-      "whoFor": "The self-appointed grill master.",
-      "sizing": "3-piece.",
-      "giftBecause": "Plays straight to his favourite hobby."
-    },
-    {
-      "name": "Pub Quiz Pocket Games",
-      "maker": "Gable Games",
-      "collection": "off-shift",
-      "category": "Home",
-      "icon": "games",
-      "price": 18,
-      "badges": [],
-      "colorNames": [
-        "Bilberry",
-        "Bracken"
-      ],
-      "sizes": [
-        "One size"
-      ],
-      "why": "Three pocket games for the pub, the tent or the passenger seat.",
-      "whoFor": "The good-company sort.",
-      "sizing": "Pocket-sized.",
-      "giftBecause": "A cracking little stocking filler."
-    },
-    {
-      "name": "Cotton Twill Cap",
-      "maker": "Off Shift",
-      "collection": "off-shift",
-      "category": "Accessories",
-      "icon": "cap",
-      "price": 26,
-      "badges": [],
-      "colorNames": [
-        "Moss",
-        "Rust",
-        "Charcoal",
-        "Storm Blue"
-      ],
-      "sizes": [
-        "One size"
-      ],
-      "why": "A soft, unstructured cap that's better after a few washes.",
-      "whoFor": "Bad-hair-day walkers.",
-      "sizing": "Adjustable.",
-      "giftBecause": "Easy, safe and always worn."
+      "why": "The one subscription worth trying — good coffee, on repeat."
     },
     {
       "name": "The Fellside Crate",

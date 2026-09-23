@@ -81,7 +81,19 @@
     robe: '<path d="M32 24l-8 8 4 8 4-3v44h36V45l4 3 4-8-8-8-14 6-14-6z"/><path d="M46 24v54M40 30l6 4 6-4"/>',
     crate: '<rect x="24" y="36" width="52" height="40" rx="3"/><path d="M24 50h52M50 36v40M32 28l8 8M68 28l-8 8"/><path d="M40 60h20"/>',
     overshirt: '<path d="M34 24l-12 7v13l8-2v42h40V42l8 2V31l-12-7-8 6-8-6z"/><path d="M42 24l8 6 8-6M50 30v54M40 44h4M40 56h4M40 68h4"/>',
-    knife: '<path d="M28 62l30-30a14 14 0 0112 12L40 74z"/><path d="M28 62l-4 8 8-4M52 38l6 6"/>'
+    knife: '<path d="M28 62l30-30a14 14 0 0112 12L40 74z"/><path d="M28 62l-4 8 8-4M52 38l6 6"/>',
+    trousers: '<path d="M36 22h28l-2 56h-12l-2-34-2 34H38z"/><path d="M36 22h28M50 22v12"/>',
+    tee: '<path d="M38 24l-14 8 5 11 9-4v39h24V39l9 4 5-11-14-8-8 7-8-7z"/><path d="M42 24l8 7 8-7"/>',
+    coffee: '<path d="M34 30h32l-2 48H36z"/><path d="M34 30l4-8h24l4 8M44 46h12M44 58h12"/>',
+    candle: '<rect x="40" y="42" width="20" height="38" rx="2"/><path d="M50 42v-6"/><path d="M50 24c4 3 4 8 0 10-4-2-4-7 0-10z"/>',
+    sunglasses: '<path d="M22 42h56"/><path d="M26 42h18v8a9 9 0 01-18 0z"/><path d="M56 42h18v8a9 9 0 01-18 0z"/><path d="M44 46h12"/>',
+    razor: '<path d="M46 20h8v30h-8z"/><path d="M40 50h20l-3 12H43z"/><path d="M40 55h20"/>',
+    blanket: '<rect x="26" y="32" width="48" height="36" rx="3"/><path d="M26 42h48M26 58h48M42 32v36"/>',
+    notebook: '<rect x="34" y="26" width="34" height="48" rx="2"/><path d="M42 26v48M48 40h14M48 52h14"/>',
+    board: '<path d="M36 34h28v36a4 4 0 01-4 4H40a4 4 0 01-4-4z"/><circle cx="50" cy="28" r="4"/>',
+    brush: '<rect x="42" y="22" width="16" height="16" rx="2"/><path d="M44 38l-2 40h16l-2-40"/>',
+    pen: '<path d="M42 22h16v42l-8 14-8-14z"/><path d="M42 40h16M50 64v10"/>',
+    key: '<circle cx="40" cy="40" r="12"/><path d="M40 40l30 30M64 64l6-6M56 56l6-6"/>'
   };
 
   /* ---- Textured background variants (subtle, natural) ---- */
