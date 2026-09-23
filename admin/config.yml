@@ -52,9 +52,9 @@ collections:
                   - { label: Off Shift, value: off-shift }
                   - { label: The Crate, value: the-crate }
               - name: category
-                label: Category
+                label: Category (department)
                 widget: select
-                options: [Clothing, Footwear, Gear, Accessories, Grooming, Home, Food & Drink, Gifts]
+                options: [Wear, Step, Carry, Field, Daily, Travel, Groom, Home, Gifts]
               - { name: price, label: Price (£), widget: number, value_type: float, min: 0 }
               - { name: oldPrice, label: "Was price (£, optional — shows a sale)", widget: number, value_type: float, required: false, min: 0 }
               - name: badges
@@ -71,7 +71,7 @@ collections:
               - name: icon
                 label: Icon (used when there is no photo)
                 widget: select
-                options: [jacket, waterproof, fleece, jumper, boot, flask, torch, backpack, holdall, watch, wallet, multitool, gloves, socks, mug, tankard, grooming, whisky, bbq, games, cap, beanie, robe, crate, overshirt, knife]
+                options: [jacket, waterproof, fleece, jumper, overshirt, trousers, tee, boot, socks, gloves, cap, beanie, robe, backpack, holdall, wallet, watch, sunglasses, key, flask, torch, multitool, knife, mug, tankard, whisky, coffee, candle, board, blanket, grooming, razor, brush, notebook, pen, bbq, games, crate]
               - name: colorNames
                 label: Colours
                 widget: list
