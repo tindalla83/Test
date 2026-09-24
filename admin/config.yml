@@ -19,8 +19,8 @@ media_folder: assets/img/uploads
 public_folder: assets/img/uploads
 
 # Shown in the editor UI; update to your real domain when live.
-site_url: https://bield.example
-display_url: https://bield.example
+site_url: https://wearebield.com
+display_url: https://wearebield.com
 
 collections:
   # ───────────────────────────── PRODUCTS ─────────────────────────────
