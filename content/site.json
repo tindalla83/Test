@@ -147,15 +147,15 @@
         "url": "https://www.instagram.com/wearebield/"
       },
       {
+        "platform": "tiktok",
+        "url": "https://www.tiktok.com/@wearebield"
+      },
+      {
         "platform": "pinterest",
         "url": "#"
       },
       {
         "platform": "youtube",
-        "url": "#"
-      },
-      {
-        "platform": "tiktok",
         "url": "#"
       }
     ],
